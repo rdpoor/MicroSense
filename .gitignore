@@ -1,0 +1,18 @@
+# Build Directories
+# Debug/
+# Release/
+
+# Build Results
+*.o
+*.d
+*.eep
+*.elf
+*.hex
+*.map
+*.srec
+*.bin
+*.lss
+
+# Atmel Start Artifacts
+*.atsuo
+.atmel-start-backup/

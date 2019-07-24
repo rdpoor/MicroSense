@@ -1,49 +1,43 @@
-L.A.C.H MicroSense
+# L.A.C.H MicroSense
 
 
-Program Structure:
+## Hardware Configuration:
 
-Once every millisecond ("sample interval"):
-- TMR0 overflows
-- TMR0 ISR updates system tic counter.
-- TMR0 ISR clears ADCDone and toggles ClkOut1KHz.  (These GPIOs are only used
-  for monitoring and debugging and have no other effect.)
-- TMR0 triggers an event on Channel 0.  This initiates an ADC reading.
-- ADC Completion calls an ISR where "all the processing" happens, including
-  updating dv/dt and incrementing the systic counter.
+SYNC_IN (PA3) is driven from the 60 Hz line detection circuitry.  A low-to-high
+transition on SYNC_IN does two things (configured via Atmel START):
 
-Once every 250 milliseconds ("frame interval"):
-- emits CSV record with dv/dt for this frame
-- updates the PWM output (analog output)
-- resets the dv/dt count
+- It generates an event on Channel 0 (configured via Atmel START in the
+  EVENT_SYSTEM_0 component).
+- It generates a high-level interrupt on port 0 (configured via Atmel START in
+  the PINMUX Configurator).
+
+
+## Program Structure:
+
+
+On SYNC_IN (60Hz) low-to-high transition (at interrupt level):
+- Trigger an event on Channel 0.  This initiates an ADC reading.
+- wait for D1 microseconds
+- set A low for D2 microseconds
+- set A high
+
+On ADC completion (at interrupt level):
+- update PWM to track ADC sample
+- add sample to running average
+- after N samples set "has_frame"
+
+At foreground level:
+- if "has_frame" true, process frame and set has_frame false
 
 ## I/O Assignments
 
-The product is defined to run on an ATXMEGA16D, but we used an XMEGA A1U
+The product is defined to run on an ATXMEGA16D4, but we used an XMEGA A1U
 XPlained development board for prototyping the system.  As a result, during the
 development process, there are two sets of I/O assignments:
 
 ```
-signal name  ATMEGA16D   XMEGA A1U        XMEGA A1U Connector
+signal name  ATMEGA16D4  XMEGA A1U        XMEGA A1U Connector
 ------------+-----------+----------------+--------------------
-ANALOG_IN_P  PA0         PA0              EXT1.3
-ANALOG_IN_M  PA2         PA4              EXT1.4
-SERIAL_RX    PC2         PE2 (USARTE0)    EDBG / USB
-SERIAL_TX    PC3         PE3 (USARTE0)    EDBG / USB
-MUXA0        PB0         PE6              EXT1.5
-MUXA1        PB1         PE7              EXT1.6
-POLARITY     PA7         PR1              EXT1.10
-LED          PD7         PQ3              on board
-PWM_OUT-                 PE0 (TCE0 OC0A)  EXT1.8     works
-PWM_OUT+     PD0         PE1 (TCE0 OC0B)  EXT1.7     doesn't work
-I2C_SCL      PE1
-IC2_SDA      PE0
-IRDA_RX      PD2
-IRDA_TX      PD3
-
-CONVERTING_SAMPLE        PB4              EXT2.5
-PROCESSING_SAMPLE        PB5              EXT2.6
-PROCESSING_FRAME         PB6              EXT2.9
 ```
 
 ## To Modify and Rebuild the MicroSense firmware
