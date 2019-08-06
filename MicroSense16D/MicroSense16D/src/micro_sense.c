@@ -5,10 +5,12 @@
  *  Author: Robert Poor <rdpoor@gmail.com>
  */
 
-#include <compiler.h>
+#include <atmel_start.h>
+
 #include <stdbool.h>
 #include <stdio.h>
 #include "atmel_start_pins.h"
+#include "delay.h"
 #include "micro_sense.h"
 #include "profiling.h"
 #include "pwm.h"
