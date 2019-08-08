@@ -424,7 +424,7 @@ void system_init()
 	    // <12=> 12
 	    // <13=> 13
 	    // <14=> 14
-	    0x0);
+	    0x8);
 
 	SYNC_IN_int1_mask(
 	    // <o> port vector 1 int mask

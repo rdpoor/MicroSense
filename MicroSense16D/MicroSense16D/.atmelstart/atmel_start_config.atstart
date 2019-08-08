@@ -469,7 +469,7 @@ pads:
       pad_dir: In
       pad_initial_level: Low
       pad_int0lvl: High Level
-      pad_int0msk: '0'
+      pad_int0msk: '8'
       pad_int1lvl: Interrupt Disabled
       pad_int1msk: '0'
       pad_isc: Sense Rising Edge
