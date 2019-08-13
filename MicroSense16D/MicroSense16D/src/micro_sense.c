@@ -73,6 +73,10 @@ void micro_sense_step(void) {
         printf("%e\r\n", s_result);
         s_has_result = false;
     }
+    // each time through the loop, make MUX0 and MUX1 track SDA and SCL
+    MUX_A0_set_level(SDA_get_level());
+    MUX_A1_set_level(SCL_get_level());
+
     asm("nop");
 }
 
