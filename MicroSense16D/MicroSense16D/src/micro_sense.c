@@ -5,8 +5,106 @@
  *  Author: Robert Poor <rdpoor@gmail.com>
  */
 
-#include <atmel_start.h>
+/**
+I/O PIN ASSIGNMENTS:
 
+PA0: VOUT0 (input) feeds ADC+
+PA1: VOUT1 (input) feeds Comparator+, generates interrupt to start conversion
+PA2: VREF (input) feeds Comparator-
+PA3: SYNC_IN (input) generates interrupt to end conversion
+PA4: NC
+PA5: NC
+PA6: B (output) for resetting integrator.
+PA7: A (output) for resetting integrator.
+
+PB0: MUXA0 (out)
+PB1: MUXA1 (out)
+PB2: NC
+PB3: NC
+
+PC0: NC
+PC1: NC
+PC2: RXD
+PC3: TXD
+PC4: NC
+PC5: NC
+PC6: NC
+PC7: NC
+
+PD0: PWM (out)
+PD1: NC
+PD2: IRDA RXD
+PD3: IRDA TXD
+PD4: IRDA SDD
+PD5: NC
+PD6: NC
+PD7: LED (output)
+
+PE0: SDA
+PE1: SCL
+PE2: NC
+PE3: NC
+
+FUNCTIONAL REQUIREMENTS:
+
+When VOUT1 exceeds VREF, start ADC conversion.
+Upon Conversion complete:
+  Record sample (S0)
+When SYNC_IN goes false, start ADC conversion.
+Upon conversion complete:
+  Record sample as S1
+  If S1 not fully saturated, save (S1-S0)
+  If S1 is fully saturated, decrease MUXA0:1
+  If S1 < ??, increase MUXA0:1
+Reset Integrator:
+  - assert A, assert B
+  - wait 1.25 uSec
+  - de-assert A
+  - wait 1.25 uSec
+  - de-assert B
+Loop
+
+IMPLEMENTATION:
+
+At the start of a cycle, Vout0 (same as Vout1) starts to ramp up.
+
+When Vout1 exceeds Vref, the comparator generates an event on channel 0 (set up
+in ATMEL START).
+
+Event 0 initiates an ADC conversion.
+
+[Optional: Event 0 resets TC0. Assign to t0.]
+
+When the ADC completes conversion, it generates an interrupt.
+
+In the interrupt, the ADC value is stored as S0 and `has_s0` is set true.
+
+When SYNC_IN goes true, its GPIO generates an event on channel 1 (set up in
+Atmel START).
+
+Event 1 initiates another ADC conversion.
+
+[Optional: Event 1 captures TC0.  Assign to t1.]
+
+When the ADC completes conversion, it generates an interrupt.
+
+In the interrupt:
+- the integrator is reset (described above)
+- if the value is NOT saturated, it is stored as S1 and "has_s1" is set true
+- if the value IS saturated, it is ignored
+
+The cycle repeats.
+
+AT FOREGROUND LEVEL:
+
+If `has_s1` is true: dv/dt = (S1-S0) / k
+[Optinal: dv/dt = (S1-S0)/(TC1-TC0)]
+Set `has_s1` to false.
+Wiggle a GPIO pin to show that the foreground has processed the sample.
+
+*/
+
+#include <atmel_start.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include "atmel_start_pins.h"
@@ -18,10 +116,11 @@
 //=============================================================================
 // definitions
 
-// time to wait before asserting integrator reset
-#define INTEGRATOR_HOLDOFF_US 1
-// time to hold integrator reset asserted
-#define INTEGRATOR_ASSERT_US 1
+// A and B are responsible for resetting the integrator
+#define A_PIN_MASK (1<<7)  // PA7
+#define B_PIN_MASK (1<<6)  // PA6
+#define A_RESET_HOLD_CYCLES (3)
+#define B_RESET_HOLD_CYCLES (6)
 
 #define ADC_COUNT_TO_RATIO(count) ((float)(count)/(float)(1<<12))
 #define SAMPLES_PER_FRAME 15
@@ -99,11 +198,21 @@ static uint16_t get_conversion_result(void) {
 	return (ADCA.CH0RES);
 }
 
+/**
+ * To reset integrator:
+ * - assert A and B
+ * - wait 1.5 uSec
+ * - deassert A
+ * - wait 1.5 uSec
+ * - deassert B
+ */
 static void reset_integrator() {
-  delay_us(INTEGRATOR_HOLDOFF_US);
+  // Assert A and B simultaneously
+  PORTA_set_port_level(A_PIN_MASK | B_PIN_MASK, true);
+  delay_cycles(A_RESET_HOLD_CYCLES);
   A_set_level(false);
-  delay_us(INTEGRATOR_ASSERT_US);
-  A_set_level(true);
+  delay_cycles(B_RESET_HOLD_CYCLES - A_RESET_HOLD_CYCLES);
+  B_set_level(false);
 }
 
 // Arrive here at interrupt level upon completion of ADC conversion
