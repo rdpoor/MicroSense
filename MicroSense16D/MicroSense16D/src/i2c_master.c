@@ -38,6 +38,7 @@
 #include <i2c_master.h>
 #include <i2c_types.h>
 #include <driver_init.h>
+#include <util/delay.h>
 #include <stdbool.h>
 #include <stdlib.h>
 // #include "timeout.h"  // TODO: Add timeout integration

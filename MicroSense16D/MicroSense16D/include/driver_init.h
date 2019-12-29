@@ -58,6 +58,7 @@
 #include <i2c_master.h>
 
 #include <evsys.h>
+#include <ac.h>
 
 #include <usart_basic.h>
 

@@ -37,17 +37,19 @@
 extern "C" {
 #endif
 
+#define I2C_TIMEOUT 10000
+
 #define TWIE_BAUD(F_SCL, T_RISE)                                                                                       \
 	((((((float)32000000 / (float)F_SCL)) - 10 - ((float)32000000 * T_RISE / 1000000))) / 2)
 
-uint8_t  I2C_0_read1ByteRegister(i2c_address_t address, uint8_t reg);
-uint16_t I2C_0_read2ByteRegister(i2c_address_t address, uint8_t reg);
-void     I2C_0_write1ByteRegister(i2c_address_t address, uint8_t reg, uint8_t data);
-void     I2C_0_write2ByteRegister(i2c_address_t address, uint8_t reg, uint16_t data);
+uint8_t     I2C_0_read1ByteRegister(i2c_address_t address, uint8_t reg);
+uint16_t    I2C_0_read2ByteRegister(i2c_address_t address, uint8_t reg);
+i2c_error_t I2C_0_write1ByteRegister(i2c_address_t address, uint8_t reg, uint8_t data);
+i2c_error_t I2C_0_write2ByteRegister(i2c_address_t address, uint8_t reg, uint16_t data);
 
-void I2C_0_writeNBytes(i2c_address_t address, void *data, size_t len);
-void I2C_0_readDataBlock(i2c_address_t address, uint8_t reg, void *data, size_t len);
-void I2C_0_readNBytes(i2c_address_t address, void *data, size_t len);
+i2c_error_t I2C_0_writeNBytes(i2c_address_t address, void *data, size_t len);
+i2c_error_t I2C_0_readDataBlock(i2c_address_t address, uint8_t reg, void *data, size_t len);
+i2c_error_t I2C_0_readNBytes(i2c_address_t address, void *data, size_t len);
 
 #ifdef __cplusplus
 }

@@ -34,6 +34,7 @@ extern "C" {
 
 #include <stdint.h>
 #include <stdbool.h>
+#include <compiler.h>
 
 enum port_output_pull_mode {
 	PORT_CONFIGURATION_TOTEM,

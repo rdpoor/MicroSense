@@ -37,6 +37,7 @@
       <description>Atmel Start Framework</description>
       <RTE_Components_h>#define ATMEL_START</RTE_Components_h>
       <files>
+        <file category="doc" condition="ARMCC, GCC, IAR" name="modules/ac/doc/ac.rst"/>
         <file category="doc" condition="ARMCC, GCC, IAR" name="modules/adc/doc/adc.rst"/>
         <file category="doc" condition="ARMCC, GCC, IAR" name="modules/clk/doc/clk.rst"/>
         <file category="doc" condition="ARMCC, GCC, IAR" name="modules/clk/doc/osc.rst"/>
@@ -54,6 +55,7 @@
         <file category="other" condition="ARMCC, GCC, IAR" name="doxygen/mainpage.dox"/>
         <file category="other" condition="ARMCC, GCC, IAR" name="doxygen/generator/doxyfile.doxygen"/>
         <file category="other" condition="ARMCC, GCC, IAR" name="doxygen/generator/DoxygenLayout.xml"/>
+        <file category="other" condition="ARMCC, GCC, IAR" name="doxygen/ac.dox"/>
         <file category="other" condition="ARMCC, GCC, IAR" name="doxygen/adc.dox"/>
         <file category="other" condition="ARMCC, GCC, IAR" name="doxygen/clk.dox"/>
         <file category="other" condition="ARMCC, GCC, IAR" name="doxygen/evsys.dox"/>
@@ -70,6 +72,7 @@
         <file category="header" condition="ARMCC, GCC, IAR" name="examples/include/usart_basic_example.h"/>
         <file category="source" condition="ARMCC, GCC, IAR" name="examples/src/i2c_master_example.c"/>
         <file category="source" condition="ARMCC, GCC, IAR" name="examples/src/usart_basic_example.c"/>
+        <file category="header" condition="ARMCC, GCC, IAR" name="include/ac.h"/>
         <file category="header" condition="ARMCC, GCC, IAR" name="include/adc.h"/>
         <file category="header" condition="ARMCC, GCC, IAR" name="include/ccp.h"/>
         <file category="header" condition="ARMCC, GCC, IAR" name="include/clk.h"/>
@@ -85,6 +88,7 @@
         <file category="header" condition="ARMCC, GCC, IAR" name="include/system.h"/>
         <file category="header" condition="ARMCC, GCC, IAR" name="include/tc.h"/>
         <file category="header" condition="ARMCC, GCC, IAR" name="include/usart_basic.h"/>
+        <file category="source" condition="ARMCC, GCC, IAR" name="src/ac.c"/>
         <file category="source" condition="ARMCC, GCC, IAR" name="src/adc.c"/>
         <file category="source" condition="ARMCC, GCC, IAR" name="src/clk.c"/>
         <file category="source" condition="ARMCC, GCC, IAR" name="src/evsys.c"/>

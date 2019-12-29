@@ -47,9 +47,3 @@ ISR(ADCA_CH0_vect)
   micro_sense_adc_complete_cb();
 	ADCA.INTFLAGS = ADC_CH0IF_bm;
 }
-
-ISR(PORTA_INT0_vect)
-{
-  micro_sense_sync_cb();
- 	PORTA_INTFLAGS = PORT_INT0IF_bm;
-}

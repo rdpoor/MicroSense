@@ -4,10 +4,10 @@ versions:
   api: '1.0'
   backend: 1.6.148
   commit: 605f106ab95776472e3febf2fac2471441fb1816
-  content: 1.0.1600
+  content: 1.0.1686
   content_pack_name: acme-packs-all
   format: '2'
-  frontend: 1.6.1881
+  frontend: 1.6.1894
 board:
   identifier: CustomBoard
   device: ATxmega16D4-AU
@@ -290,9 +290,9 @@ drivers:
       evsys_ch0ctrl_qden: false
       evsys_ch0ctrl_qdien: false
       evsys_ch0ctrl_qdirm: QDPH0 = 0, QDPH90 = 0
-      evsys_ch0mux_ch0mux: Port A, Pin3
+      evsys_ch0mux_ch0mux: Analog Comparator A Channel 0
       evsys_ch1ctrl_digfilt: 1 SAMPLE
-      evsys_ch1mux_ch1mux: 'Off'
+      evsys_ch1mux_ch1mux: Port A, Pin3
       evsys_ch2ctrl_digfilt: 1 SAMPLE
       evsys_ch2mux_ch2mux: 'Off'
       evsys_ch3ctrl_digfilt: 1 SAMPLE
@@ -308,6 +308,56 @@ drivers:
           external_frequency: 0
         configuration:
           evsys_clock_source: CLK CPU/PER
+  AC_0:
+    user_label: AC_0
+    definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::ACA::driver_config_definition::AC::Drivers:AC:Init
+    functionality: AC
+    api: Drivers:AC:Init
+    configuration:
+      ac_ac0ctrl_enable: true
+      ac_ac0ctrl_hsmode: false
+      ac_ac0ctrl_hysmode: Small hysteresis
+      ac_ac0ctrl_intlvl: Interrupt disabled
+      ac_ac0ctrl_intmode: Interrupt on falling edge
+      ac_ac0muxctrl_muxneg: Pin 1
+      ac_ac0muxctrl_muxpos: Pin 2
+      ac_ac1ctrl_enable: false
+      ac_ac1ctrl_hsmode: false
+      ac_ac1ctrl_hysmode: No hysteresis
+      ac_ac1ctrl_intlvl: Interrupt disabled
+      ac_ac1ctrl_intmode: Interrupt on both edges
+      ac_ac1muxctrl_muxneg: Pin 0
+      ac_ac1muxctrl_muxpos: Pin 0
+      ac_ctrla_ac0out: false
+      ac_ctrlb_scalefac: 0
+      ac_winctrl_wen: false
+      ac_winctrl_wintlvl: Interrupt disabled
+      ac_winctrl_wintmode: Interrupt on above window
+    optional_signals:
+    - identifier: AC_0:AC/1
+      pad: PA1
+      mode: Enabled
+      configuration: null
+      definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::optional_signal_definition::ACA.AC.1
+      name: ACA/AC/1
+      label: AC/1
+    - identifier: AC_0:AC/2
+      pad: PA2
+      mode: Enabled
+      configuration: null
+      definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::optional_signal_definition::ACA.AC.2
+      name: ACA/AC/2
+      label: AC/2
+    variant: null
+    clocks:
+      domain_group:
+        nodes:
+        - name: AC
+          input: CLK CPU/PER
+          external: false
+          external_frequency: 0
+        configuration:
+          ac_clock_source: CLK CPU/PER
   USART_0:
     user_label: USART_0
     definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::USARTC0::driver_config_definition::Async.IRQ.Mode::Drivers:USART:Basic
@@ -388,6 +438,12 @@ drivers:
         configuration:
           usart_clock_source: CLK CPU/PER
 pads:
+  B:
+    name: PA6
+    definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::pad::PA6
+    mode: Digital output
+    user_label: B
+    configuration: null
   A:
     name: PA7
     definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::pad::PA7
@@ -460,6 +516,18 @@ pads:
     mode: Analog
     user_label: OUT
     configuration: null
+  PA1:
+    name: PA1
+    definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::pad::PA1
+    mode: Analog
+    user_label: PA1
+    configuration: null
+  PA2:
+    name: PA2
+    definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::pad::PA2
+    mode: Analog
+    user_label: PA2
+    configuration: null
   SYNC_IN:
     name: PA3
     definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::pad::PA3
@@ -468,12 +536,12 @@ pads:
     configuration:
       pad_dir: In
       pad_initial_level: Low
-      pad_int0lvl: High Level
-      pad_int0msk: '8'
+      pad_int0lvl: Interrupt Disabled
+      pad_int0msk: '0'
       pad_int1lvl: Interrupt Disabled
       pad_int1msk: '0'
       pad_isc: Sense Rising Edge
-      pad_output_pull_config: Totem-pole
+      pad_output_pull_config: Pull-up
 toolchain_options:
 - definition:
     identifier: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::environment_definition::All:Atmel.Studio:7.0.0

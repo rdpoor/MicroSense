@@ -232,6 +232,9 @@
     <Compile Include="examples\src\usart_basic_example.c">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="include\ac.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="include\adc.h">
       <SubType>compile</SubType>
     </Compile>
@@ -296,6 +299,9 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="main.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="src\ac.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\adc.c">
@@ -387,6 +393,9 @@
     <Folder Include="utils\assembler\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="doxygen\ac.dox">
+      <SubType>compile</SubType>
+    </None>
     <None Include="doxygen\adc.dox">
       <SubType>compile</SubType>
     </None>

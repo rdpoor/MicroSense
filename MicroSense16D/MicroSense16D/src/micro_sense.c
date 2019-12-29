@@ -48,12 +48,15 @@ PE3: NC
 FUNCTIONAL REQUIREMENTS:
 
 When VOUT1 exceeds VREF, start ADC conversion.
+  [Optional: Record T0]
 Upon Conversion complete:
   Record sample (S0)
 When SYNC_IN goes false, start ADC conversion.
+  [Optional: Record T1]
 Upon conversion complete:
   Record sample as S1
   If S1 not fully saturated, save (S1-S0)
+  [Optional: save T1-T0]
   If S1 is fully saturated, decrease MUXA0:1
   If S1 < ??, increase MUXA0:1
 Reset Integrator:
@@ -68,7 +71,7 @@ IMPLEMENTATION:
 
 At the start of a cycle, Vout0 (same as Vout1) starts to ramp up.
 
-When Vout1 exceeds Vref, the comparator generates an event on channel 0 (set up
+When Vout1 exceeds Vref, the comparator generates an Event on channel 0 (set up
 in ATMEL START).
 
 Event 0 initiates an ADC conversion.
@@ -77,30 +80,32 @@ Event 0 initiates an ADC conversion.
 
 When the ADC completes conversion, it generates an interrupt.
 
-In the interrupt, the ADC value is stored as S0 and `has_s0` is set true.
+In the interrupt, the ADC value is stored as v0 and `has_v0` is set true.
 
-When SYNC_IN goes true, its GPIO generates an event on channel 1 (set up in
+When SYNC_IN goes true, its GPIO generates an Event on channel 1 (set up in
 Atmel START).
 
 Event 1 initiates another ADC conversion.
 
 [Optional: Event 1 captures TC0.  Assign to t1.]
 
-When the ADC completes conversion, it generates an interrupt.
+When the ADC completes conversion, it generates an interrupt (again).
 
 In the interrupt:
 - the integrator is reset (described above)
 - if the value is NOT saturated, it is stored as S1 and "has_s1" is set true
 - if the value IS saturated, it is ignored
-
+[NOTE: handling saturated values is not yet implemented.]
+- if 15 samples have been processed, set has_dv true
 The cycle repeats.
 
 AT FOREGROUND LEVEL:
 
-If `has_s1` is true: dv/dt = (S1-S0) / k
-[Optinal: dv/dt = (S1-S0)/(TC1-TC0)]
-Set `has_s1` to false.
-Wiggle a GPIO pin to show that the foreground has processed the sample.
+If `has_dv` is true: dv/dt = average_dv / k
+[Optional: dv/dt = (S1-S0)/(TC1-TC0)]
+Set `has_dv` to false.
+For debugging, wiggle a GPIO pin to show that the foreground has processed the
+  sample.
 
 */
 
@@ -122,78 +127,98 @@ Wiggle a GPIO pin to show that the foreground has processed the sample.
 #define A_RESET_HOLD_CYCLES (3)
 #define B_RESET_HOLD_CYCLES (6)
 
+// Convert ADC count (0...2^12) to a ratio (0.0 ... 1.0)
 #define ADC_COUNT_TO_RATIO(count) ((float)(count)/(float)(1<<12))
 #define SAMPLES_PER_FRAME 15
+
+// TODO: set DT to convert dvdt abstract units to meaningful units
+#define DT (1.0)
 
 //=============================================================================
 // forward declarations
 
 static uint16_t get_conversion_result(void);
-
-// called upon completion of ADC conversion
-static void process_sample(void);
-
-// called after 15 samples processed
-static void process_frame(float average);
-
-// momentarily drop A to reset integrator
 static void reset_integrator(void);
-
-static void emit_csv(float average);
-
 static void led_on();
-
 static void led_off();
 
 //=============================================================================
 // private storage
 
-volatile static uint16_t s_sample_count;
-volatile static float s_total;
-volatile static float s_result;
-volatile static bool s_has_result;
+volatile static float s_v0;      // A/D reading at start of integration ramp
+volatile static bool s_has_v0;   // set true after sampling v0
+
+volatile static uint16_t s_sample_count;  // # of samples processed
+volatile static float s_total_dv;         // accumulated dv
+volatile static float s_average_dv;       // averaged dv
+volatile static bool s_has_dv;            // set after 15 samples (250 mSec)
 
 //=============================================================================
 // "public" code
 
-// called once at initialization
+// [foreground] called once at initialization
 void micro_sense_init(void) {
-    s_sample_count = 0;
-    s_total = 0.0;
-    s_result = 0.0;
-    s_has_result = false;
+  s_v0 = 0.0;
+  s_has_v0 = false;
+  s_sample_count = 0;
+  s_total_dv = 0.0;
+  s_average_dv = 0.0;
+  s_has_dv = false;
 
-    reset_integrator();
+  reset_integrator();
 }
 
-// called repeatedly in foreground
+// [foreground] called repeatedly in foreground
 void micro_sense_step(void) {
-    if (s_has_result) {
-        printf("%e\r\n", s_result);
-        s_has_result = false;
+    if (s_has_dv) {
+      // averaged dv is waiting for us...
+      s_has_dv = false;
+      float dvdt = s_average_dv / DT;
+      printf("%e\r\n", dvdt);
     }
-    // each time through the loop, make MUX0 and MUX1 track SDA and SCL
+    // Until we implement autoscaling: each time through the loop, make MUX0 and
+    // MUX1 track SDA and SCL
     MUX_A0_set_level(SDA_get_level());
     MUX_A1_set_level(SCL_get_level());
 
     asm("nop");
 }
 
-// Called on completion of ADC conversion
+// [interrupt] Called on completion of ADC conversion
 void micro_sense_adc_complete_cb(void) {
+  float ratio = ADC_COUNT_TO_RATIO(get_conversion_result());
+
   led_on();
-  process_sample();
+
+  if (!s_has_v0) {
+    // here on the first sample: capture starting value of the integrator ramp
+    s_has_v0 = true;
+    s_v0 = ratio;
+
+  } else {
+    // here on the second sample:
+    s_has_v0 = false;
+    reset_integrator();               // reset integrator
+    pwm_set_ratio(ratio);             // pwm tracks A/D
+    s_total_dv += (ratio - s_v0);     // accumulate dv (i.e. v1 - v0)
+    s_sample_count += 1;
+
+    if (s_sample_count >= SAMPLES_PER_FRAME) {
+      // after 15 samples (250 mSec), emit averaged result
+      s_average_dv = s_total_dv / SAMPLES_PER_FRAME;  // store result for fg
+      s_has_dv = true;                                // notify fg
+      s_total_dv = 0.0;                               // reset averaging filter
+      s_sample_count = 0;
+    }
+
+  }
   led_off();
 }
 
-// Called whenever the SYNC input transitions low to high
-void micro_sense_sync_cb(void) {
-  reset_integrator();
-}
-
 //=============================================================================
-// "private" code
+// local code
 
+// Fetch the raw 12 bit sample from the A/D
 static uint16_t get_conversion_result(void) {
 	return (ADCA.CH0RES);
 }
@@ -213,34 +238,6 @@ static void reset_integrator() {
   A_set_level(false);
   delay_cycles(B_RESET_HOLD_CYCLES - A_RESET_HOLD_CYCLES);
   B_set_level(false);
-}
-
-// Arrive here at interrupt level upon completion of ADC conversion
-static void process_sample(void) {
-  float ratio = ADC_COUNT_TO_RATIO(get_conversion_result());
-
-  // PWM tracks A/D
-  pwm_set_ratio(ratio);
-
-  // Call process_frame() after SAMPLES_PER_FRAME samples
-  s_sample_count += 1;
-  if (s_sample_count >= SAMPLES_PER_FRAME) {
-    s_sample_count = 0;
-    process_frame(s_total / SAMPLES_PER_FRAME);
-    s_total = 0;
-  }
-}
-
-// Arrive here at interrupt level after SAMPLES_PER_FRAME have been processed
-static void process_frame(float average) {
-  PROFILING_SET(PROCESSING_FRAME);
-  emit_csv(average);
-  PROFILING_CLR(PROCESSING_FRAME);
-}
-
-static void emit_csv(float average) {
-  s_result = average;
-  s_has_result = true;
 }
 
 static void led_on() {

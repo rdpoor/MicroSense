@@ -45,27 +45,47 @@ static i2c_operations_t I2C_0_wr1RegCompleteHandler(void *p)
 	return i2c_continue;
 }
 
-void I2C_0_write1ByteRegister(i2c_address_t address, uint8_t reg, uint8_t data)
+i2c_error_t I2C_0_write1ByteRegister(i2c_address_t address, uint8_t reg, uint8_t data)
 {
-	while (!I2C_0_open(address))
+	/* timeout is used to get out of twim_release, when there is no device connected to the bus*/
+	uint16_t timeout = I2C_TIMEOUT;
+
+	while (I2C_BUSY == I2C_0_open(address) && --timeout)
 		; // sit here until we get the bus..
+	if (!timeout)
+		return I2C_BUSY;
 	I2C_0_set_data_complete_callback(I2C_0_wr1RegCompleteHandler, &data);
 	I2C_0_set_buffer(&reg, 1);
 	I2C_0_set_address_nack_callback(i2c_cb_restart_write, NULL); // NACK polling?
 	I2C_0_master_write();
-	while (I2C_BUSY == I2C_0_close())
+	timeout = I2C_TIMEOUT;
+	while (I2C_BUSY == I2C_0_close() && --timeout)
 		; // sit here until finished.
+	if (!timeout)
+		return I2C_FAIL;
+
+	return I2C_NOERR;
 }
 
-void I2C_0_writeNBytes(i2c_address_t address, void *data, size_t len)
+i2c_error_t I2C_0_writeNBytes(i2c_address_t address, void *data, size_t len)
 {
-	while (!I2C_0_open(address))
+	/* timeout is used to get out of twim_release, when there is no device connected to the bus*/
+	uint16_t timeout = I2C_TIMEOUT;
+
+	while (I2C_BUSY == I2C_0_open(address) && --timeout)
 		; // sit here until we get the bus..
+	if (!timeout)
+		return I2C_BUSY;
 	I2C_0_set_buffer(data, len);
 	I2C_0_set_address_nack_callback(i2c_cb_restart_write, NULL); // NACK polling?
 	I2C_0_master_write();
-	while (I2C_BUSY == I2C_0_close())
+	timeout = I2C_TIMEOUT;
+	while (I2C_BUSY == I2C_0_close() && --timeout)
 		; // sit here until finished.
+	if (!timeout)
+		return I2C_FAIL;
+
+	return I2C_NOERR;
 }
 
 static i2c_operations_t I2C_0_rd1RegCompleteHandler(void *p)
@@ -129,16 +149,26 @@ static i2c_operations_t I2C_0_wr2RegCompleteHandler(void *p)
 	return i2c_continue;
 }
 
-void I2C_0_write2ByteRegister(i2c_address_t address, uint8_t reg, uint16_t data)
+i2c_error_t I2C_0_write2ByteRegister(i2c_address_t address, uint8_t reg, uint16_t data)
 {
-	while (!I2C_0_open(address))
+	/* timeout is used to get out of twim_release, when there is no device connected to the bus*/
+	uint16_t timeout = I2C_TIMEOUT;
+
+	while (I2C_BUSY == I2C_0_open(address) && --timeout)
 		; // sit here until we get the bus..
+	if (!timeout)
+		return I2C_BUSY;
 	I2C_0_set_data_complete_callback(I2C_0_wr2RegCompleteHandler, &data);
 	I2C_0_set_buffer(&reg, 1);
 	I2C_0_set_address_nack_callback(i2c_cb_restart_write, NULL); // NACK polling?
 	I2C_0_master_write();
-	while (I2C_BUSY == I2C_0_close())
+	timeout = I2C_TIMEOUT;
+	while (I2C_BUSY == I2C_0_close() && --timeout)
 		; // sit here until finished.
+	if (!timeout)
+		return I2C_FAIL;
+
+	return I2C_NOERR;
 }
 
 /****************************************************************/
@@ -154,29 +184,48 @@ static i2c_operations_t I2C_0_rdBlkRegCompleteHandler(void *p)
 	return i2c_restart_read;
 }
 
-void I2C_0_readDataBlock(i2c_address_t address, uint8_t reg, void *data, size_t len)
+i2c_error_t I2C_0_readDataBlock(i2c_address_t address, uint8_t reg, void *data, size_t len)
 {
+	/* timeout is used to get out of twim_release, when there is no device connected to the bus*/
+	uint16_t timeout = I2C_TIMEOUT;
 	// result is little endian
 	I2C_0_buf_t d;
 	d.data = data;
 	d.len  = len;
 
-	while (!I2C_0_open(address))
+	while (I2C_BUSY == I2C_0_open(address) && --timeout)
 		; // sit here until we get the bus..
+	if (!timeout)
+		return I2C_BUSY;
 	I2C_0_set_data_complete_callback(I2C_0_rdBlkRegCompleteHandler, &d);
 	I2C_0_set_buffer(&reg, 1);
 	I2C_0_set_address_nack_callback(i2c_cb_restart_write, NULL); // NACK polling?
 	I2C_0_master_write();
-	while (I2C_BUSY == I2C_0_close())
+	timeout = I2C_TIMEOUT;
+	while (I2C_BUSY == I2C_0_close() && --timeout)
 		; // sit here until finished.
+	if (!timeout)
+		return I2C_FAIL;
+
+	return I2C_NOERR;
 }
 
-void I2C_0_readNBytes(i2c_address_t address, void *data, size_t len)
+i2c_error_t I2C_0_readNBytes(i2c_address_t address, void *data, size_t len)
 {
-	while (!I2C_0_open(address))
+	/* timeout is used to get out of twim_release, when there is no device connected to the bus*/
+	uint16_t timeout = I2C_TIMEOUT;
+
+	while (I2C_BUSY == I2C_0_open(address) && --timeout)
 		; // sit here until we get the bus..
+	if (!timeout)
+		return I2C_BUSY;
 	I2C_0_set_buffer(data, len);
 	I2C_0_master_read();
-	while (I2C_BUSY == I2C_0_close())
+	timeout = I2C_TIMEOUT;
+	while (I2C_BUSY == I2C_0_close() && --timeout)
 		; // sit here until finished.
+	if (!timeout)
+		return I2C_FAIL;
+
+	return I2C_NOERR;
 }

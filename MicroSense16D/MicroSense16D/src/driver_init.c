@@ -275,6 +275,23 @@ void EVENT_SYSTEM_0_initialization(void)
 	EVENT_SYSTEM_0_init();
 }
 
+/* configure pins and initialize registers */
+void AC_0_initialization(void)
+{
+
+	// Disable pull-up resistor
+	PA1_set_output_pull_mode(PORT_CONFIGURATION_TOTEM);
+	// Disable digital         // Disable digital input buffer
+	PA1_set_isc(PORT_ISC_INPUT_DISABLE_gc);
+
+	// Disable pull-up resistor
+	PA2_set_output_pull_mode(PORT_CONFIGURATION_TOTEM);
+	// Disable digital         // Disable digital input buffer
+	PA2_set_isc(PORT_ISC_INPUT_DISABLE_gc);
+
+	AC_0_init();
+}
+
 /* Configure pins and initialize registers */
 void USART_0_initialization(void)
 {
@@ -376,7 +393,7 @@ void system_init()
 	    // <PORT_CONFIGURATION_WIREDAND"> Wired-AND
 	    // <PORT_CONFIGURATION_WIREDORPULL"> Wired-OR with pull-down
 	    // <PORT_CONFIGURATION_WIREDANDPULL"> Wired-AND with pull-up
-	    PORT_CONFIGURATION_TOTEM);
+	    PORT_CONFIGURATION_PULLUP);
 
 	SYNC_IN_set_isc(
 	    // <y> Pin Input/Sense Configuration
@@ -395,7 +412,7 @@ void system_init()
 	    // <PORT_INT0LVL_LO_gc"> Low Level
 	    // <PORT_INT0LVL_MED_gc"> Medium Level
 	    // <PORT_INT0LVL_HI_gc"> High Level
-	    PORT_INT0LVL_HI_gc);
+	    PORT_INT0LVL_OFF_gc);
 
 	SYNC_IN_int_level(
 	    // <y> port vector 1 int level
@@ -424,7 +441,7 @@ void system_init()
 	    // <12=> 12
 	    // <13=> 13
 	    // <14=> 14
-	    0x8);
+	    0x0);
 
 	SYNC_IN_int1_mask(
 	    // <o> port vector 1 int mask
@@ -445,6 +462,18 @@ void system_init()
 	    // <13=> 13
 	    // <14=> 14
 	    0x0);
+
+	/* PORT setting on PA6 */
+
+	// Set pin direction to output
+	B_set_dir(PORT_DIR_OUT);
+
+	B_set_level(
+	    // <y> Initial level
+	    // <id> pad_initial_level
+	    // <false"> Low
+	    // <true"> High
+	    false);
 
 	/* PORT setting on PA7 */
 
@@ -509,6 +538,8 @@ void system_init()
 	I2C_0_initialization();
 
 	EVENT_SYSTEM_0_initialization();
+
+	AC_0_init();
 
 	USART_0_initialization();
 

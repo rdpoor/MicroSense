@@ -43,9 +43,9 @@
 int8_t EVENT_SYSTEM_0_init()
 {
 
-	EVSYS.CH0MUX = EVSYS_CHMUX_PORTA_PIN3_gc; /* Port A, Pin3 */
+	EVSYS.CH0MUX = EVSYS_CHMUX_ACA_CH0_gc; /* Analog Comparator A Channel 0 */
 
-	// EVSYS.CH1MUX = EVSYS_CHMUX_OFF_gc; /* Off */
+	EVSYS.CH1MUX = EVSYS_CHMUX_PORTA_PIN3_gc; /* Port A, Pin3 */
 
 	// EVSYS.CH2MUX = EVSYS_CHMUX_OFF_gc; /* Off */
 

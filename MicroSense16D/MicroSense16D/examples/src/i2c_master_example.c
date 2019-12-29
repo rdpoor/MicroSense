@@ -27,6 +27,7 @@
 
 #include <atmel_start.h>
 #include <i2c_types.h>
+#include <i2c_simple_master.h>
 #include <utils/atomic.h>
 
 #define slave_adr 0x4f
@@ -61,11 +62,16 @@ i2c_operations_t I2C_0_read_handler(void *d)
 This transfer sequence is typically done to first write to the slave the address in
 the slave to read from, thereafter to read N bytes from this address.
 */
-void I2C_0_do_transfer(uint8_t adr, uint8_t *data, uint8_t size)
+i2c_error_t I2C_0_do_transfer(uint8_t adr, uint8_t *data, uint8_t size)
 {
-	transfer_descriptor_t d = {data, size};
-	while (!I2C_0_open(slave_adr))
+	/* timeout is used to get out of twim_release, when there is no device connected to the bus*/
+	uint16_t              timeout = I2C_TIMEOUT;
+	transfer_descriptor_t d       = {data, size};
+
+	while (I2C_BUSY == I2C_0_open(slave_adr) && --timeout)
 		; // sit here until we get the bus..
+	if (!timeout)
+		return I2C_BUSY;
 
 	// This callback specifies what to do after the first write operation has completed
 	// The parameters to the callback are bundled together in the aggregate data type d.
@@ -76,8 +82,13 @@ void I2C_0_do_transfer(uint8_t adr, uint8_t *data, uint8_t size)
 	I2C_0_set_buffer((void *)&adr, 1);
 	// Start a Write operation
 	I2C_0_master_operation(false);
-	while (I2C_BUSY == I2C_0_close())
-		; // sit here until the entire chained operation has finished
+	timeout = I2C_TIMEOUT;
+	while (I2C_BUSY == I2C_0_close() && --timeout)
+		; // sit here until finished.
+	if (!timeout)
+		return I2C_FAIL;
+
+	return I2C_NOERR;
 }
 
 uint8_t I2C_0_test_i2c_master(void)

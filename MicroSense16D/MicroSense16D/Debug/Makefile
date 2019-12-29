@@ -52,6 +52,7 @@ C_SRCS +=  \
 ../examples/src/i2c_master_example.c \
 ../examples/src/usart_basic_example.c \
 ../main.c \
+../src/ac.c \
 ../src/adc.c \
 ../src/clk.c \
 ../src/delay.c \
@@ -83,6 +84,7 @@ driver_isr.o \
 examples/src/i2c_master_example.o \
 examples/src/usart_basic_example.o \
 main.o \
+src/ac.o \
 src/adc.o \
 src/clk.o \
 src/delay.o \
@@ -107,6 +109,7 @@ driver_isr.o \
 examples/src/i2c_master_example.o \
 examples/src/usart_basic_example.o \
 main.o \
+src/ac.o \
 src/adc.o \
 src/clk.o \
 src/delay.o \
@@ -131,6 +134,7 @@ driver_isr.d \
 examples/src/i2c_master_example.d \
 examples/src/usart_basic_example.d \
 main.d \
+src/ac.d \
 src/adc.d \
 src/clk.d \
 src/delay.d \
@@ -155,6 +159,7 @@ driver_isr.d \
 examples/src/i2c_master_example.d \
 examples/src/usart_basic_example.d \
 main.d \
+src/ac.d \
 src/adc.d \
 src/clk.d \
 src/delay.d \
@@ -216,6 +221,13 @@ examples/src/usart_basic_example.o: ../examples/src/usart_basic_example.c
 	
 
 ./main.o: .././main.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler : 5.4.0
+	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"../examples/include" -I"../include" -I"../utils" -I"../utils/assembler" -I".." -I"../Config" -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\XMEGAD_DFP\1.1.63\include"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atxmega16d4 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\XMEGAD_DFP\1.1.63\gcc\dev\atxmega16d4" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+src/ac.o: ../src/ac.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler : 5.4.0
 	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"../examples/include" -I"../include" -I"../utils" -I"../utils/assembler" -I".." -I"../Config" -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\XMEGAD_DFP\1.1.63\include"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atxmega16d4 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\XMEGAD_DFP\1.1.63\gcc\dev\atxmega16d4" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
