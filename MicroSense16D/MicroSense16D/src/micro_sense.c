@@ -124,8 +124,8 @@ For debugging, wiggle a GPIO pin to show that the foreground has processed the
 // A and B are responsible for resetting the integrator
 #define A_PIN_MASK (1<<7)  // PA7
 #define B_PIN_MASK (1<<6)  // PA6
-#define A_RESET_HOLD_CYCLES (3)
-#define B_RESET_HOLD_CYCLES (6)
+#define A_RESET_HOLD_CYCLES (18)
+#define B_RESET_HOLD_CYCLES (36)
 
 // Convert ADC count (0...2^12) to a ratio (0.0 ... 1.0)
 #define ADC_COUNT_TO_RATIO(count) ((float)(count)/(float)(1<<12))
