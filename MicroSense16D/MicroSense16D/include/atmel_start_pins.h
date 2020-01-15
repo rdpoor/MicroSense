@@ -532,7 +532,7 @@ static inline void SYNC_IN_int1_mask(const uint8_t value)
  */
 static inline void B_set_output_pull_mode(const enum port_output_pull_mode output_pull_mode)
 {
-	PORTA_set_pin_output_pull_mode(6, output_pull_mode);
+	PORTA_set_pin_output_pull_mode(4, output_pull_mode);
 }
 
 /**
@@ -548,7 +548,7 @@ static inline void B_set_output_pull_mode(const enum port_output_pull_mode outpu
  */
 static inline void B_set_dir(const enum port_dir dir)
 {
-	PORTA_set_pin_dir(6, dir);
+	PORTA_set_pin_dir(4, dir);
 }
 
 /**
@@ -565,7 +565,7 @@ static inline void B_set_dir(const enum port_dir dir)
  */
 static inline void B_set_isc(const PORT_ISC_t isc)
 {
-	PORTA_pin_set_isc(6, isc);
+	PORTA_pin_set_isc(4, isc);
 }
 
 /**
@@ -578,7 +578,7 @@ static inline void B_set_isc(const PORT_ISC_t isc)
  */
 static inline void B_set_inverted(const bool inverted)
 {
-	PORTA_pin_set_inverted(6, inverted);
+	PORTA_pin_set_inverted(4, inverted);
 }
 
 /**
@@ -591,7 +591,7 @@ static inline void B_set_inverted(const bool inverted)
  */
 static inline void B_set_level(const bool level)
 {
-	PORTA_set_pin_level(6, level);
+	PORTA_set_pin_level(4, level);
 }
 
 /**
@@ -601,7 +601,7 @@ static inline void B_set_level(const bool level)
  */
 static inline void B_toggle_level()
 {
-	PORTA_toggle_pin_level(6);
+	PORTA_toggle_pin_level(4);
 }
 
 /**
@@ -611,7 +611,7 @@ static inline void B_toggle_level()
  */
 static inline bool B_get_level()
 {
-	return PORTA_get_pin_level(6);
+	return PORTA_get_pin_level(4);
 }
 
 /**
@@ -660,7 +660,7 @@ static inline void B_int1_mask(const uint8_t value)
  */
 static inline void A_set_output_pull_mode(const enum port_output_pull_mode output_pull_mode)
 {
-	PORTA_set_pin_output_pull_mode(7, output_pull_mode);
+	PORTA_set_pin_output_pull_mode(5, output_pull_mode);
 }
 
 /**
@@ -676,7 +676,7 @@ static inline void A_set_output_pull_mode(const enum port_output_pull_mode outpu
  */
 static inline void A_set_dir(const enum port_dir dir)
 {
-	PORTA_set_pin_dir(7, dir);
+	PORTA_set_pin_dir(5, dir);
 }
 
 /**
@@ -693,7 +693,7 @@ static inline void A_set_dir(const enum port_dir dir)
  */
 static inline void A_set_isc(const PORT_ISC_t isc)
 {
-	PORTA_pin_set_isc(7, isc);
+	PORTA_pin_set_isc(5, isc);
 }
 
 /**
@@ -706,7 +706,7 @@ static inline void A_set_isc(const PORT_ISC_t isc)
  */
 static inline void A_set_inverted(const bool inverted)
 {
-	PORTA_pin_set_inverted(7, inverted);
+	PORTA_pin_set_inverted(5, inverted);
 }
 
 /**
@@ -719,7 +719,7 @@ static inline void A_set_inverted(const bool inverted)
  */
 static inline void A_set_level(const bool level)
 {
-	PORTA_set_pin_level(7, level);
+	PORTA_set_pin_level(5, level);
 }
 
 /**
@@ -729,7 +729,7 @@ static inline void A_set_level(const bool level)
  */
 static inline void A_toggle_level()
 {
-	PORTA_toggle_pin_level(7);
+	PORTA_toggle_pin_level(5);
 }
 
 /**
@@ -739,7 +739,7 @@ static inline void A_toggle_level()
  */
 static inline bool A_get_level()
 {
-	return PORTA_get_pin_level(7);
+	return PORTA_get_pin_level(5);
 }
 
 /**
@@ -774,6 +774,134 @@ static inline void A_int0_mask(const uint8_t value)
  * \param[in] value Value to write to the port register
  */
 static inline void A_int1_mask(const uint8_t value)
+{
+	PORTA_write_int1_mask(value);
+}
+
+/**
+ * \brief Set COMP_OUT output & pull configuration
+ *
+ * Configure pin to pull up, down or disable pull mode, supported pull
+ * modes are defined by device used
+ *
+ * \param[in] output_pull_mode Pin output & pull mode
+ */
+static inline void COMP_OUT_set_output_pull_mode(const enum port_output_pull_mode output_pull_mode)
+{
+	PORTA_set_pin_output_pull_mode(7, output_pull_mode);
+}
+
+/**
+ * \brief Set COMP_OUT data direction
+ *
+ * Select if the pin data direction is input, output or disabled.
+ * If disabled state is not possible, this function throws an assert.
+ *
+ * \param[in] direction PORT_DIR_IN  = Data direction in
+ *                      PORT_DIR_OUT = Data direction out
+ *                      PORT_DIR_OFF = Disables the pin
+ *                      (low power state)
+ */
+static inline void COMP_OUT_set_dir(const enum port_dir dir)
+{
+	PORTA_set_pin_dir(7, dir);
+}
+
+/**
+ * \brief Set COMP_OUT input/sense configuration
+ *
+ * Enable/disable COMP_OUT digital input buffer and pin change interrupt,
+ * select pin interrupt edge/level sensing mode
+ *
+ * \param[in] isc PORT_ISC_BOTHEDGES_gc     = Sense Both Edges
+ *                PORT_ISC_RISING_gc        = Sense Rising Edge
+ *                PORT_ISC_FALLING_gc       = Sense Falling Edge
+ *                PORT_ISC_INPUT_DISABLE_gc = Digital Input Buffer disabled
+ *                PORT_ISC_LEVEL_gc         = Sense low Level
+ */
+static inline void COMP_OUT_set_isc(const PORT_ISC_t isc)
+{
+	PORTA_pin_set_isc(7, isc);
+}
+
+/**
+ * \brief Set COMP_OUT inverted mode
+ *
+ * Enable or disable inverted I/O on a pin
+ *
+ * \param[in] inverted true  = I/O on COMP_OUT is inverted
+ *                     false = I/O on COMP_OUT is not inverted
+ */
+static inline void COMP_OUT_set_inverted(const bool inverted)
+{
+	PORTA_pin_set_inverted(7, inverted);
+}
+
+/**
+ * \brief Set COMP_OUT level
+ *
+ * Sets output level on a pin
+ *
+ * \param[in] level true  = Pin level set to "high" state
+ *                  false = Pin level set to "low" state
+ */
+static inline void COMP_OUT_set_level(const bool level)
+{
+	PORTA_set_pin_level(7, level);
+}
+
+/**
+ * \brief Toggle output level on COMP_OUT
+ *
+ * Toggle the pin level
+ */
+static inline void COMP_OUT_toggle_level()
+{
+	PORTA_toggle_pin_level(7);
+}
+
+/**
+ * \brief Get level on COMP_OUT
+ *
+ * Reads the level on a pin
+ */
+static inline bool COMP_OUT_get_level()
+{
+	return PORTA_get_pin_level(7);
+}
+
+/**
+ * \brief Set COMP_OUT interrupt level
+ *
+ * Sets interrupt level for port
+ *
+ * \param[in] level Value to write to the port register
+ */
+static inline void COMP_OUT_int_level(const uint8_t level)
+{
+	PORTA_set_int_level(level);
+}
+
+/**
+ * \brief Set COMP_OUT interrupt vector 0 mask
+ *
+ * Sets interrupt mask for port vector 0
+ *
+ * \param[in] value Value to write to the port register
+ */
+static inline void COMP_OUT_int0_mask(const uint8_t value)
+{
+	PORTA_write_int0_mask(value);
+}
+
+/**
+ * \brief Set COMP_OUT interrupt vector 1 mask
+ *
+ * Sets interrupt mask for port vector 1
+ *
+ * \param[in] value Value to write to the port register
+ */
+static inline void COMP_OUT_int1_mask(const uint8_t value)
 {
 	PORTA_write_int1_mask(value);
 }

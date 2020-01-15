@@ -50,7 +50,7 @@ int8_t AC_0_init()
 	// ACA.AC1MUXCTRL = AC_MUXNEG_PIN0_gc /* Pin 0 */
 	//		 | AC_MUXPOS_PIN0_gc; /* Pin 0 */
 
-	// ACA.CTRLA = 0 << AC_AC0OUT_bp /* Analog Comparator 0 Output Enable: disabled */;
+	ACA.CTRLA = 1 << AC_AC0OUT_bp /* Analog Comparator 0 Output Enable: enabled */;
 
 	// ACA.CTRLB = 0; /* VCC Voltage Scaler Factor: 0 */
 

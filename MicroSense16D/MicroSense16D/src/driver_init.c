@@ -463,7 +463,7 @@ void system_init()
 	    // <14=> 14
 	    0x0);
 
-	/* PORT setting on PA6 */
+	/* PORT setting on PA4 */
 
 	// Set pin direction to output
 	B_set_dir(PORT_DIR_OUT);
@@ -475,7 +475,7 @@ void system_init()
 	    // <true"> High
 	    false);
 
-	/* PORT setting on PA7 */
+	/* PORT setting on PA5 */
 
 	// Set pin direction to output
 	A_set_dir(PORT_DIR_OUT);
@@ -486,6 +486,13 @@ void system_init()
 	    // <false"> Low
 	    // <true"> High
 	    false);
+
+	/* PORT setting on PA7 */
+
+	// Disable pull-up resistor
+	COMP_OUT_set_output_pull_mode(PORT_CONFIGURATION_TOTEM);
+	// Disable digital         // Disable digital input buffer
+	COMP_OUT_set_isc(PORT_ISC_INPUT_DISABLE_gc);
 
 	/* PORT setting on PB0 */
 

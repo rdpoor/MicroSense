@@ -35,7 +35,6 @@
 
 #include <driver_init.h>
 #include <compiler.h>
-#include "micro_sense.h"
 
 ISR(TCD0_OVF_vect)
 {
@@ -44,6 +43,5 @@ ISR(TCD0_OVF_vect)
 
 ISR(ADCA_CH0_vect)
 {
-  micro_sense_adc_complete_cb();
-	ADCA.INTFLAGS = ADC_CH0IF_bm;
+	/* Insert your ADC result ready interrupt handling code here */
 }
