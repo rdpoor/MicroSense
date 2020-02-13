@@ -71,7 +71,7 @@ IMPLEMENTATION:
 
 At the start of a cycle, Vout0 (same as Vout1) starts to ramp up.  Or not.
 
-At such time that Vout1 exceeds Vref, the comparator generates an Event on 
+At such time that Vout1 exceeds Vref, the comparator generates an Event on
 channel 0 (set up in ATMEL START).
 
 Event 0 initiates an ADC conversion.
@@ -137,6 +137,7 @@ For debugging, wiggle a GPIO pin to show that the foreground has processed the
 //=============================================================================
 // forward declarations
 
+static void process_sample(float v0, float v1);
 static uint16_t get_conversion_result(void);
 static void reset_integrator(void);
 static void led_on();
@@ -145,9 +146,9 @@ static void led_off();
 //=============================================================================
 // private storage
 
-volatile static float s_v0;      // A/D reading at start of integration ramp
-volatile static bool s_has_v0;   // set true after sampling v0
-
+volatile static bool s_comp_did_trigger;  // Set true when comparator matches
+volatile static bool s_sync_did_trigger;  // Set true when sync in goes true
+volatile static float s_v0;               // integrator voltage captured at t0
 volatile static uint16_t s_sample_count;  // # of samples processed
 volatile static float s_total_dv;         // accumulated dv
 volatile static float s_average_dv;       // averaged dv
@@ -158,8 +159,9 @@ volatile static bool s_has_dv;            // set after 15 samples (250 mSec)
 
 // [foreground] called once at initialization
 void micro_sense_init(void) {
+  s_comp_did_trigger = false;
+  s_sync_did_trigger = false;
   s_v0 = 0.0;
-  s_has_v0 = false;
   s_sample_count = 0;
   s_total_dv = 0.0;
   s_average_dv = 0.0;
@@ -188,36 +190,57 @@ void micro_sense_step(void) {
     asm("nop");
 }
 
+// [Interrupt] Called when comparator match goes true
+void micro_sense_ac_match_cb(void) {
+  s_comp_did_trigger = true;
+}
+
 // [interrupt] Called on completion of ADC conversion
 void micro_sense_adc_complete_cb(void) {
   float ratio = ADC_COUNT_TO_RATIO(get_conversion_result());
 
   led_on();
 
-  if (!s_has_v0) {
-    // here on the first sample: capture starting value of the integrator ramp
-    s_has_v0 = true;
-    s_v0 = ratio;
+  // Only two things trigger an ADC reading: when the comparator goes true or
+  // when SYNC triggers.
+  if (s_comp_did_trigger) {
+    s_comp_did_trigger = false;  // prepare for next reading of v0
 
-  } else {
-    // here on the second sample:
-    s_has_v0 = false;
-    reset_integrator();               // reset integrator
-    pwm_set_ratio(ratio);             // pwm tracks A/D
-    s_total_dv += (ratio - s_v0);     // accumulate dv (i.e. v1 - v0)
-    s_sample_count += 1;
-
-    if (s_sample_count >= SAMPLES_PER_FRAME) {
-      // after 15 samples (250 mSec), emit averaged result
-      s_average_dv = s_total_dv / SAMPLES_PER_FRAME;  // store result for fg
-      s_has_dv = true;                                // notify fg
-      s_total_dv = 0.0;                               // reset averaging filter
-      s_sample_count = 0;
+    if (!s_sync_did_trigger) {
+      // Arrive here because the comparator triggerd.  Capture v0.
+      s_v0 = ratio;
+    } else {
+      // Arrive here because the sync triggered.  Capture dv = v1 - v0
+      s_sync_did_trigger = false;  // prepare for next reading of v0
+      process_sample(s_v0, ratio);
     }
-
+  } else {
+    // The integrator output failed to trigger the comparator: ignore reading.
+    s_sync_did_trigger = false;  // prepare for next reading of v0
   }
   led_off();
 }
+
+static void process_sample(float v0, float v1) {
+  reset_integrator();               // reset integrator
+  pwm_set_ratio(v1);             // pwm tracks A/D
+  s_total_dv += (v1 - v0);          // accumulate dv (i.e. v1 - v0)
+  s_sample_count += 1;
+
+  if (s_sample_count >= SAMPLES_PER_FRAME) {
+    // after 15 samples (250 mSec), emit averaged result
+    s_average_dv = s_total_dv / SAMPLES_PER_FRAME;  // store result for fg
+    s_has_dv = true;                                // notify fg
+    s_total_dv = 0.0;                               // reset averaging filter
+    s_sample_count = 0;
+  }
+}
+
+// [Interrupt] Called on each low-to-high transition on SYNC_IN (60Hz)
+void micro_sense_sync_cb(void) {
+
+}
+
 
 //=============================================================================
 // local code

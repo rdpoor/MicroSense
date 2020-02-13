@@ -279,8 +279,8 @@ drivers:
       ac_ac0ctrl_enable: true
       ac_ac0ctrl_hsmode: false
       ac_ac0ctrl_hysmode: Small hysteresis
-      ac_ac0ctrl_intlvl: Interrupt disabled
-      ac_ac0ctrl_intmode: Interrupt on falling edge
+      ac_ac0ctrl_intlvl: Low level
+      ac_ac0ctrl_intmode: Interrupt on rising edge
       ac_ac0muxctrl_muxneg: Pin 1
       ac_ac0muxctrl_muxpos: Pin 2
       ac_ac1ctrl_enable: false
@@ -406,6 +406,12 @@ pads:
     mode: Digital output
     user_label: A
     configuration: null
+  PA6_TEST:
+    name: PA6
+    definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::pad::PA6
+    mode: Digital output
+    user_label: PA6_TEST
+    configuration: null
   COMP_OUT:
     name: PA7
     definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::pad::PA7
@@ -423,6 +429,18 @@ pads:
     definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::pad::PB1
     mode: Digital output
     user_label: MUX_A1
+    configuration: null
+  TEST_PB2:
+    name: PB2
+    definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::pad::PB2
+    mode: Digital output
+    user_label: TEST_PB2
+    configuration: null
+  TEST_PB3:
+    name: PB3
+    definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::pad::PB3
+    mode: Digital output
+    user_label: TEST_PB3
     configuration: null
   RXCD:
     name: PC2
@@ -496,14 +514,14 @@ pads:
     mode: Advanced
     user_label: SYNC_IN
     configuration:
-      pad_dir: In
+      pad_dir: Out
       pad_initial_level: Low
-      pad_int0lvl: Interrupt Disabled
-      pad_int0msk: '0'
+      pad_int0lvl: Low Level
+      pad_int0msk: '8'
       pad_int1lvl: Interrupt Disabled
       pad_int1msk: '0'
       pad_isc: Sense Rising Edge
-      pad_output_pull_config: Pull-up
+      pad_output_pull_config: Totem-pole
   B:
     name: PA4
     definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::pad::PA4

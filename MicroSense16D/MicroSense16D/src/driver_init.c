@@ -174,7 +174,7 @@ void system_init()
 	    // <PORT_DIR_OFF"> Off
 	    // <PORT_DIR_IN"> In
 	    // <PORT_DIR_OUT"> Out
-	    PORT_DIR_IN);
+	    PORT_DIR_OUT);
 
 	SYNC_IN_set_level(
 	    // <y> Initial level
@@ -194,7 +194,7 @@ void system_init()
 	    // <PORT_CONFIGURATION_WIREDAND"> Wired-AND
 	    // <PORT_CONFIGURATION_WIREDORPULL"> Wired-OR with pull-down
 	    // <PORT_CONFIGURATION_WIREDANDPULL"> Wired-AND with pull-up
-	    PORT_CONFIGURATION_PULLUP);
+	    PORT_CONFIGURATION_TOTEM);
 
 	SYNC_IN_set_isc(
 	    // <y> Pin Input/Sense Configuration
@@ -213,7 +213,7 @@ void system_init()
 	    // <PORT_INT0LVL_LO_gc"> Low Level
 	    // <PORT_INT0LVL_MED_gc"> Medium Level
 	    // <PORT_INT0LVL_HI_gc"> High Level
-	    PORT_INT0LVL_OFF_gc);
+	    PORT_INT0LVL_LO_gc);
 
 	SYNC_IN_int_level(
 	    // <y> port vector 1 int level
@@ -242,7 +242,7 @@ void system_init()
 	    // <12=> 12
 	    // <13=> 13
 	    // <14=> 14
-	    0x0);
+	    0x8);
 
 	SYNC_IN_int1_mask(
 	    // <o> port vector 1 int mask
@@ -288,6 +288,18 @@ void system_init()
 	    // <true"> High
 	    false);
 
+	/* PORT setting on PA6 */
+
+	// Set pin direction to output
+	PA6_TEST_set_dir(PORT_DIR_OUT);
+
+	PA6_TEST_set_level(
+	    // <y> Initial level
+	    // <id> pad_initial_level
+	    // <false"> Low
+	    // <true"> High
+	    false);
+
 	/* PORT setting on PA7 */
 
 	// Disable pull-up resistor
@@ -313,6 +325,30 @@ void system_init()
 	MUX_A1_set_dir(PORT_DIR_OUT);
 
 	MUX_A1_set_level(
+	    // <y> Initial level
+	    // <id> pad_initial_level
+	    // <false"> Low
+	    // <true"> High
+	    false);
+
+	/* PORT setting on PB2 */
+
+	// Set pin direction to output
+	TEST_PB2_set_dir(PORT_DIR_OUT);
+
+	TEST_PB2_set_level(
+	    // <y> Initial level
+	    // <id> pad_initial_level
+	    // <false"> Low
+	    // <true"> High
+	    false);
+
+	/* PORT setting on PB3 */
+
+	// Set pin direction to output
+	TEST_PB3_set_dir(PORT_DIR_OUT);
+
+	TEST_PB3_set_level(
 	    // <y> Initial level
 	    // <id> pad_initial_level
 	    // <false"> Low

@@ -18,6 +18,9 @@ void micro_sense_init(void);
 // called repeatedly in foreground
 void micro_sense_step(void);
 
+// Called when comparator match goes true
+void micro_sense_ac_match_cb(void);
+
 // Called on completion of ADC conversion
 void micro_sense_adc_complete_cb(void);
 
