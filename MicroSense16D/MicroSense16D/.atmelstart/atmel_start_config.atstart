@@ -242,49 +242,6 @@ drivers:
     variant: null
     clocks:
       domain_group: null
-  I2C_0:
-    user_label: I2C_0
-    definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::TWIE::driver_config_definition::Interrupt::Drivers:I2C:Master
-    functionality: I2C
-    api: Drivers:I2C:Master
-    configuration:
-      f_scl: 100000
-      t_rise: 0
-      twi_ctrl_edien: false
-      twi_ctrla_intlvl: Low Level
-      twi_ctrla_master_enable: true
-      twi_ctrla_rien: true
-      twi_ctrla_wien: true
-      twi_ctrlb_qcen: false
-      twi_ctrlb_smen: false
-      twi_ctrlb_timeout: Bus Timeout Disabled
-      twi_mast_ctrl_sdahold: SDA hold time off
-      twi_status_busstate: Bus is Idle
-    optional_signals:
-    - identifier: I2C_0:SCL
-      pad: PE1
-      mode: Enabled
-      configuration: null
-      definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::optional_signal_definition::TWIE.SCL
-      name: TWIE/SCL
-      label: SCL
-    - identifier: I2C_0:SDA
-      pad: PE0
-      mode: Enabled
-      configuration: null
-      definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::optional_signal_definition::TWIE.SDA
-      name: TWIE/SDA
-      label: SDA
-    variant: null
-    clocks:
-      domain_group:
-        nodes:
-        - name: TWI
-          input: CLK CPU/PER
-          external: false
-          external_frequency: 0
-        configuration:
-          twi_clock_source: CLK CPU/PER
   EVENT_SYSTEM_0:
     user_label: EVENT_SYSTEM_0
     definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::EVSYS::driver_config_definition::EVSYS::Drivers:EVSYS:Init
@@ -506,13 +463,13 @@ pads:
   SDA:
     name: PE0
     definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::pad::PE0
-    mode: Advanced
+    mode: Digital input
     user_label: SDA
     configuration: null
   SCL:
     name: PE1
     definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::pad::PE1
-    mode: Advanced
+    mode: Digital input
     user_label: SCL
     configuration: null
   OUT:

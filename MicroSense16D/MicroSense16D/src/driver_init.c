@@ -70,205 +70,6 @@ void SLEEP_initialization(void)
 	SLEEP_init();
 }
 
-/* configure pins and initialize registers */
-void I2C_0_initialization(void)
-{
-
-	SCL_set_dir(
-	    // <y> Pin direction
-	    // <id> pad_dir
-	    // <PORT_DIR_OFF"> Off
-	    // <PORT_DIR_IN"> In
-	    // <PORT_DIR_OUT"> Out
-	    PORT_DIR_OUT);
-
-	SCL_set_level(
-	    // <y> Initial level
-	    // <id> pad_initial_level
-	    // <false"> Low
-	    // <true"> High
-	    false);
-
-	SCL_set_output_pull_mode(
-	    // <y> Output and Pull Configuration
-	    // <id> pad_output_pull_config
-	    // <PORT_CONFIGURATION_TOTEM"> Totem-pole
-	    // <PORT_CONFIGURATION_BUSKEEPER"> Totem-pole with bus-keeper
-	    // <PORT_CONFIGURATION_PULLDOWN"> Pull-down
-	    // <PORT_CONFIGURATION_PULLUP"> Pull-up
-	    // <PORT_CONFIGURATION_WIREDOR"> Wired-OR
-	    // <PORT_CONFIGURATION_WIREDAND"> Wired-AND
-	    // <PORT_CONFIGURATION_WIREDORPULL"> Wired-OR with pull-down
-	    // <PORT_CONFIGURATION_WIREDANDPULL"> Wired-AND with pull-up
-	    PORT_CONFIGURATION_TOTEM);
-
-	SCL_set_isc(
-	    // <y> Pin Input/Sense Configuration
-	    // <id> pad_isc
-	    // <PORT_ISC_BOTHEDGES_gc"> Sense Both Edges
-	    // <PORT_ISC_RISING_gc"> Sense Rising Edge
-	    // <PORT_ISC_FALLING_gc"> Sense Falling Edge
-	    // <PORT_ISC_INPUT_DISABLE_gc"> Digital Input Buffer disabled
-	    // <PORT_ISC_LEVEL_gc"> Sense low Level
-	    PORT_ISC_BOTHEDGES_gc);
-
-	SCL_int_level(
-	    // <y> port vector 0 int level
-	    // <id> pad_int0lvl
-	    // <PORT_INT0LVL_OFF_gc"> Interrupt Disabled
-	    // <PORT_INT0LVL_LO_gc"> Low Level
-	    // <PORT_INT0LVL_MED_gc"> Medium Level
-	    // <PORT_INT0LVL_HI_gc"> High Level
-	    PORT_INT0LVL_OFF_gc);
-
-	SCL_int_level(
-	    // <y> port vector 1 int level
-	    // <id> pad_int1lvl
-	    // <PORT_INT1LVL_OFF_gc"> Interrupt Disabled
-	    // <PORT_INT1LVL_LO_gc"> Low Level
-	    // <PORT_INT1LVL_MED_gc"> Medium Level
-	    // <PORT_INT1LVL_HI_gc"> High Level
-	    PORT_INT1LVL_OFF_gc);
-
-	SCL_int0_mask(
-	    // <o> port vector 0 int mask
-	    // <id> pad_int0msk
-	    // <0=> 0
-	    // <1=> 1
-	    // <2=> 2
-	    // <3=> 3
-	    // <4=> 4
-	    // <5=> 5
-	    // <6=> 6
-	    // <7=> 7
-	    // <8=> 8
-	    // <9=> 9
-	    // <10=> 10
-	    // <11=> 11
-	    // <12=> 12
-	    // <13=> 13
-	    // <14=> 14
-	    0x0);
-
-	SCL_int1_mask(
-	    // <o> port vector 1 int mask
-	    // <id> pad_int1msk
-	    // <0=> 0
-	    // <1=> 1
-	    // <2=> 2
-	    // <3=> 3
-	    // <4=> 4
-	    // <5=> 5
-	    // <6=> 6
-	    // <7=> 7
-	    // <8=> 8
-	    // <9=> 9
-	    // <10=> 10
-	    // <11=> 11
-	    // <12=> 12
-	    // <13=> 13
-	    // <14=> 14
-	    0x0);
-
-	SDA_set_dir(
-	    // <y> Pin direction
-	    // <id> pad_dir
-	    // <PORT_DIR_OFF"> Off
-	    // <PORT_DIR_IN"> In
-	    // <PORT_DIR_OUT"> Out
-	    PORT_DIR_OUT);
-
-	SDA_set_level(
-	    // <y> Initial level
-	    // <id> pad_initial_level
-	    // <false"> Low
-	    // <true"> High
-	    false);
-
-	SDA_set_output_pull_mode(
-	    // <y> Output and Pull Configuration
-	    // <id> pad_output_pull_config
-	    // <PORT_CONFIGURATION_TOTEM"> Totem-pole
-	    // <PORT_CONFIGURATION_BUSKEEPER"> Totem-pole with bus-keeper
-	    // <PORT_CONFIGURATION_PULLDOWN"> Pull-down
-	    // <PORT_CONFIGURATION_PULLUP"> Pull-up
-	    // <PORT_CONFIGURATION_WIREDOR"> Wired-OR
-	    // <PORT_CONFIGURATION_WIREDAND"> Wired-AND
-	    // <PORT_CONFIGURATION_WIREDORPULL"> Wired-OR with pull-down
-	    // <PORT_CONFIGURATION_WIREDANDPULL"> Wired-AND with pull-up
-	    PORT_CONFIGURATION_TOTEM);
-
-	SDA_set_isc(
-	    // <y> Pin Input/Sense Configuration
-	    // <id> pad_isc
-	    // <PORT_ISC_BOTHEDGES_gc"> Sense Both Edges
-	    // <PORT_ISC_RISING_gc"> Sense Rising Edge
-	    // <PORT_ISC_FALLING_gc"> Sense Falling Edge
-	    // <PORT_ISC_INPUT_DISABLE_gc"> Digital Input Buffer disabled
-	    // <PORT_ISC_LEVEL_gc"> Sense low Level
-	    PORT_ISC_BOTHEDGES_gc);
-
-	SDA_int_level(
-	    // <y> port vector 0 int level
-	    // <id> pad_int0lvl
-	    // <PORT_INT0LVL_OFF_gc"> Interrupt Disabled
-	    // <PORT_INT0LVL_LO_gc"> Low Level
-	    // <PORT_INT0LVL_MED_gc"> Medium Level
-	    // <PORT_INT0LVL_HI_gc"> High Level
-	    PORT_INT0LVL_OFF_gc);
-
-	SDA_int_level(
-	    // <y> port vector 1 int level
-	    // <id> pad_int1lvl
-	    // <PORT_INT1LVL_OFF_gc"> Interrupt Disabled
-	    // <PORT_INT1LVL_LO_gc"> Low Level
-	    // <PORT_INT1LVL_MED_gc"> Medium Level
-	    // <PORT_INT1LVL_HI_gc"> High Level
-	    PORT_INT1LVL_OFF_gc);
-
-	SDA_int0_mask(
-	    // <o> port vector 0 int mask
-	    // <id> pad_int0msk
-	    // <0=> 0
-	    // <1=> 1
-	    // <2=> 2
-	    // <3=> 3
-	    // <4=> 4
-	    // <5=> 5
-	    // <6=> 6
-	    // <7=> 7
-	    // <8=> 8
-	    // <9=> 9
-	    // <10=> 10
-	    // <11=> 11
-	    // <12=> 12
-	    // <13=> 13
-	    // <14=> 14
-	    0x0);
-
-	SDA_int1_mask(
-	    // <o> port vector 1 int mask
-	    // <id> pad_int1msk
-	    // <0=> 0
-	    // <1=> 1
-	    // <2=> 2
-	    // <3=> 3
-	    // <4=> 4
-	    // <5=> 5
-	    // <6=> 6
-	    // <7=> 7
-	    // <8=> 8
-	    // <9=> 9
-	    // <10=> 10
-	    // <11=> 11
-	    // <12=> 12
-	    // <13=> 13
-	    // <14=> 14
-	    0x0);
-
-	I2C_0_init();
-}
-
 void EVENT_SYSTEM_0_initialization(void)
 {
 
@@ -530,6 +331,42 @@ void system_init()
 	    // <true"> High
 	    false);
 
+	/* PORT setting on PE0 */
+
+	// Set pin direction to input
+	SDA_set_dir(PORT_DIR_IN);
+
+	SDA_set_output_pull_mode(
+	    // <y> Output and Pull Configuration
+	    // <id> pad_output_pull_config
+	    // <PORT_CONFIGURATION_TOTEM"> Totem-pole
+	    // <PORT_CONFIGURATION_BUSKEEPER"> Totem-pole with bus-keeper
+	    // <PORT_CONFIGURATION_PULLDOWN"> Pull-down
+	    // <PORT_CONFIGURATION_PULLUP"> Pull-up
+	    // <PORT_CONFIGURATION_WIREDOR"> Wired-OR
+	    // <PORT_CONFIGURATION_WIREDAND"> Wired-AND
+	    // <PORT_CONFIGURATION_WIREDORPULL"> Wired-OR with pull-down
+	    // <PORT_CONFIGURATION_WIREDANDPULL"> Wired-AND with pull-up
+	    PORT_CONFIGURATION_TOTEM);
+
+	/* PORT setting on PE1 */
+
+	// Set pin direction to input
+	SCL_set_dir(PORT_DIR_IN);
+
+	SCL_set_output_pull_mode(
+	    // <y> Output and Pull Configuration
+	    // <id> pad_output_pull_config
+	    // <PORT_CONFIGURATION_TOTEM"> Totem-pole
+	    // <PORT_CONFIGURATION_BUSKEEPER"> Totem-pole with bus-keeper
+	    // <PORT_CONFIGURATION_PULLDOWN"> Pull-down
+	    // <PORT_CONFIGURATION_PULLUP"> Pull-up
+	    // <PORT_CONFIGURATION_WIREDOR"> Wired-OR
+	    // <PORT_CONFIGURATION_WIREDAND"> Wired-AND
+	    // <PORT_CONFIGURATION_WIREDORPULL"> Wired-OR with pull-down
+	    // <PORT_CONFIGURATION_WIREDANDPULL"> Wired-AND with pull-up
+	    PORT_CONFIGURATION_TOTEM);
+
 	PWM_initialization();
 
 	OSC_init();
@@ -541,8 +378,6 @@ void system_init()
 	PMIC_init();
 
 	SLEEP_initialization();
-
-	I2C_0_initialization();
 
 	EVENT_SYSTEM_0_initialization();
 

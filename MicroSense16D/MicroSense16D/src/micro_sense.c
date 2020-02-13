@@ -12,10 +12,10 @@ PA0: VOUT0 (input) feeds ADC+
 PA1: VOUT1 (input) feeds Comparator+, generates interrupt to start conversion
 PA2: VREF (input) feeds Comparator-
 PA3: SYNC_IN (input) generates interrupt to end conversion
-PA4: NC
-PA5: NC
-PA6: B (output) for resetting integrator.
-PA7: A (output) for resetting integrator.
+PA4: B (output) for resetting integrator.
+PA5: A (output) for resetting integrator.
+PA6: NC
+PA7: NC
 
 PB0: MUXA0 (out)
 PB1: MUXA1 (out)
@@ -69,10 +69,10 @@ Loop
 
 IMPLEMENTATION:
 
-At the start of a cycle, Vout0 (same as Vout1) starts to ramp up.
+At the start of a cycle, Vout0 (same as Vout1) starts to ramp up.  Or not.
 
-When Vout1 exceeds Vref, the comparator generates an Event on channel 0 (set up
-in ATMEL START).
+At such time that Vout1 exceeds Vref, the comparator generates an Event on 
+channel 0 (set up in ATMEL START).
 
 Event 0 initiates an ADC conversion.
 
@@ -122,8 +122,8 @@ For debugging, wiggle a GPIO pin to show that the foreground has processed the
 // definitions
 
 // A and B are responsible for resetting the integrator
-#define A_PIN_MASK (1<<7)  // PA7
-#define B_PIN_MASK (1<<6)  // PA6
+#define A_PIN_MASK (1<<5)  // PA5
+#define B_PIN_MASK (1<<4)  // PA4
 #define A_RESET_HOLD_CYCLES (18)
 #define B_RESET_HOLD_CYCLES (36)
 

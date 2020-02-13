@@ -55,8 +55,6 @@
 
 #include <sleep.h>
 
-#include <i2c_master.h>
-
 #include <evsys.h>
 #include <ac.h>
 

@@ -237,13 +237,7 @@
     <Compile Include="driver_isr.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="examples\include\i2c_master_example.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="examples\include\usart_basic_example.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="examples\src\i2c_master_example.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="examples\src\usart_basic_example.c">
@@ -271,15 +265,6 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="include\evsys.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="include\i2c_master.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="include\i2c_simple_master.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="include\i2c_types.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="include\micro_sense.h">
@@ -334,15 +319,6 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\evsys.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="src\i2c_master.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="src\i2c_simple_master.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="src\i2c_types.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="src\micro_sense.c">
@@ -426,12 +402,6 @@
       <SubType>compile</SubType>
     </None>
     <None Include="doxygen\generator\DoxygenLayout.xml">
-      <SubType>compile</SubType>
-    </None>
-    <None Include="doxygen\i2c.dox">
-      <SubType>compile</SubType>
-    </None>
-    <None Include="doxygen\i2c_master.dox">
       <SubType>compile</SubType>
     </None>
     <None Include="doxygen\mainpage.dox">
