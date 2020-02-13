@@ -406,11 +406,11 @@ pads:
     mode: Digital output
     user_label: A
     configuration: null
-  PA6_TEST:
+  TEST_PA6:
     name: PA6
     definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::pad::PA6
     mode: Digital output
-    user_label: PA6_TEST
+    user_label: TEST_PA6
     configuration: null
   COMP_OUT:
     name: PA7
@@ -514,7 +514,7 @@ pads:
     mode: Advanced
     user_label: SYNC_IN
     configuration:
-      pad_dir: Out
+      pad_dir: In
       pad_initial_level: Low
       pad_int0lvl: Low Level
       pad_int0msk: '8'

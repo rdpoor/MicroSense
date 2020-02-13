@@ -207,7 +207,7 @@ void micro_sense_adc_complete_cb(void) {
     s_comp_did_trigger = false;  // prepare for next reading of v0
 
     if (!s_sync_did_trigger) {
-      // Arrive here because the comparator triggerd.  Capture v0.
+      // Arrive here because the comparator triggered.  Capture v0.
       s_v0 = ratio;
     } else {
       // Arrive here because the sync triggered.  Capture dv = v1 - v0
@@ -223,7 +223,7 @@ void micro_sense_adc_complete_cb(void) {
 
 static void process_sample(float v0, float v1) {
   reset_integrator();               // reset integrator
-  pwm_set_ratio(v1);             // pwm tracks A/D
+  pwm_set_ratio(v1);                // pwm tracks A/D
   s_total_dv += (v1 - v0);          // accumulate dv (i.e. v1 - v0)
   s_sample_count += 1;
 
@@ -238,7 +238,7 @@ static void process_sample(float v0, float v1) {
 
 // [Interrupt] Called on each low-to-high transition on SYNC_IN (60Hz)
 void micro_sense_sync_cb(void) {
-
+  s_sync_did_trigger = true;
 }
 
 

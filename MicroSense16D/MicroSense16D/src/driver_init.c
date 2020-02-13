@@ -174,7 +174,7 @@ void system_init()
 	    // <PORT_DIR_OFF"> Off
 	    // <PORT_DIR_IN"> In
 	    // <PORT_DIR_OUT"> Out
-	    PORT_DIR_OUT);
+	    PORT_DIR_IN);
 
 	SYNC_IN_set_level(
 	    // <y> Initial level
@@ -291,9 +291,9 @@ void system_init()
 	/* PORT setting on PA6 */
 
 	// Set pin direction to output
-	PA6_TEST_set_dir(PORT_DIR_OUT);
+	TEST_PA6_set_dir(PORT_DIR_OUT);
 
-	PA6_TEST_set_level(
+	TEST_PA6_set_level(
 	    // <y> Initial level
 	    // <id> pad_initial_level
 	    // <false"> Low

@@ -44,9 +44,9 @@ ISR(TCD0_OVF_vect)
 
 ISR(ADCA_CH0_vect)
 {
-  TEST_PB3_set_level(true);
+  TEST_PA6_set_level(true);
   micro_sense_adc_complete_cb();
-  TEST_PB3_set_level(false);
+  TEST_PA6_set_level(false);
 }
 
 ISR(ACA_AC0_vect)
