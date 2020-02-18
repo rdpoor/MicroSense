@@ -2,16 +2,16 @@ format_version: '2'
 name: MicroSense16D
 versions:
   api: '1.0'
-  backend: 1.7.279
+  backend: 1.7.298
   commit: 1e07622763d149970fd8808a8f12ff3b1e84e0d7
   content: unknown
   content_pack_name: unknown
   format: '2'
-  frontend: 1.7.279
-  packs_version_avr8: 1.0.1401
+  frontend: 1.7.298
+  packs_version_avr8: 1.0.1408
   packs_version_qtouch: unknown
   packs_version_sam: 1.0.1373
-  version_backend: 1.7.279
+  version_backend: 1.7.298
   version_frontend: ''
 board:
   identifier: CustomBoard
@@ -278,9 +278,9 @@ drivers:
     configuration:
       ac_ac0ctrl_enable: true
       ac_ac0ctrl_hsmode: false
-      ac_ac0ctrl_hysmode: Small hysteresis
+      ac_ac0ctrl_hysmode: Large hysteresis
       ac_ac0ctrl_intlvl: Low level
-      ac_ac0ctrl_intmode: Interrupt on rising edge
+      ac_ac0ctrl_intmode: Interrupt on falling edge
       ac_ac0muxctrl_muxneg: Pin 1
       ac_ac0muxctrl_muxpos: Pin 2
       ac_ac1ctrl_enable: false

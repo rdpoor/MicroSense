@@ -201,22 +201,33 @@ void micro_sense_adc_complete_cb(void) {
 
   led_on();
 
+//  if (ACA.STATUS & AC_AC0STATE_bp) {
+//	  // Use comparator level rather than interrupt trigger to set s_comp_did_trigger
+//	  s_comp_did_trigger = true;
+//  }
+
   // Only two things trigger an ADC reading: when the comparator goes true or
   // when SYNC triggers.
   if (s_comp_did_trigger) {
-    s_comp_did_trigger = false;  // prepare for next reading of v0
-
-    if (!s_sync_did_trigger) {
-      // Arrive here because the comparator triggered.  Capture v0.
-      s_v0 = ratio;
-    } else {
-      // Arrive here because the sync triggered.  Capture dv = v1 - v0
-      s_sync_did_trigger = false;  // prepare for next reading of v0
-      process_sample(s_v0, ratio);
-    }
+	  if (!s_sync_did_trigger) {
+		  // normal start: capture v0
+          s_v0 = ratio;
+	  } else {
+		  // normal end: capture v1 and process sample
+          // Arrive here because the sync triggered.  Capture dv = v1 - v0
+		  s_comp_did_trigger = false;
+          s_sync_did_trigger = false;  // prepare for next reading of v0
+          process_sample(s_v0, ratio);
+	  }
   } else {
-    // The integrator output failed to trigger the comparator: ignore reading.
-    s_sync_did_trigger = false;  // prepare for next reading of v0
+	  // Arrive here if comparator did not trigger.
+	  if (s_sync_did_trigger) {
+		  // flatline: gain is too low, ignore sample
+          s_sync_did_trigger = false;  // prepare for next reading of v0
+	  } else {
+		  // wtf?
+		  asm("nop");
+	  }
   }
   led_off();
 }
@@ -265,6 +276,7 @@ static void reset_integrator() {
   A_set_level(false);
   delay_cycles(B_RESET_HOLD_CYCLES - A_RESET_HOLD_CYCLES);
   B_set_level(false);
+  asm("nop");
 }
 
 static void led_on() {

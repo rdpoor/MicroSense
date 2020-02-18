@@ -61,5 +61,5 @@ ISR(PORTA_INT0_vect)
   TEST_PB3_set_level(true);
   micro_sense_sync_cb();
   TEST_PB3_set_level(false);
-	PORTA_INTFLAGS = PORT_INT0IF_bm;
+  PORTA_INTFLAGS = PORT_INT0IF_bm;
 }
