@@ -44,22 +44,22 @@ ISR(TCD0_OVF_vect)
 
 ISR(ADCA_CH0_vect)
 {
-  TEST_PA6_set_level(true);
+  TP_0_set_level(true);
   micro_sense_adc_complete_cb();
-  TEST_PA6_set_level(false);
+  TP_0_set_level(false);
 }
 
 ISR(ACA_AC0_vect)
 {
-  TEST_PB2_set_level(true);
+  TP_1_set_level(true);
   micro_sense_ac_match_cb();
-  TEST_PB2_set_level(false);
+  TP_1_set_level(false);
 }
 
 ISR(PORTA_INT0_vect)
 {
-  TEST_PB3_set_level(true);
+  TP_2_set_level(true);
   micro_sense_sync_cb();
-  TEST_PB3_set_level(false);
+  TP_2_set_level(false);
   PORTA_INTFLAGS = PORT_INT0IF_bm;
 }

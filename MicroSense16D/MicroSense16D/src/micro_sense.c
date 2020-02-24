@@ -167,8 +167,8 @@ void micro_sense_init(void) {
   s_average_dv = 0.0;
   s_has_dv = false;
 
-  MUX_A0_set_level(SDA_get_level());
-  MUX_A1_set_level(SCL_get_level());
+  GAIN_A0_set_level(SDA_get_level());
+  GAIN_A1_set_level(SCL_get_level());
 
   reset_integrator();
   delay_ms(5);
@@ -184,8 +184,8 @@ void micro_sense_step(void) {
     }
     // Until we implement autoscaling: each time through the loop, make MUX0 and
     // MUX1 track SDA and SCL
-    MUX_A0_set_level(SDA_get_level());
-    MUX_A1_set_level(SCL_get_level());
+    GAIN_A0_set_level(SDA_get_level());
+    GAIN_A1_set_level(SCL_get_level());
 
     asm("nop");
 }
@@ -273,9 +273,9 @@ static void reset_integrator() {
   // Assert A and B simultaneously
   PORTA_set_port_level(A_PIN_MASK | B_PIN_MASK, true);
   delay_cycles(A_RESET_HOLD_CYCLES);
-  A_set_level(false);
+  RESET_A_set_level(false);
   delay_cycles(B_RESET_HOLD_CYCLES - A_RESET_HOLD_CYCLES);
-  B_set_level(false);
+  RESET_B_set_level(false);
   asm("nop");
 }
 

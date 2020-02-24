@@ -51,9 +51,9 @@
         </TopLevelComponents>
         <AcmeActionInfos>
           <AcmeProjectActionInfo Action="File" Source="main.c" IsConfig="false" Hash="k0AH7j+BrmdFhBPzCCMptA" />
-          <AcmeProjectActionInfo Action="File" Source="src/driver_init.c" IsConfig="false" Hash="Uu2KjAJEd+Zf/0r/4zZAkg" />
+          <AcmeProjectActionInfo Action="File" Source="src/driver_init.c" IsConfig="false" Hash="z76D1wEPoapa5ZE7dHvuRQ" />
           <AcmeProjectActionInfo Action="File" Source="include/driver_init.h" IsConfig="false" Hash="JEHmvy6HhSEY1BF3YsZFkQ" />
-          <AcmeProjectActionInfo Action="File" Source="include/atmel_start_pins.h" IsConfig="false" Hash="ULDktIiWBbjS/lI1E+317g" />
+          <AcmeProjectActionInfo Action="File" Source="include/atmel_start_pins.h" IsConfig="false" Hash="6yCT9eKuHduVnI0plXk3PQ" />
           <AcmeProjectActionInfo Action="File" Source="driver_isr.c" IsConfig="false" Hash="JutaZRNKLfblHMOX1IBnRw" />
           <AcmeProjectActionInfo Action="File" Source="examples/include/usart_basic_example.h" IsConfig="false" Hash="r0M1xFMKV2ZWH04HK3tslg" />
           <AcmeProjectActionInfo Action="File" Source="examples/src/usart_basic_example.c" IsConfig="false" Hash="cQXR0ho5Megz53xmls6P4A" />

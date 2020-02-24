@@ -400,17 +400,17 @@ drivers:
         configuration:
           usart_clock_source: CLK CPU/PER
 pads:
-  A:
+  RESET_A:
     name: PA5
     definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::pad::PA5
     mode: Digital output
-    user_label: A
+    user_label: RESET_A
     configuration: null
-  TEST_PA6:
+  TP_0:
     name: PA6
     definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::pad::PA6
     mode: Digital output
-    user_label: TEST_PA6
+    user_label: TP_0
     configuration: null
   COMP_OUT:
     name: PA7
@@ -418,29 +418,29 @@ pads:
     mode: Analog
     user_label: COMP_OUT
     configuration: null
-  MUX_A0:
+  GAIN_A0:
     name: PB0
     definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::pad::PB0
     mode: Digital output
-    user_label: MUX_A0
+    user_label: GAIN_A0
     configuration: null
-  MUX_A1:
+  GAIN_A1:
     name: PB1
     definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::pad::PB1
     mode: Digital output
-    user_label: MUX_A1
+    user_label: GAIN_A1
     configuration: null
-  TEST_PB2:
+  TP_1:
     name: PB2
     definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::pad::PB2
     mode: Digital output
-    user_label: TEST_PB2
+    user_label: TP_1
     configuration: null
-  TEST_PB3:
+  TP_2:
     name: PB3
     definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::pad::PB3
     mode: Digital output
-    user_label: TEST_PB3
+    user_label: TP_2
     configuration: null
   RXCD:
     name: PC2
@@ -454,23 +454,23 @@ pads:
     mode: Digital output
     user_label: TXDC
     configuration: null
-  PD0:
+  PWM_OUT:
     name: PD0
     definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::pad::PD0
     mode: Digital output
-    user_label: PD0
+    user_label: PWM_OUT
     configuration: null
-  PD2:
+  RXD:
     name: PD2
     definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::pad::PD2
     mode: Digital input
-    user_label: PD2
+    user_label: RXD
     configuration: null
-  PD3:
+  TXD:
     name: PD3
     definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::pad::PD3
     mode: Digital output
-    user_label: PD3
+    user_label: TXD
     configuration: null
   STATUS_LED:
     name: PD7
@@ -490,23 +490,23 @@ pads:
     mode: Digital input
     user_label: SCL
     configuration: null
-  OUT:
+  V_RAMP:
     name: PA0
     definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::pad::PA0
     mode: Analog
-    user_label: OUT
+    user_label: V_RAMP
     configuration: null
-  PA1:
+  COMP_N:
     name: PA1
     definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::pad::PA1
     mode: Analog
-    user_label: PA1
+    user_label: COMP_N
     configuration: null
-  PA2:
+  V_REF:
     name: PA2
     definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::pad::PA2
     mode: Analog
-    user_label: PA2
+    user_label: V_REF
     configuration: null
   SYNC_IN:
     name: PA3
@@ -522,11 +522,11 @@ pads:
       pad_int1msk: '0'
       pad_isc: Sense Rising Edge
       pad_output_pull_config: Totem-pole
-  B:
+  RESET_B:
     name: PA4
     definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::pad::PA4
     mode: Digital output
-    user_label: B
+    user_label: RESET_B
     configuration: null
 toolchain_options:
 - definition:

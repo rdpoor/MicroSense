@@ -40,9 +40,9 @@ void PWM_initialization(void)
 {
 
 	// Set pin direction to output
-	PD0_set_dir(PORT_DIR_OUT);
+	PWM_OUT_set_dir(PORT_DIR_OUT);
 
-	PD0_set_level(
+	PWM_OUT_set_level(
 	    // <y> Initial level
 	    // <id> pad_initial_level
 	    // <false"> Low
@@ -57,9 +57,9 @@ void ADC_0_initialization(void)
 {
 
 	// Disable pull-up resistor
-	OUT_set_output_pull_mode(PORT_CONFIGURATION_TOTEM);
+	V_RAMP_set_output_pull_mode(PORT_CONFIGURATION_TOTEM);
 	// Disable digital         // Disable digital input buffer
-	OUT_set_isc(PORT_ISC_INPUT_DISABLE_gc);
+	V_RAMP_set_isc(PORT_ISC_INPUT_DISABLE_gc);
 
 	ADC_0_init();
 }
@@ -81,14 +81,14 @@ void AC_0_initialization(void)
 {
 
 	// Disable pull-up resistor
-	PA1_set_output_pull_mode(PORT_CONFIGURATION_TOTEM);
+	COMP_N_set_output_pull_mode(PORT_CONFIGURATION_TOTEM);
 	// Disable digital         // Disable digital input buffer
-	PA1_set_isc(PORT_ISC_INPUT_DISABLE_gc);
+	COMP_N_set_isc(PORT_ISC_INPUT_DISABLE_gc);
 
 	// Disable pull-up resistor
-	PA2_set_output_pull_mode(PORT_CONFIGURATION_TOTEM);
+	V_REF_set_output_pull_mode(PORT_CONFIGURATION_TOTEM);
 	// Disable digital         // Disable digital input buffer
-	PA2_set_isc(PORT_ISC_INPUT_DISABLE_gc);
+	V_REF_set_isc(PORT_ISC_INPUT_DISABLE_gc);
 
 	AC_0_init();
 }
@@ -131,9 +131,9 @@ void IRDA_initialization(void)
 {
 
 	// Set pin direction to input
-	PD2_set_dir(PORT_DIR_IN);
+	RXD_set_dir(PORT_DIR_IN);
 
-	PD2_set_output_pull_mode(
+	RXD_set_output_pull_mode(
 	    // <y> Output and Pull Configuration
 	    // <id> pad_output_pull_config
 	    // <PORT_CONFIGURATION_TOTEM"> Totem-pole
@@ -147,9 +147,9 @@ void IRDA_initialization(void)
 	    PORT_CONFIGURATION_TOTEM);
 
 	// Set pin direction to output
-	PD3_set_dir(PORT_DIR_OUT);
+	TXD_set_dir(PORT_DIR_OUT);
 
-	PD3_set_level(
+	TXD_set_level(
 	    // <y> Initial level
 	    // <id> pad_initial_level
 	    // <false"> Low
@@ -267,9 +267,9 @@ void system_init()
 	/* PORT setting on PA4 */
 
 	// Set pin direction to output
-	B_set_dir(PORT_DIR_OUT);
+	RESET_B_set_dir(PORT_DIR_OUT);
 
-	B_set_level(
+	RESET_B_set_level(
 	    // <y> Initial level
 	    // <id> pad_initial_level
 	    // <false"> Low
@@ -279,9 +279,9 @@ void system_init()
 	/* PORT setting on PA5 */
 
 	// Set pin direction to output
-	A_set_dir(PORT_DIR_OUT);
+	RESET_A_set_dir(PORT_DIR_OUT);
 
-	A_set_level(
+	RESET_A_set_level(
 	    // <y> Initial level
 	    // <id> pad_initial_level
 	    // <false"> Low
@@ -291,9 +291,9 @@ void system_init()
 	/* PORT setting on PA6 */
 
 	// Set pin direction to output
-	TEST_PA6_set_dir(PORT_DIR_OUT);
+	TP_0_set_dir(PORT_DIR_OUT);
 
-	TEST_PA6_set_level(
+	TP_0_set_level(
 	    // <y> Initial level
 	    // <id> pad_initial_level
 	    // <false"> Low
@@ -310,9 +310,9 @@ void system_init()
 	/* PORT setting on PB0 */
 
 	// Set pin direction to output
-	MUX_A0_set_dir(PORT_DIR_OUT);
+	GAIN_A0_set_dir(PORT_DIR_OUT);
 
-	MUX_A0_set_level(
+	GAIN_A0_set_level(
 	    // <y> Initial level
 	    // <id> pad_initial_level
 	    // <false"> Low
@@ -322,9 +322,9 @@ void system_init()
 	/* PORT setting on PB1 */
 
 	// Set pin direction to output
-	MUX_A1_set_dir(PORT_DIR_OUT);
+	GAIN_A1_set_dir(PORT_DIR_OUT);
 
-	MUX_A1_set_level(
+	GAIN_A1_set_level(
 	    // <y> Initial level
 	    // <id> pad_initial_level
 	    // <false"> Low
@@ -334,9 +334,9 @@ void system_init()
 	/* PORT setting on PB2 */
 
 	// Set pin direction to output
-	TEST_PB2_set_dir(PORT_DIR_OUT);
+	TP_1_set_dir(PORT_DIR_OUT);
 
-	TEST_PB2_set_level(
+	TP_1_set_level(
 	    // <y> Initial level
 	    // <id> pad_initial_level
 	    // <false"> Low
@@ -346,9 +346,9 @@ void system_init()
 	/* PORT setting on PB3 */
 
 	// Set pin direction to output
-	TEST_PB3_set_dir(PORT_DIR_OUT);
+	TP_2_set_dir(PORT_DIR_OUT);
 
-	TEST_PB3_set_level(
+	TP_2_set_level(
 	    // <y> Initial level
 	    // <id> pad_initial_level
 	    // <false"> Low
