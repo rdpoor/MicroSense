@@ -153,6 +153,7 @@ volatile static uint16_t s_sample_count;  // # of samples processed
 volatile static float s_total_dv;         // accumulated dv
 volatile static float s_average_dv;       // averaged dv
 volatile static bool s_has_dv;            // set after 15 samples (250 mSec)
+volatile static bool s_has_initialized;   // set only after initial setup
 
 //=============================================================================
 // "public" code
@@ -166,12 +167,15 @@ void micro_sense_init(void) {
   s_total_dv = 0.0;
   s_average_dv = 0.0;
   s_has_dv = false;
+  s_has_initialized = false;
+
+  delay_ms(5);
 
   GAIN_A0_set_level(SDA_get_level());
   GAIN_A1_set_level(SCL_get_level());
-
   reset_integrator();
-  delay_ms(5);
+
+  s_has_initialized = true;
 }
 
 // [foreground] called repeatedly in foreground
@@ -192,11 +196,14 @@ void micro_sense_step(void) {
 
 // [Interrupt] Called when comparator match goes true
 void micro_sense_ac_match_cb(void) {
+  if (!s_has_initialized) return;
   s_comp_did_trigger = true;
 }
 
 // [interrupt] Called on completion of ADC conversion
 void micro_sense_adc_complete_cb(void) {
+  if (!s_has_initialized) return;
+
   float ratio = ADC_COUNT_TO_RATIO(get_conversion_result());
 
   led_on();
@@ -211,22 +218,24 @@ void micro_sense_adc_complete_cb(void) {
   if (s_comp_did_trigger) {
 	  if (!s_sync_did_trigger) {
 		  // normal start: capture v0
-          s_v0 = ratio;
+          s_v0 = ratio;                // CASE 0
 	  } else {
 		  // normal end: capture v1 and process sample
           // Arrive here because the sync triggered.  Capture dv = v1 - v0
-		  s_comp_did_trigger = false;
+		  s_comp_did_trigger = false;  // CASE 1
           s_sync_did_trigger = false;  // prepare for next reading of v0
           process_sample(s_v0, ratio);
+		  reset_integrator();
 	  }
   } else {
 	  // Arrive here if comparator did not trigger.
+      reset_integrator();
 	  if (s_sync_did_trigger) {
-		  // flatline: gain is too low, ignore sample
+		  // flatline: gain is too low, ignore sample  CASE 3
           s_sync_did_trigger = false;  // prepare for next reading of v0
 	  } else {
 		  // wtf?
-		  asm("nop");
+		  asm("nop");                  // CASE 2
 	  }
   }
   led_off();
@@ -249,6 +258,7 @@ static void process_sample(float v0, float v1) {
 
 // [Interrupt] Called on each low-to-high transition on SYNC_IN (60Hz)
 void micro_sense_sync_cb(void) {
+  if (!s_has_initialized) return;
   s_sync_did_trigger = true;
 }
 
