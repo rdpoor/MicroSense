@@ -1,7 +1,7 @@
 /**
  * \file
  *
- * \brief Driver ISR.
+ * \brief Driver initialization.
  *
  (c) 2018 Microchip Technology Inc. and its subsidiaries.
 
@@ -33,40 +33,39 @@
  * to avoid losing it when reconfiguring.
  */
 
-#include <driver_init.h>
+#ifndef DRIVER_INIT_H_INCLUDED
+#define DRIVER_INIT_H_INCLUDED
+
 #include <compiler.h>
-#include "micro_sense.h"
+#include <clock_config.h>
+#include <port.h>
+#include <atmel_start_pins.h>
 
-ISR(TCD0_OVF_vect)
-{
-	/* Insert your Timer Overflow/Underflow Interrupt handling code here */
-}
+#include <tc.h>
 
-ISR(ADCA_CH0_vect)
-{
-  // A/D conversion complete interrupt
-  TP_0_set_level(true);
-  micro_sense_adc_complete_cb();
-  TP_0_set_level(false);
-}
+#include <tc.h>
 
-ISR(ACA_AC0_vect)
-{
-  // analog comparator (AC0) interrupt
-  TP_1_set_level(true);
-  micro_sense_ac_match_cb();
-  // clear comparator interrupt here?
-  TP_1_set_level(false);
-}
+#include <osc.h>
+#include <ccp.h>
 
-ISR(PORTA_INT0_vect)
-{
-  // sync (GPIO) interrupt
-  TP_2_set_level(true);
-  micro_sense_sync_cb();
-  // elevate INT0 interrupt to medium level? (see driver_init.c)
-  // initiate ADC conversion here?
-  // ADCA.CTRLA |= 1 << ADC_CH0START_bp // start an ADC conversion
-  TP_2_set_level(false);
-  PORTA_INTFLAGS = PORT_INT0IF_bm;
+#include <clk.h>
+#include <pmic.h>
+#include <ccp.h>
+
+#include <sleep.h>
+
+#include <evsys.h>
+
+#include <usart_basic.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+void system_init(void);
+
+#ifdef __cplusplus
 }
+#endif
+
+#endif /* DRIVER_INIT_H_INCLUDED */

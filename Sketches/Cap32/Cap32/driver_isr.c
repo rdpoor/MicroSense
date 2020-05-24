@@ -37,36 +37,19 @@
 #include <compiler.h>
 #include "micro_sense.h"
 
-ISR(TCD0_OVF_vect)
+ISR(TCC0_CCA_vect)
 {
-	/* Insert your Timer Overflow/Underflow Interrupt handling code here */
+  micro_sense_on_tcc0_cca_irq();
 }
 
-ISR(ADCA_CH0_vect)
+ISR(TCC0_ERR_vect)
 {
-  // A/D conversion complete interrupt
-  TP_0_set_level(true);
-  micro_sense_adc_complete_cb();
-  TP_0_set_level(false);
-}
-
-ISR(ACA_AC0_vect)
-{
-  // analog comparator (AC0) interrupt
-  TP_1_set_level(true);
-  micro_sense_ac_match_cb();
-  // clear comparator interrupt here?
-  TP_1_set_level(false);
+  micro_sense_on_tcc0_err_irq();
 }
 
 ISR(PORTA_INT0_vect)
 {
-  // sync (GPIO) interrupt
-  TP_2_set_level(true);
-  micro_sense_sync_cb();
-  // elevate INT0 interrupt to medium level? (see driver_init.c)
-  // initiate ADC conversion here?
-  // ADCA.CTRLA |= 1 << ADC_CH0START_bp // start an ADC conversion
-  TP_2_set_level(false);
-  PORTA_INTFLAGS = PORT_INT0IF_bm;
+  micro_sense_on_porta_irq();
+	// Clear interrupt flags
+	PORTA_INTFLAGS = PORT_INT0IF_bm;
 }
