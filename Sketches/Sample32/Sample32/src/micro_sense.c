@@ -41,7 +41,8 @@
 
 static int s_cca_irqs;
 static int s_err_irqs;
-static int s_port_irqs;
+static uint16_t s_adc_raw;
+static int s_vsync_irqs;
 static bool s_changed;
 static uint16_t s_cca_lo;
 static uint16_t s_cca_hi;
@@ -53,55 +54,59 @@ static uint16_t s_cca_hi;
 void micro_sense_init(void) {
   s_changed = false;
 
-  // I haven't found a way to get Atmel START to have AC_0 drive PA7 output and
-  // specify that PA7 is configured to sense both edges, as required by the
-  // pulse width counter.
-  PORTA_pin_set_isc(7, PORT_ISC_BOTHEDGES_gc);
+  // Experiment: PA7 is driven by the output of AC_0 (the comparator).  We want
+  // to use the rising edge to generate an event to trigger the ADC.
+  PORTA_pin_set_isc(7, PORT_ISC_RISING_gc);
 }
 
 // called repeatedly from the main loop
 void micro_sense_step(void) {
-  USR_LED__set_level(USR_SWITCH__get_level());
   if (s_changed) {
     uint32_t pulse_width = ((uint32_t)s_cca_hi << 16) | s_cca_lo;
-    printf("\r\n%4d, %4d, %4d, %8ld", s_cca_irqs, s_err_irqs, s_port_irqs,
-	       pulse_width);
+    printf("\r\n%4d, %4d, %4d, %4d, %8ld",
+           s_cca_irqs,
+           s_err_irqs,
+           s_adc_raw,
+           s_vsync_irqs,
+	         pulse_width);
     s_changed = false;
   }
 }
 
 /**
- * \brief Called from interrupt level on TCC0 compare interrupt
+ * \brief [Interrupt] TCC0/TCC1 completed pulse-width measurement.
  */
 void micro_sense_on_tcc0_cca_irq(void) {
   s_cca_irqs += 1;
-  // I was noticing continual interrupts.  From the documentation:
-  //
-  // For input capture operation, the CCxIF will be set if the corresponding
-  // compare buffer contains valid data (i.e., when CCxBV is set). The flag will
-  // be cleared when the CCx register is read. Executing the interrupt vector in
-  // this mode of operation will not clear the flag.
-  //
-  // So we read the CCA registers...
+  // Reading the CCA registers clears the interrupt...
   s_cca_lo = TCC0.CCA;
   s_cca_hi = TCC1.CCA;
-  s_changed = true;
+  // s_changed = true;
 }
 
 /**
- * \brief Called from interrupt level on TCC0 error (overflow) interrupt
+* \brief [Interrupt] TCC0/TCC1 registers were overwritten before reading.
  */
 void micro_sense_on_tcc0_err_irq(void) {
   s_err_irqs += 1;
+  // s_changed = true;
+}
+
+/**
+ * \brief [Interrupt] ADC completed a reading.
+ */
+void micro_sense_on_adc_complete_irq(void) {
+  TP_0_toggle_level();
+  s_adc_raw = ADCA.CH0RES;  // read ADC register, clears interrupt
   s_changed = true;
 }
 
 /**
- * \brief Called from interrupt level on Port A interrupt
+* \brief [Interrupt] V_SYNC went true.
  */
-void micro_sense_on_porta_irq(void) {
-  s_port_irqs += 1;
-  s_changed = true;
+void micro_sense_on_vsync_irq(void) {
+  s_vsync_irqs += 1;
+  // s_changed = true;
 }
 
 // =============================================================================
