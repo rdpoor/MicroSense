@@ -53,8 +53,8 @@ Route the output of AC_0 (comparator) to PA7 (EXT3.04) for scope probing.
 
 |Name      |16D Port|A1U Port|Xplained Pro pin| |Note            |
 |----------|--------|--------|----------------|-|----------------|
-|V_RAMP_A  |xxx     |PA0     |EXT1.03         | |Comp +          |
-|V_RAMP_B  |xxx     |PA4     |EXT1.04         | |ADC +           |
+|V_RAMP_A  |xxx     |PA0     |EXT1.03         | |ADC +           |
+|V_RAMP_B  |xxx     |PA4     |EXT1.04         | |Comp +          |
 |V_REF     |xxx     |-na-    |-na-            |x|                |
 |V_SYNC    |xxx     |PA3     |EXT3.03         | |Drives Event Ch1|
 |TEST_PT0  |xxx     |PK1     |EXT3.06         |x|ADC sample done |
