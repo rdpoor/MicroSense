@@ -35,6 +35,7 @@
 
 #include <driver_init.h>
 #include <compiler.h>
+#include "micro_sense.h"
 
 ISR(TCC1_CCA_vect)
 {

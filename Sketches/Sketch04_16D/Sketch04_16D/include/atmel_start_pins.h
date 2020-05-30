@@ -651,6 +651,390 @@ static inline void PA4_int1_mask(const uint8_t value)
 }
 
 /**
+ * \brief Set A output & pull configuration
+ *
+ * Configure pin to pull up, down or disable pull mode, supported pull
+ * modes are defined by device used
+ *
+ * \param[in] output_pull_mode Pin output & pull mode
+ */
+static inline void A_set_output_pull_mode(const enum port_output_pull_mode output_pull_mode)
+{
+	PORTA_set_pin_output_pull_mode(5, output_pull_mode);
+}
+
+/**
+ * \brief Set A data direction
+ *
+ * Select if the pin data direction is input, output or disabled.
+ * If disabled state is not possible, this function throws an assert.
+ *
+ * \param[in] direction PORT_DIR_IN  = Data direction in
+ *                      PORT_DIR_OUT = Data direction out
+ *                      PORT_DIR_OFF = Disables the pin
+ *                      (low power state)
+ */
+static inline void A_set_dir(const enum port_dir dir)
+{
+	PORTA_set_pin_dir(5, dir);
+}
+
+/**
+ * \brief Set A input/sense configuration
+ *
+ * Enable/disable A digital input buffer and pin change interrupt,
+ * select pin interrupt edge/level sensing mode
+ *
+ * \param[in] isc PORT_ISC_BOTHEDGES_gc     = Sense Both Edges
+ *                PORT_ISC_RISING_gc        = Sense Rising Edge
+ *                PORT_ISC_FALLING_gc       = Sense Falling Edge
+ *                PORT_ISC_INPUT_DISABLE_gc = Digital Input Buffer disabled
+ *                PORT_ISC_LEVEL_gc         = Sense low Level
+ */
+static inline void A_set_isc(const PORT_ISC_t isc)
+{
+	PORTA_pin_set_isc(5, isc);
+}
+
+/**
+ * \brief Set A inverted mode
+ *
+ * Enable or disable inverted I/O on a pin
+ *
+ * \param[in] inverted true  = I/O on A is inverted
+ *                     false = I/O on A is not inverted
+ */
+static inline void A_set_inverted(const bool inverted)
+{
+	PORTA_pin_set_inverted(5, inverted);
+}
+
+/**
+ * \brief Set A level
+ *
+ * Sets output level on a pin
+ *
+ * \param[in] level true  = Pin level set to "high" state
+ *                  false = Pin level set to "low" state
+ */
+static inline void A_set_level(const bool level)
+{
+	PORTA_set_pin_level(5, level);
+}
+
+/**
+ * \brief Toggle output level on A
+ *
+ * Toggle the pin level
+ */
+static inline void A_toggle_level()
+{
+	PORTA_toggle_pin_level(5);
+}
+
+/**
+ * \brief Get level on A
+ *
+ * Reads the level on a pin
+ */
+static inline bool A_get_level()
+{
+	return PORTA_get_pin_level(5);
+}
+
+/**
+ * \brief Set A interrupt level
+ *
+ * Sets interrupt level for port
+ *
+ * \param[in] level Value to write to the port register
+ */
+static inline void A_int_level(const uint8_t level)
+{
+	PORTA_set_int_level(level);
+}
+
+/**
+ * \brief Set A interrupt vector 0 mask
+ *
+ * Sets interrupt mask for port vector 0
+ *
+ * \param[in] value Value to write to the port register
+ */
+static inline void A_int0_mask(const uint8_t value)
+{
+	PORTA_write_int0_mask(value);
+}
+
+/**
+ * \brief Set A interrupt vector 1 mask
+ *
+ * Sets interrupt mask for port vector 1
+ *
+ * \param[in] value Value to write to the port register
+ */
+static inline void A_int1_mask(const uint8_t value)
+{
+	PORTA_write_int1_mask(value);
+}
+
+/**
+ * \brief Set MUX_A0 output & pull configuration
+ *
+ * Configure pin to pull up, down or disable pull mode, supported pull
+ * modes are defined by device used
+ *
+ * \param[in] output_pull_mode Pin output & pull mode
+ */
+static inline void MUX_A0_set_output_pull_mode(const enum port_output_pull_mode output_pull_mode)
+{
+	PORTB_set_pin_output_pull_mode(0, output_pull_mode);
+}
+
+/**
+ * \brief Set MUX_A0 data direction
+ *
+ * Select if the pin data direction is input, output or disabled.
+ * If disabled state is not possible, this function throws an assert.
+ *
+ * \param[in] direction PORT_DIR_IN  = Data direction in
+ *                      PORT_DIR_OUT = Data direction out
+ *                      PORT_DIR_OFF = Disables the pin
+ *                      (low power state)
+ */
+static inline void MUX_A0_set_dir(const enum port_dir dir)
+{
+	PORTB_set_pin_dir(0, dir);
+}
+
+/**
+ * \brief Set MUX_A0 input/sense configuration
+ *
+ * Enable/disable MUX_A0 digital input buffer and pin change interrupt,
+ * select pin interrupt edge/level sensing mode
+ *
+ * \param[in] isc PORT_ISC_BOTHEDGES_gc     = Sense Both Edges
+ *                PORT_ISC_RISING_gc        = Sense Rising Edge
+ *                PORT_ISC_FALLING_gc       = Sense Falling Edge
+ *                PORT_ISC_INPUT_DISABLE_gc = Digital Input Buffer disabled
+ *                PORT_ISC_LEVEL_gc         = Sense low Level
+ */
+static inline void MUX_A0_set_isc(const PORT_ISC_t isc)
+{
+	PORTB_pin_set_isc(0, isc);
+}
+
+/**
+ * \brief Set MUX_A0 inverted mode
+ *
+ * Enable or disable inverted I/O on a pin
+ *
+ * \param[in] inverted true  = I/O on MUX_A0 is inverted
+ *                     false = I/O on MUX_A0 is not inverted
+ */
+static inline void MUX_A0_set_inverted(const bool inverted)
+{
+	PORTB_pin_set_inverted(0, inverted);
+}
+
+/**
+ * \brief Set MUX_A0 level
+ *
+ * Sets output level on a pin
+ *
+ * \param[in] level true  = Pin level set to "high" state
+ *                  false = Pin level set to "low" state
+ */
+static inline void MUX_A0_set_level(const bool level)
+{
+	PORTB_set_pin_level(0, level);
+}
+
+/**
+ * \brief Toggle output level on MUX_A0
+ *
+ * Toggle the pin level
+ */
+static inline void MUX_A0_toggle_level()
+{
+	PORTB_toggle_pin_level(0);
+}
+
+/**
+ * \brief Get level on MUX_A0
+ *
+ * Reads the level on a pin
+ */
+static inline bool MUX_A0_get_level()
+{
+	return PORTB_get_pin_level(0);
+}
+
+/**
+ * \brief Set MUX_A0 interrupt level
+ *
+ * Sets interrupt level for port
+ *
+ * \param[in] level Value to write to the port register
+ */
+static inline void MUX_A0_int_level(const uint8_t level)
+{
+	PORTB_set_int_level(level);
+}
+
+/**
+ * \brief Set MUX_A0 interrupt vector 0 mask
+ *
+ * Sets interrupt mask for port vector 0
+ *
+ * \param[in] value Value to write to the port register
+ */
+static inline void MUX_A0_int0_mask(const uint8_t value)
+{
+	PORTB_write_int0_mask(value);
+}
+
+/**
+ * \brief Set MUX_A0 interrupt vector 1 mask
+ *
+ * Sets interrupt mask for port vector 1
+ *
+ * \param[in] value Value to write to the port register
+ */
+static inline void MUX_A0_int1_mask(const uint8_t value)
+{
+	PORTB_write_int1_mask(value);
+}
+
+/**
+ * \brief Set MUX_A1 output & pull configuration
+ *
+ * Configure pin to pull up, down or disable pull mode, supported pull
+ * modes are defined by device used
+ *
+ * \param[in] output_pull_mode Pin output & pull mode
+ */
+static inline void MUX_A1_set_output_pull_mode(const enum port_output_pull_mode output_pull_mode)
+{
+	PORTB_set_pin_output_pull_mode(1, output_pull_mode);
+}
+
+/**
+ * \brief Set MUX_A1 data direction
+ *
+ * Select if the pin data direction is input, output or disabled.
+ * If disabled state is not possible, this function throws an assert.
+ *
+ * \param[in] direction PORT_DIR_IN  = Data direction in
+ *                      PORT_DIR_OUT = Data direction out
+ *                      PORT_DIR_OFF = Disables the pin
+ *                      (low power state)
+ */
+static inline void MUX_A1_set_dir(const enum port_dir dir)
+{
+	PORTB_set_pin_dir(1, dir);
+}
+
+/**
+ * \brief Set MUX_A1 input/sense configuration
+ *
+ * Enable/disable MUX_A1 digital input buffer and pin change interrupt,
+ * select pin interrupt edge/level sensing mode
+ *
+ * \param[in] isc PORT_ISC_BOTHEDGES_gc     = Sense Both Edges
+ *                PORT_ISC_RISING_gc        = Sense Rising Edge
+ *                PORT_ISC_FALLING_gc       = Sense Falling Edge
+ *                PORT_ISC_INPUT_DISABLE_gc = Digital Input Buffer disabled
+ *                PORT_ISC_LEVEL_gc         = Sense low Level
+ */
+static inline void MUX_A1_set_isc(const PORT_ISC_t isc)
+{
+	PORTB_pin_set_isc(1, isc);
+}
+
+/**
+ * \brief Set MUX_A1 inverted mode
+ *
+ * Enable or disable inverted I/O on a pin
+ *
+ * \param[in] inverted true  = I/O on MUX_A1 is inverted
+ *                     false = I/O on MUX_A1 is not inverted
+ */
+static inline void MUX_A1_set_inverted(const bool inverted)
+{
+	PORTB_pin_set_inverted(1, inverted);
+}
+
+/**
+ * \brief Set MUX_A1 level
+ *
+ * Sets output level on a pin
+ *
+ * \param[in] level true  = Pin level set to "high" state
+ *                  false = Pin level set to "low" state
+ */
+static inline void MUX_A1_set_level(const bool level)
+{
+	PORTB_set_pin_level(1, level);
+}
+
+/**
+ * \brief Toggle output level on MUX_A1
+ *
+ * Toggle the pin level
+ */
+static inline void MUX_A1_toggle_level()
+{
+	PORTB_toggle_pin_level(1);
+}
+
+/**
+ * \brief Get level on MUX_A1
+ *
+ * Reads the level on a pin
+ */
+static inline bool MUX_A1_get_level()
+{
+	return PORTB_get_pin_level(1);
+}
+
+/**
+ * \brief Set MUX_A1 interrupt level
+ *
+ * Sets interrupt level for port
+ *
+ * \param[in] level Value to write to the port register
+ */
+static inline void MUX_A1_int_level(const uint8_t level)
+{
+	PORTB_set_int_level(level);
+}
+
+/**
+ * \brief Set MUX_A1 interrupt vector 0 mask
+ *
+ * Sets interrupt mask for port vector 0
+ *
+ * \param[in] value Value to write to the port register
+ */
+static inline void MUX_A1_int0_mask(const uint8_t value)
+{
+	PORTB_write_int0_mask(value);
+}
+
+/**
+ * \brief Set MUX_A1 interrupt vector 1 mask
+ *
+ * Sets interrupt mask for port vector 1
+ *
+ * \param[in] value Value to write to the port register
+ */
+static inline void MUX_A1_int1_mask(const uint8_t value)
+{
+	PORTB_write_int1_mask(value);
+}
+
+/**
  * \brief Set PC2 output & pull configuration
  *
  * Configure pin to pull up, down or disable pull mode, supported pull

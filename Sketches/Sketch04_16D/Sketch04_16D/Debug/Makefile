@@ -54,6 +54,7 @@ C_SRCS +=  \
 ../src/ac.c \
 ../src/adc.c \
 ../src/clk.c \
+../src/delay.c \
 ../src/driver_init.c \
 ../src/evsys.c \
 ../src/micro_sense.c \
@@ -79,6 +80,7 @@ main.o \
 src/ac.o \
 src/adc.o \
 src/clk.o \
+src/delay.o \
 src/driver_init.o \
 src/evsys.o \
 src/micro_sense.o \
@@ -97,6 +99,7 @@ main.o \
 src/ac.o \
 src/adc.o \
 src/clk.o \
+src/delay.o \
 src/driver_init.o \
 src/evsys.o \
 src/micro_sense.o \
@@ -115,6 +118,7 @@ main.d \
 src/ac.d \
 src/adc.d \
 src/clk.d \
+src/delay.d \
 src/driver_init.d \
 src/evsys.d \
 src/micro_sense.d \
@@ -133,6 +137,7 @@ main.d \
 src/ac.d \
 src/adc.d \
 src/clk.d \
+src/delay.d \
 src/driver_init.d \
 src/evsys.d \
 src/micro_sense.d \
@@ -200,6 +205,13 @@ src/adc.o: ../src/adc.c
 	
 
 src/clk.o: ../src/clk.c
+	@echo Building file: $<
+	@echo Invoking: AVR/GNU C Compiler : 5.4.0
+	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"../examples/include" -I"../include" -I"../utils" -I"../utils/assembler" -I".." -I"../Config" -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\XMEGAD_DFP\1.1.63\include"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atxmega16d4 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\XMEGAD_DFP\1.1.63\gcc\dev\atxmega16d4" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 
+	@echo Finished building: $<
+	
+
+src/delay.o: ../src/delay.c
 	@echo Building file: $<
 	@echo Invoking: AVR/GNU C Compiler : 5.4.0
 	$(QUOTE)C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avr8-gnu-toolchain\bin\avr-gcc.exe$(QUOTE)  -x c -funsigned-char -funsigned-bitfields -DDEBUG  -I"../examples/include" -I"../include" -I"../utils" -I"../utils/assembler" -I".." -I"../Config" -I"C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\XMEGAD_DFP\1.1.63\include"  -O1 -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -g2 -Wall -mmcu=atxmega16d4 -B "C:\Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\XMEGAD_DFP\1.1.63\gcc\dev\atxmega16d4" -c -std=gnu99 -MD -MP -MF "$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -MT"$(@:%.o=%.o)"   -o "$@" "$<" 

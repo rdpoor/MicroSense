@@ -442,6 +442,26 @@ drivers:
         configuration:
           usart_clock_source: CLK CPU/PER
 pads:
+  A:
+    name: PA5
+    definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::pad::PA5
+    mode: Digital output
+    user_label: A
+    configuration:
+      pad_initial_level: Low
+  MUX_A0:
+    name: PB0
+    definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::pad::PB0
+    mode: Digital output
+    user_label: MUX_A0
+    configuration: null
+  MUX_A1:
+    name: PB1
+    definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::pad::PB1
+    mode: Digital output
+    user_label: MUX_A1
+    configuration:
+      pad_initial_level: High
   PC2:
     name: PC2
     definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::pad::PC2

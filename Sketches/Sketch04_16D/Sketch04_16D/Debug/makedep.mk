@@ -16,6 +16,8 @@ src\adc.c
 
 src\clk.c
 
+src\delay.c
+
 src\driver_init.c
 
 src\evsys.c

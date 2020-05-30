@@ -275,6 +275,42 @@ void system_init()
 	    // <14=> 14
 	    0x0);
 
+	/* PORT setting on PA5 */
+
+	// Set pin direction to output
+	A_set_dir(PORT_DIR_OUT);
+
+	A_set_level(
+	    // <y> Initial level
+	    // <id> pad_initial_level
+	    // <false"> Low
+	    // <true"> High
+	    false);
+
+	/* PORT setting on PB0 */
+
+	// Set pin direction to output
+	MUX_A0_set_dir(PORT_DIR_OUT);
+
+	MUX_A0_set_level(
+	    // <y> Initial level
+	    // <id> pad_initial_level
+	    // <false"> Low
+	    // <true"> High
+	    false);
+
+	/* PORT setting on PB1 */
+
+	// Set pin direction to output
+	MUX_A1_set_dir(PORT_DIR_OUT);
+
+	MUX_A1_set_level(
+	    // <y> Initial level
+	    // <id> pad_initial_level
+	    // <false"> Low
+	    // <true"> High
+	    true);
+
 	/* PORT setting on PD7 */
 
 	// Set pin direction to output

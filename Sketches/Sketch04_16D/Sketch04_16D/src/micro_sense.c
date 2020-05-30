@@ -27,14 +27,18 @@
 
 #include "micro_sense.h"
 #include <atmel_start.h>
+#include "delay.h"
 #include <stdbool.h>
 #include <stdio.h>
+#include <stdint.h>
 
 // =============================================================================
 // local types and definitions
 
 // =============================================================================
 // local (forward) declarations
+
+static void reset_v_out();
 
 // =============================================================================
 // local storage
@@ -52,6 +56,8 @@ static uint16_t s_cca;
 
 // called once at startup after chip and board initialization
 void micro_sense_init(void) {
+  MUX_A0_set_level(false);
+  MUX_A1_set_level(true);
   s_changed = false;
 }
 
@@ -96,6 +102,7 @@ void micro_sense_on_adc_complete_irq(void) {
   s_adc_raw = ADCA.CH0RES;  // read ADC register, clears interrupt
   s_adc_irqs += 1;
   s_changed = true;
+  reset_v_out();
 }
 
 /**
@@ -108,3 +115,9 @@ void micro_sense_on_vsync_irq(void) {
 
 // =============================================================================
 // local (static) code
+
+static void reset_v_out() {
+	A_set_level(true);
+	delay_us(200);
+	A_set_level(false);
+}
