@@ -74,7 +74,7 @@
           <AcmeProjectActionInfo Action="File" Source="src/adc.c" IsConfig="false" Hash="x+GXJwM9fMHIiO0ZueyI0w" />
           <AcmeProjectActionInfo Action="File" Source="src/clk.c" IsConfig="false" Hash="xXTHbl/Vh7606pRZhtWRPA" />
           <AcmeProjectActionInfo Action="File" Source="src/evsys.c" IsConfig="false" Hash="Ve9/o4pzE674hLjTV9w9jw" />
-          <AcmeProjectActionInfo Action="File" Source="src/osc.c" IsConfig="false" Hash="0XM3CfDEPdHliY4fr3fNng" />
+          <AcmeProjectActionInfo Action="File" Source="src/osc.c" IsConfig="false" Hash="6kioy5PSgxoYMcF87juAeA" />
           <AcmeProjectActionInfo Action="File" Source="src/pmic.c" IsConfig="false" Hash="BPk/h0ZNhGdp1hHGcIYQ6A" />
           <AcmeProjectActionInfo Action="File" Source="src/protected_io.S" IsConfig="false" Hash="L8Ol9RShK90tJyVn8DHTdw" />
           <AcmeProjectActionInfo Action="File" Source="src/sleep.c" IsConfig="false" Hash="AXoEKgq9DBGKwk3IVYAzYQ" />

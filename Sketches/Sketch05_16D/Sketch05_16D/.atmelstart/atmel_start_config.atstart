@@ -126,11 +126,11 @@ drivers:
       enable_pll: false
       enable_xosc32k: true
       osc2m_cal_override: false
-      osc2m_enable: true
+      osc2m_enable: false
       osc32k_calib: 0
       osc32k_enable: false
       osc32m_cal_override: false
-      osc32m_enable: false
+      osc32m_enable: true
       osc_xoscctrl_x32klpm: false
       osc_xoscctrl_xoscsel: External Clock - 6 CLK
       osc_xoscfail_pllfden: false

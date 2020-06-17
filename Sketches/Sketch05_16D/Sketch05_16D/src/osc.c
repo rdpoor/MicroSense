@@ -62,16 +62,16 @@ int8_t OSC_init()
 	//		 | 1 << OSC_PLLDIV_bp /* PLL divided output: enabled */
 	//		 | 1 << OSC_PLLFAC_gp; /* PLL Multiplication Factor: 1 */
 
-	// OSC.CTRL = 0 << OSC_PLLEN_bp /* PLL Enable: disabled */
-	//		 | 0 << OSC_XOSCEN_bp /* External Oscillator Enable: disabled */
-	//		 | 0 << OSC_RC32KEN_bp /* Internal 32kHz RC Oscillator Enable: disabled */
-	//		 | 0 << OSC_RC32MEN_bp /* Internal 32MHz RC Oscillator Enable: disabled */
-	//		 | 1 << OSC_RC2MEN_bp; /* Internal 2MHz RC Oscillator Enable: enabled */
+	OSC.CTRL = 0 << OSC_PLLEN_bp     /* PLL Enable: disabled */
+	           | 0 << OSC_XOSCEN_bp  /* External Oscillator Enable: disabled */
+	           | 0 << OSC_RC32KEN_bp /* Internal 32kHz RC Oscillator Enable: disabled */
+	           | 1 << OSC_RC32MEN_bp /* Internal 32MHz RC Oscillator Enable: enabled */
+	           | 0 << OSC_RC2MEN_bp; /* Internal 2MHz RC Oscillator Enable: disabled */
 
 	// Wait for the Oscillators to be stable
 
-	while (!(OSC.STATUS & OSC_RC2MRDY_bm)) {
-		/* Wait for 2MHz Internal Oscillator to be stable */
+	while (!(OSC.STATUS & OSC_RC32MRDY_bm)) {
+		/* Wait for 32MHz Internal Oscillator  to be stable */
 	}
 
 	// OSC.DFLLCTRL = 0 << OSC_RC32MCREF_bp /* DFLL 32 MHz DFLL Calibration Reference: disabled */
