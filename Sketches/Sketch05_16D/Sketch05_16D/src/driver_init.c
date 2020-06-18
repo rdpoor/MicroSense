@@ -287,6 +287,18 @@ void system_init()
 	    // <true"> High
 	    false);
 
+	/* PORT setting on PA6 */
+
+	// Set pin direction to output
+	TEST_PT_A_set_dir(PORT_DIR_OUT);
+
+	TEST_PT_A_set_level(
+	    // <y> Initial level
+	    // <id> pad_initial_level
+	    // <false"> Low
+	    // <true"> High
+	    false);
+
 	/* PORT setting on PB0 */
 
 	// Set pin direction to output

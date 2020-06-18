@@ -449,6 +449,12 @@ pads:
     user_label: A
     configuration:
       pad_initial_level: Low
+  TEST_PT_A:
+    name: PA6
+    definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::pad::PA6
+    mode: Digital output
+    user_label: TEST_PT_A
+    configuration: null
   MUX_A0:
     name: PB0
     definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::pad::PB0

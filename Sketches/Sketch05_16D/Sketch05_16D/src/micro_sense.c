@@ -230,15 +230,17 @@ void micro_sense_step(void) {
     s_sample_state = SAMPLE_WAITING;
 
     s_sample_count += 1;
+    TEST_PT_A_set_level(true);
     if (s_sample_count == SAMPLES_PER_FRAME) {
       emit_frame((gain1 << 1) + gain0,
                  s_sum_count > 0 ? s_sum_dvdt / s_sum_count : 0.0,
                  s_sum_count);
-    }
     s_sum_dvdt = 0.0;
     s_sum_count = 0;
     s_sample_count = 0;
-  }
+    }
+	TEST_PT_A_set_level(false);
+  }  
 }
 
 /**
@@ -295,7 +297,10 @@ void micro_sense_on_pwm_irq(void) {
 // local (static) code
 
 static void emit_frame(int gain, float dvdt, int count) {
-  printf("\r\n%d, %6.3f, %d", gain, dvdt, count);
+	// re-learn how to print floats!!
+    // printf("\r\n%d, %6.3f, %d", gain, dvdt, count);
+	long int idvdt = dvdt * 2000000;
+    printf("\r\n%d, %ld, %d", gain, idvdt, count);
 }
 
 static void reset_v_out() {
