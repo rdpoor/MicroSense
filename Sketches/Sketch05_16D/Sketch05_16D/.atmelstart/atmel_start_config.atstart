@@ -86,7 +86,7 @@ drivers:
       tc1_intctrlb_ccAintlvl: Low Level
       tc1_intctrlb_ccBintlvl: Interrupt Disabled
       tc_cnt: 0
-      tc_ctrla_clksel: System Clock / 64
+      tc_ctrla_clksel: System Clock / 8
       tc_ctrlb_wgmode: Normal Mode
       tc_ctrld_evact: Pulse-width Capture
       tc_ctrld_evsel: Event Channel 2
@@ -157,7 +157,7 @@ drivers:
     configuration:
       clk_cpu_clock_source: CLK PER2
       clk_lock_lock: false
-      clk_psctrl_psadiv: Divide by 1
+      clk_psctrl_psadiv: Divide by 2
       clk_psctrl_psbcdiv: Divide B by 1 and C by 1
       clk_sys_source_oscillator: 32MHz Internal Oscillator
       cpu_clock_prescaler: 0
@@ -194,11 +194,11 @@ drivers:
     configuration:
       adc_cal: 0
       adc_cmp: 0
-      adc_ctrl_gain_ch0: 1x gain
+      adc_ctrl_gain_ch0: x/2 gain
       adc_ctrl_inputmode_ch0: Differential input, no gain
       adc_ctrla_enable: true
       adc_ctrla_flush: false
-      adc_ctrlb_conmode: Unsigned Mode
+      adc_ctrlb_conmode: Signed Mode
       adc_ctrlb_currlimit: No limit
       adc_ctrlb_freerun: false
       adc_ctrlb_resolution: 12-bit right-adjusted result
@@ -211,7 +211,7 @@ drivers:
       adc_muxctrl_muxpos_ch0: Input pin 4
       adc_prescaler_prescaler: Divide clock by 4
       adc_refctrl_bandgap: false
-      adc_refctrl_refsel: Internal VCC / 1.6
+      adc_refctrl_refsel: Internal VCC / 2
       adc_refctrl_tempref: false
       adc_sampctrl_sampval: 0
       adc_scan_count_ch: 0

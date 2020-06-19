@@ -46,8 +46,9 @@ int8_t CLK_init()
 
 	ccp_write_io((void *)&(CLK.CTRL), CLK_SCLKSEL_RC32M_gc /* 32MHz Internal Oscillator */);
 
-	// ccp_write_io((void*)&(CLK.PSCTRL),CLK_PSADIV_1_gc /* Divide by 1 */
-	//		 | CLK_PSBCDIV_1_1_gc /* Divide B by 1 and C by 1 */);
+	ccp_write_io((void *)&(CLK.PSCTRL),
+	             CLK_PSADIV_2_gc /* Divide by 2 */
+	                 | CLK_PSBCDIV_1_1_gc /* Divide B by 1 and C by 1 */);
 
 	// ccp_write_io((void*)&(CLK.LOCK),0 << CLK_LOCK_bp /* Clock System Lock: disabled */);
 

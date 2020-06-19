@@ -71,8 +71,8 @@
           <AcmeProjectActionInfo Action="File" Source="include/tc.h" IsConfig="false" Hash="0DqcnhOIacoQQPkDbYU+LA" />
           <AcmeProjectActionInfo Action="File" Source="include/usart_basic.h" IsConfig="false" Hash="iBWAzLE1TTWp9jVaP6BBYg" />
           <AcmeProjectActionInfo Action="File" Source="src/ac.c" IsConfig="false" Hash="On/GGOE/6HO5OcTzQyvV3A" />
-          <AcmeProjectActionInfo Action="File" Source="src/adc.c" IsConfig="false" Hash="x+GXJwM9fMHIiO0ZueyI0w" />
-          <AcmeProjectActionInfo Action="File" Source="src/clk.c" IsConfig="false" Hash="xXTHbl/Vh7606pRZhtWRPA" />
+          <AcmeProjectActionInfo Action="File" Source="src/adc.c" IsConfig="false" Hash="vsca7zeibO/uazal2xkS3A" />
+          <AcmeProjectActionInfo Action="File" Source="src/clk.c" IsConfig="false" Hash="R/Oag93dfxa8Zdh9W2WPRg" />
           <AcmeProjectActionInfo Action="File" Source="src/evsys.c" IsConfig="false" Hash="Ve9/o4pzE674hLjTV9w9jw" />
           <AcmeProjectActionInfo Action="File" Source="src/osc.c" IsConfig="false" Hash="6kioy5PSgxoYMcF87juAeA" />
           <AcmeProjectActionInfo Action="File" Source="src/pmic.c" IsConfig="false" Hash="BPk/h0ZNhGdp1hHGcIYQ6A" />
@@ -90,7 +90,7 @@
           <AcmeProjectActionInfo Action="File" Source="utils/utils_assert.h" IsConfig="false" Hash="lJZG/QWOeOnUhe4wcXVztA" />
           <AcmeProjectActionInfo Action="File" Source="atmel_start.h" IsConfig="false" Hash="ZPe6iT3s4OihW8t8wDF53g" />
           <AcmeProjectActionInfo Action="File" Source="atmel_start.c" IsConfig="false" Hash="1RHIE7zTtYK4DURNPUqF9w" />
-          <AcmeProjectActionInfo Action="File" Source="config/clock_config.h" IsConfig="true" Hash="2XrJQPY8QVc5p/np/1bO0Q" />
+          <AcmeProjectActionInfo Action="File" Source="config/clock_config.h" IsConfig="true" Hash="abZD9F0T2wxUaZcba0JAgA" />
         </AcmeActionInfos>
         <NonsecureFilesInfo />
       </AcmeProjectConfig>
