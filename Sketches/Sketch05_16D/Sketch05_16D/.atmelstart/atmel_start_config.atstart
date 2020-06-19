@@ -86,7 +86,7 @@ drivers:
       tc1_intctrlb_ccAintlvl: Low Level
       tc1_intctrlb_ccBintlvl: Interrupt Disabled
       tc_cnt: 0
-      tc_ctrla_clksel: System Clock / 8
+      tc_ctrla_clksel: System Clock / 64
       tc_ctrlb_wgmode: Normal Mode
       tc_ctrld_evact: Pulse-width Capture
       tc_ctrld_evsel: Event Channel 2
@@ -211,7 +211,7 @@ drivers:
       adc_muxctrl_muxpos_ch0: Input pin 4
       adc_prescaler_prescaler: Divide clock by 4
       adc_refctrl_bandgap: false
-      adc_refctrl_refsel: Internal 1V
+      adc_refctrl_refsel: Internal VCC / 1.6
       adc_refctrl_tempref: false
       adc_sampctrl_sampval: 0
       adc_scan_count_ch: 0

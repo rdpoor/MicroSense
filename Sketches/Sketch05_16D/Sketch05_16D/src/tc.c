@@ -116,7 +116,7 @@ int8_t TIMER_1_init()
 
 	// TCC1.PER = 0xffff; /* Period: 0xffff */
 
-	TCC1.CTRLA = TC_CLKSEL_DIV8_gc; /* System Clock / 8 */
+	TCC1.CTRLA = TC_CLKSEL_DIV64_gc; /* System Clock / 64 */
 
 	return 0;
 }

@@ -67,9 +67,9 @@ int8_t ADC_0_init()
 
 	// ADCA.SAMPCTRL = 0x0 << ADC_SAMPVAL_gp; /* Sampling Time Control: 0x0 */
 
-	// ADCA.REFCTRL = ADC_REFSEL_INT1V_gc /* Internal 1V */
-	//		 | 0 << ADC_BANDGAP_bp /* Bandgap enable: disabled */
-	//		 | 0 << ADC_TEMPREF_bp; /* Temperature Reference Enable: disabled */
+	ADCA.REFCTRL = ADC_REFSEL_INTVCC_gc   /* Internal VCC / 1.6 */
+	               | 0 << ADC_BANDGAP_bp  /* Bandgap enable: disabled */
+	               | 0 << ADC_TEMPREF_bp; /* Temperature Reference Enable: disabled */
 
 	// ADCA.PRESCALER = ADC_PRESCALER_DIV4_gc; /* Divide clock by 4 */
 

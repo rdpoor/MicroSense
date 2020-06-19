@@ -164,6 +164,7 @@ static void pwm_set_ratio(float ratio);
 static uint16_t s_dt_raw;
 static bool s_has_dt;
 static float s_v0_ratio;
+static uint16_t s_v1_raw;
 static float s_v1_ratio;
 static float s_pwm_ratio;
 static int s_err_irqs;
@@ -172,7 +173,7 @@ static int s_err_irqs;
 static volatile sample_state_t s_sample_state;
 static volatile float s_dvdt;
 
-// foregrond only
+// foreground only
 static int s_sample_count;         // # of samples seen in this frame
 static float s_sum_dvdt;   // sum of dvdt for this frame
 static int s_sum_count;    // # of dvdt's sum
@@ -264,7 +265,8 @@ void micro_sense_on_vsync_irq(void) {
  */
 void micro_sense_on_adc_complete_irq(void) {
   USR_LED_toggle_level();
-  s_v1_ratio = ADC_COUNT_TO_RATIO(ADCA.CH0RES);  // read ADC, clears interrupt
+  s_v1_raw = ADCA.CH0RES;
+  s_v1_ratio = ADC_COUNT_TO_RATIO(s_v1_raw);  // read ADC, clears interrupt
   s_pwm_ratio = s_v1_ratio;
   reset_v_out();             // reset V_OUT
 }
@@ -297,10 +299,9 @@ void micro_sense_on_pwm_irq(void) {
 // local (static) code
 
 static void emit_frame(int gain, float dvdt, int count) {
-	// re-learn how to print floats!!
-    // printf("\r\n%d, %6.3f, %d", gain, dvdt, count);
-	long int idvdt = dvdt * 2000000;
-    printf("\r\n%d, %ld, %d", gain, idvdt, count);
+	printf("\r\n%d, %e, %d, %d, %d", gain, dvdt, count, s_v1_raw, s_dt_raw);
+	// long int idvdt = dvdt * 2000000;
+    // printf("\r\n%d, %ld, %d", gain, idvdt, count);
 }
 
 static void reset_v_out() {
