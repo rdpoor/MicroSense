@@ -320,7 +320,7 @@ drivers:
     configuration:
       ac_ac0ctrl_enable: true
       ac_ac0ctrl_hsmode: false
-      ac_ac0ctrl_hysmode: Small hysteresis
+      ac_ac0ctrl_hysmode: Large hysteresis
       ac_ac0ctrl_intlvl: Interrupt disabled
       ac_ac0ctrl_intmode: Interrupt on both edges
       ac_ac0muxctrl_muxneg: Pin 0

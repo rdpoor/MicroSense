@@ -265,8 +265,9 @@ void micro_sense_on_vsync_irq(void) {
  */
 void micro_sense_on_adc_complete_irq(void) {
   USR_LED_toggle_level();
-  s_v1_raw = ADCA.CH0RES;
-  s_v1_ratio = ADC_COUNT_TO_RATIO(s_v1_raw);  // read ADC, clears interrupt
+  s_v1_raw = ADCA.CH0RES;                     // read ADC, clears interrupt
+  printf("%d\r\n", s_v1_raw);
+  s_v1_ratio = ADC_COUNT_TO_RATIO(s_v1_raw);  
   s_pwm_ratio = s_v1_ratio;
   reset_v_out();             // reset V_OUT
 }
@@ -299,7 +300,7 @@ void micro_sense_on_pwm_irq(void) {
 // local (static) code
 
 static void emit_frame(int gain, float dvdt, int count) {
-	printf("\r\n%d, %e, %d, %d, %d", gain, dvdt, count, s_v1_raw, s_dt_raw);
+	// printf("\r\n%d, %e, %d, %d, %u", gain, dvdt, count, s_v1_raw, s_dt_raw);
 	// long int idvdt = dvdt * 2000000;
     // printf("\r\n%d, %ld, %d", gain, idvdt, count);
 }
