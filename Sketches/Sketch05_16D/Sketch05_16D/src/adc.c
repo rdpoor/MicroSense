@@ -62,7 +62,7 @@ int8_t ADC_0_init()
 	             | 0 << ADC_FREERUN_bp      /* Free Running Mode Enable: disabled */
 	             | ADC_RESOLUTION_12BIT_gc; /* 12-bit right-adjusted result */
 
-	ADCA.EVCTRL = ADC_EVSEL_0123_gc   /* Event Channel 0,1,2,3 */
+	ADCA.EVCTRL = ADC_EVSEL_3456_gc   /* Event Channel 3,4,5,6 */
 	              | ADC_EVACT_CH0_gc; /* First event triggers channel 0 */
 
 	// ADCA.SAMPCTRL = 0x0 << ADC_SAMPVAL_gp; /* Sampling Time Control: 0x0 */

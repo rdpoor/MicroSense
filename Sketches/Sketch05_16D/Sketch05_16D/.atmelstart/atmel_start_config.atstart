@@ -88,7 +88,7 @@ drivers:
       tc_cnt: 0
       tc_ctrla_clksel: System Clock / 8
       tc_ctrlb_wgmode: Normal Mode
-      tc_ctrld_evact: Pulse-width Capture
+      tc_ctrld_evact: Restart
       tc_ctrld_evsel: Event Channel 2
       tc_ctrle_bytem: false
       tc_intctrla_errintlvl: Low Level
@@ -203,7 +203,7 @@ drivers:
       adc_ctrlb_freerun: false
       adc_ctrlb_resolution: 12-bit right-adjusted result
       adc_evctrl_evact: First event triggers channel 0
-      adc_evctrl_evsel: Event Channel 0,1,2,3
+      adc_evctrl_evsel: Event Channel 3,4,5,6
       adc_intctrl_intlvl_ch0: Low level
       adc_intctrl_intmode_ch0: Interrupt on conversion complete
       adc_muxctrl_muxint_ch0: Temperature Reference
@@ -294,13 +294,13 @@ drivers:
       evsys_ch0ctrl_qden: false
       evsys_ch0ctrl_qdien: false
       evsys_ch0ctrl_qdirm: QDPH0 = 0, QDPH90 = 0
-      evsys_ch0mux_ch0mux: Port A, Pin3
+      evsys_ch0mux_ch0mux: 'Off'
       evsys_ch1ctrl_digfilt: 1 SAMPLE
       evsys_ch1mux_ch1mux: 'Off'
       evsys_ch2ctrl_digfilt: 1 SAMPLE
       evsys_ch2mux_ch2mux: Analog Comparator A Channel 0
       evsys_ch3ctrl_digfilt: 1 SAMPLE
-      evsys_ch3mux_ch3mux: 'Off'
+      evsys_ch3mux_ch3mux: Port A, Pin3
     optional_signals: []
     variant: null
     clocks:
@@ -322,7 +322,7 @@ drivers:
       ac_ac0ctrl_hsmode: false
       ac_ac0ctrl_hysmode: Large hysteresis
       ac_ac0ctrl_intlvl: Interrupt disabled
-      ac_ac0ctrl_intmode: Interrupt on both edges
+      ac_ac0ctrl_intmode: Interrupt on rising edge
       ac_ac0muxctrl_muxneg: Pin 0
       ac_ac0muxctrl_muxpos: Pin 2
       ac_ac1ctrl_enable: false

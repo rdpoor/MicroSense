@@ -96,7 +96,7 @@ int8_t TIMER_1_init()
 	// TCC1.CTRLC = 0 << TC1_CMPB_bp /* Compare B Output Value: disabled */
 	//		 | 0 << TC1_CMPA_bp; /* Compare A Output Value: disabled */
 
-	TCC1.CTRLD = TC_EVACT_PW_gc      /* Pulse-width Capture */
+	TCC1.CTRLD = TC_EVACT_RESTART_gc /* Restart */
 	             | 1 << TC1_EVDLY_bp /* Event Delay: enabled */
 	             | TC_EVSEL_CH2_gc;  /* Event Channel 2 */
 

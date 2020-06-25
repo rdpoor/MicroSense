@@ -58,11 +58,11 @@ int8_t AC_0_init()
 	//		 | AC_WINTMODE_ABOVE_gc /* Interrupt on above window */
 	//		 | 0 << AC_WEN_bp; /* Window Mode Enable: disabled */
 
-	ACA.AC0CTRL = 1 << AC_ENABLE_bp          /* Enable: enabled */
-	              | AC_HYSMODE_LARGE_gc      /* Large hysteresis */
-	              | 0 << AC_HSMODE_bp        /* High-speed Mode: disabled */
-	              | AC_INTLVL_OFF_gc         /* Interrupt disabled */
-	              | AC_INTMODE_BOTHEDGES_gc; /* Interrupt on both edges */
+	ACA.AC0CTRL = 1 << AC_ENABLE_bp       /* Enable: enabled */
+	              | AC_HYSMODE_LARGE_gc   /* Large hysteresis */
+	              | 0 << AC_HSMODE_bp     /* High-speed Mode: disabled */
+	              | AC_INTLVL_OFF_gc      /* Interrupt disabled */
+	              | AC_INTMODE_RISING_gc; /* Interrupt on rising edge */
 
 	// ACA.AC1CTRL = 0 << AC_ENABLE_bp /* Enable: disabled */
 	//		 | AC_HYSMODE_NO_gc /* No hysteresis */
