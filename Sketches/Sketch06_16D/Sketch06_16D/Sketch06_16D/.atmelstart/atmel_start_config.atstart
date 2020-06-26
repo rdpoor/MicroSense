@@ -1,0 +1,367 @@
+format_version: '2'
+name: My Project
+versions:
+  api: '1.0'
+  backend: 1.7.360
+  commit: 1e07622763d149970fd8808a8f12ff3b1e84e0d7
+  content: unknown
+  content_pack_name: unknown
+  format: '2'
+  frontend: 1.7.360
+  packs_version_avr8: 1.0.1415
+  packs_version_qtouch: unknown
+  packs_version_sam: 1.0.1622
+  version_backend: 1.7.360
+  version_frontend: ''
+board:
+  identifier: CustomBoard
+  device: ATxmega16D4-AU
+details: null
+application: null
+middlewares: {}
+drivers:
+  TIMER_0:
+    user_label: TIMER_0
+    definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::AWEXC::driver_config_definition::TC::Drivers:TC:Init
+    functionality: Timer
+    api: Drivers:TC:Init
+    configuration:
+      awex_ctrl_cwcm: false
+      awex_ctrl_dticcAen: false
+      awex_ctrl_dticcBen: false
+      awex_ctrl_dticcCen: false
+      awex_ctrl_dticcDen: false
+      awex_ctrl_pgm: false
+      awex_dtboth: 0
+      awex_dtbothbuf: 0
+      awex_dths: 0
+      awex_dthsbuf: 0
+      awex_dtls: 0
+      awex_dtlsbuf: 0
+      awex_fdctrl_fdact: No Fault Protection
+      awex_fdctrl_fddbd: false
+      awex_fdctrl_fdmode: false
+      awex_fdemask: 0
+      awex_outoven: 0
+    optional_signals: []
+    variant: null
+    clocks:
+      domain_group:
+        nodes:
+        - name: TC
+          input: CLK CPU/PER
+          external: false
+          external_frequency: 0
+        configuration:
+          tc_clock_source: CLK CPU/PER
+  OSC:
+    user_label: OSC
+    definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::OSC::driver_config_definition::OSC::Drivers:OSC:Init
+    functionality: System
+    api: Drivers:OSC:Init
+    configuration:
+      dfll2m_calib_a: 0
+      dfll2m_calib_b: 0
+      dfll2m_calib_ref: false
+      dfll2m_comp_1: 0
+      dfll2m_comp_2: 0
+      dfll32m_calib_a: 0
+      dfll32m_calib_b: 0
+      dfll32m_calib_ref_in_bit: false
+      dfll32m_comp_1: 0
+      dfll32m_comp_2: 0
+      enable_dfll2m: false
+      enable_dfll32m: false
+      enable_pll: false
+      enable_xosc32k: true
+      osc2m_cal_override: false
+      osc2m_enable: true
+      osc32k_calib: 0
+      osc32k_enable: false
+      osc32m_cal_override: false
+      osc32m_enable: false
+      osc_xoscctrl_x32klpm: false
+      osc_xoscctrl_xoscsel: External Clock - 6 CLK
+      osc_xoscfail_pllfden: false
+      osc_xoscfail_pllfdif: false
+      osc_xoscfail_xoscfden: false
+      osc_xoscfail_xoscfdif: false
+      pll_div: true
+      pll_fac: 1
+      pll_src: 2MHz Internal Oscillator
+      xosc32k_klpm: false
+      xosc_enable: false
+      xosc_frequency: 400000
+      xosc_frqrange: 0.4 - 2 MHz
+      xosc_owr: false
+    optional_signals: []
+    variant: null
+    clocks:
+      domain_group: null
+  CLK:
+    user_label: CLK
+    definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::CLK::driver_config_definition::CLK::Drivers:CLK:Init
+    functionality: System
+    api: Drivers:CLK:Init
+    configuration:
+      clk_cpu_clock_source: CLK PER2
+      clk_lock_lock: false
+      clk_psctrl_psadiv: Divide by 1
+      clk_psctrl_psbcdiv: Divide B by 1 and C by 1
+      clk_sys_source_oscillator: 32MHz Internal Oscillator
+      cpu_clock_prescaler: 0
+      cpu_clock_source: CLK CPU/PER
+      enable_clk_cpu_source: true
+      enable_clk_sys_source: true
+      enable_cpu_source: true
+      enable_lp_source: false
+      enable_per2_source: true
+      enable_per4_source: true
+      enable_rtc_source: false
+      lp_source_oscillator: Ultra Low Power Internal Oscillator
+      nvm_clock_source: CLK CPU/PER
+      per2_clock_source: CLK PER4
+      per4_clock_source: CLK SYS source
+      ram_clock_source: CLK CPU/PER
+      rtc_divider: false
+      rtc_source_oscillator: Ultra Low Power Internal Oscillator
+    optional_signals: []
+    variant: null
+    clocks:
+      domain_group:
+        nodes:
+        - name: CPU
+          input: CPU
+          external: false
+          external_frequency: 0
+        configuration: {}
+  ADC_0:
+    user_label: ADC_0
+    definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::ADCA::driver_config_definition::ADC::Drivers:ADC:Init
+    functionality: ADC
+    api: Drivers:ADC:Init
+    configuration:
+      adc_cal: 0
+      adc_cmp: 0
+      adc_ctrl_gain_ch0: 1x gain
+      adc_ctrl_inputmode_ch0: Internal inputs, no gain
+      adc_ctrla_enable: true
+      adc_ctrla_flush: false
+      adc_ctrlb_conmode: Signed Mode
+      adc_ctrlb_currlimit: No limit
+      adc_ctrlb_freerun: false
+      adc_ctrlb_resolution: 12-bit right-adjusted result
+      adc_evctrl_evact: No event action
+      adc_evctrl_evsel: Event Channel 0,1,2,3
+      adc_intctrl_intlvl_ch0: Low level
+      adc_intctrl_intmode_ch0: Interrupt on conversion complete
+      adc_muxctrl_muxint_ch0: Temperature Reference
+      adc_muxctrl_muxneg_ch0: Input pin 4 (Input Mode = 3)
+      adc_muxctrl_muxpos_ch0: Input pin 0
+      adc_prescaler_prescaler: Divide clock by 4
+      adc_refctrl_bandgap: false
+      adc_refctrl_refsel: Internal 1V
+      adc_refctrl_tempref: false
+      adc_sampctrl_sampval: 0
+      adc_scan_count_ch: 0
+    optional_signals:
+    - identifier: ADC_0:ADC/1
+      pad: PA1
+      mode: Enabled
+      configuration: null
+      definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::optional_signal_definition::ADCA.ADC.1
+      name: ADCA/ADC/1
+      label: ADC/1
+    - identifier: ADC_0:ADC/4
+      pad: PA4
+      mode: Enabled
+      configuration: null
+      definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::optional_signal_definition::ADCA.ADC.4
+      name: ADCA/ADC/4
+      label: ADC/4
+    variant: null
+    clocks:
+      domain_group:
+        nodes:
+        - name: ADC
+          input: CLK CPU/PER
+          external: false
+          external_frequency: 0
+        configuration:
+          adc_clock_source: CLK CPU/PER
+  PMIC:
+    user_label: PMIC
+    definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::PMIC::driver_config_definition::PMIC::Drivers:PMIC:Init
+    functionality: System
+    api: Drivers:PMIC:Init
+    configuration:
+      cpu_sreg_i: true
+      inc_isr_harness: true
+      pmic_ctrl_hilvlen: false
+      pmic_ctrl_ivsel: false
+      pmic_ctrl_lolvlen: true
+      pmic_ctrl_medlvlen: false
+      pmic_ctrl_rren: false
+    optional_signals: []
+    variant: null
+    clocks:
+      domain_group: null
+  SLEEP:
+    user_label: SLEEP
+    definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::SLEEP::driver_config_definition::SLEEP::Drivers:SLEEP:Init
+    functionality: System
+    api: Drivers:SLEEP:Init
+    configuration:
+      pr_prgen_evsys: false
+      pr_prgen_rtc: false
+      pr_prpa_aca: false
+      pr_prpa_adca: false
+      pr_prpc_hiresc: false
+      pr_prpc_spic: false
+      pr_prpc_tc0c: false
+      pr_prpc_tc1c: false
+      pr_prpc_twic: false
+      pr_prpc_usart0c: false
+      pr_prpd_spid: false
+      pr_prpd_tc0d: false
+      pr_prpd_usart0d: false
+      pr_prpe_tc0e: false
+      pr_prpe_twie: false
+      sleep_ctrl_sen: false
+      sleep_ctrl_smode: Idle mode
+    optional_signals: []
+    variant: null
+    clocks:
+      domain_group: null
+  USART_0:
+    user_label: USART_0
+    definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::USARTC0::driver_config_definition::Async.Polled.Mode::Drivers:USART:Basic
+    functionality: USART
+    api: Drivers:USART:Basic
+    configuration:
+      baud_rate: 115200
+      printf_support: true
+      usart_ctrlb_clk2x: false
+      usart_ctrlb_mpcm: false
+      usart_ctrlb_rxen: true
+      usart_ctrlb_txen: true
+      usart_ctrlc_chsize: 'Character size: 8 bit'
+      usart_ctrlc_cmode: Async Polled Mode
+      usart_ctrlc_pmode: No Parity
+      usart_ctrlc_sbmode: 1 stop bit
+      usart_ctrlc_ucpha: Sample DATA on Falling edge of XCK
+      usart_ctrlc_udord: Send MSB of DATA First
+    optional_signals: []
+    variant:
+      specification: CMODE=0
+      required_signals:
+      - name: USARTC0/RXD
+        pad: PC2
+        label: RXD
+      - name: USARTC0/TXD
+        pad: PC3
+        label: TXD
+    clocks:
+      domain_group:
+        nodes:
+        - name: USART
+          input: CLK CPU/PER
+          external: false
+          external_frequency: 0
+        configuration:
+          usart_clock_source: CLK CPU/PER
+pads:
+  V_RESET:
+    name: PA5
+    definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::pad::PA5
+    mode: Digital output
+    user_label: V_RESET
+    configuration: null
+  TEST_PT_A:
+    name: PA6
+    definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::pad::PA6
+    mode: Digital output
+    user_label: TEST_PT_A
+    configuration: null
+  MUX_A0:
+    name: PB0
+    definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::pad::PB0
+    mode: Digital output
+    user_label: MUX_A0
+    configuration: null
+  MUX_A1:
+    name: PB1
+    definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::pad::PB1
+    mode: Digital output
+    user_label: MUX_A1
+    configuration: null
+  SERIAL_RX:
+    name: PC2
+    definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::pad::PC2
+    mode: Digital input
+    user_label: SERIAL_RX
+    configuration: null
+  SERIAL_TX:
+    name: PC3
+    definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::pad::PC3
+    mode: Digital output
+    user_label: SERIAL_TX
+    configuration: null
+  PWM_OUT:
+    name: PD0
+    definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::pad::PD0
+    mode: Digital output
+    user_label: PWM_OUT
+    configuration: null
+  USR_LED:
+    name: PD7
+    definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::pad::PD7
+    mode: Digital output
+    user_label: USR_LED
+    configuration: null
+  FUTURE_SDA:
+    name: PE0
+    definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::pad::PE0
+    mode: Digital input
+    user_label: FUTURE_SDA
+    configuration: null
+  FUTURE_SCL:
+    name: PE1
+    definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::pad::PE1
+    mode: Digital input
+    user_label: FUTURE_SCL
+    configuration: null
+  ADC_1:
+    name: PA1
+    definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::pad::PA1
+    mode: Analog
+    user_label: ADC_1
+    configuration: null
+  V_SYNC:
+    name: PA3
+    definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::pad::PA3
+    mode: Advanced
+    user_label: V_SYNC
+    configuration:
+      pad_dir: In
+      pad_initial_level: Low
+      pad_int0lvl: Low Level
+      pad_int0msk: '8'
+      pad_int1lvl: Interrupt Disabled
+      pad_int1msk: '0'
+      pad_isc: Sense Rising Edge
+      pad_output_pull_config: Totem-pole
+  ADC_4:
+    name: PA4
+    definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::pad::PA4
+    mode: Analog
+    user_label: ADC_4
+    configuration: null
+toolchain_options:
+- definition:
+    identifier: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::environment_definition::All:Atmel.Studio:7.0.0
+  configuration:
+    compiler_config:
+      avrgcc_compiler_miscellaneous_OtherFlags: -std=gnu99
+    linker_config:
+      avrgcc_linker_miscellaneous_LinkerFlags: ''
