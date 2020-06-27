@@ -77,6 +77,10 @@ static void pwm_set_ratio(float ratio);
 // =============================================================================
 // local storage
 
+static uint8_t s_sample_count;
+static bool s_gain0;
+static bool s_gain1;
+
 // =============================================================================
 // public code
 
@@ -96,12 +100,12 @@ void micro_sense_init(void) {
 // and # of samples averaged.
 //
 void micro_sense_step(void) {
-  bool gain0 = FUTURE_SCL_get_level();
-  bool gain1 = FUTURE_SDA_get_level();
+  s_gain0 = FUTURE_SCL_get_level();
+  s_gain1 = FUTURE_SDA_get_level();
 
   // setup MUX_A0 and MUX_A1 to follow SCL and SDA (respectively)
-  MUX_A0_set_level(gain0);
-  MUX_A1_set_level(gain1);
+  MUX_A0_set_level(s_gain0);
+  MUX_A1_set_level(s_gain1);
 }
 
 /**
@@ -119,10 +123,13 @@ void micro_sense_on_vsync_irq(void) {
  * \brief [Interrupt] ADC completed a reading.
  */
 void micro_sense_on_adc_complete_irq(void) {
-  uint16_t raw = ADCA.CH0RES; // read ADC
   USR_LED_toggle_level();
-  printf("%d\r\n", raw);
+  uint16_t raw = ADCA.CH0RES; // read ADC
   reset_v_out();              // reset V_OUT
+  if (s_sample_count++ >= 15) {
+	  printf("%d %d %d\n", s_gain1, s_gain0, raw);
+	  s_sample_count = 0;
+  }
 }
 
 /**
