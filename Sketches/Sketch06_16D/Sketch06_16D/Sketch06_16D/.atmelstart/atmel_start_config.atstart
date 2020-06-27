@@ -143,8 +143,8 @@ drivers:
     configuration:
       adc_cal: 0
       adc_cmp: 0
-      adc_ctrl_gain_ch0: 1x gain
-      adc_ctrl_inputmode_ch0: Internal inputs, no gain
+      adc_ctrl_gain_ch0: x/2 gain
+      adc_ctrl_inputmode_ch0: Differential input, with gain
       adc_ctrla_enable: true
       adc_ctrla_flush: false
       adc_ctrlb_conmode: Signed Mode

@@ -46,10 +46,10 @@ int8_t ADC_0_init()
 
 	// ADCA.CAL = 0x0; /* Calibration Value: 0x0 */
 
-	// ADCA.CH0.CTRL = ADC_CH_GAIN_1X_gc /* 1x gain */
-	//		 | ADC_CH_INPUTMODE_INTERNAL_gc; /* Internal inputs, no gain */
+	ADCA.CH0.CTRL = ADC_CH_GAIN_DIV2_gc              /* x/2 gain */
+	                | ADC_CH_INPUTMODE_DIFFWGAIN_gc; /* Differential input, with gain */
 
-	ADCA.CH0.MUXCTRL = ADC_CH_MUXINT_TEMP_gc    /* Temperature Reference */
+	ADCA.CH0.MUXCTRL = ADC_CH_MUXPOS_PIN0_gc    /* Input pin 0 */
 	                   | ADC_CH_MUXNEG_PIN4_gc; /* Input pin 4 (Input Mode = 3) */
 
 	ADCA.CH0.INTCTRL = ADC_CH_INTMODE_COMPLETE_gc /* Interrupt on conversion complete */
