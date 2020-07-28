@@ -46,11 +46,11 @@ int8_t ADC_0_init()
 
 	// ADCA.CAL = 0x0; /* Calibration Value: 0x0 */
 
-	ADCA.CH0.CTRL = ADC_CH_GAIN_1X_gc                  /* 1x gain */
-	                | ADC_CH_INPUTMODE_SINGLEENDED_gc; /* Single-ended input, no gain */
+	ADCA.CH0.CTRL = ADC_CH_GAIN_DIV2_gc         /* x/2 gain */
+	                | ADC_CH_INPUTMODE_DIFF_gc; /* Differential input, no gain */
 
-	ADCA.CH0.MUXCTRL = ADC_CH_MUXPOS_PIN0_gc            /* Input pin 0 */
-	                   | ADC_CH_MUXNEG_INTGND_MODE3_gc; /* Internal Ground (Input Mode = 2) */
+	ADCA.CH0.MUXCTRL = ADC_CH_MUXPOS_PIN4_gc    /* Input pin 4 */
+	                   | ADC_CH_MUXNEG_PIN1_gc; /* Input pin 1 (Input Mode = 2) */
 
 	ADCA.CH0.INTCTRL = ADC_CH_INTMODE_COMPLETE_gc /* Interrupt on conversion complete */
 	                   | ADC_CH_INTLVL_LO_gc;     /* Low level */
@@ -62,7 +62,7 @@ int8_t ADC_0_init()
 	//		 | 0 << ADC_FREERUN_bp /* Free Running Mode Enable: disabled */
 	//		 | ADC_RESOLUTION_12BIT_gc; /* 12-bit right-adjusted result */
 
-	ADCA.EVCTRL = ADC_EVSEL_0123_gc   /* Event Channel 0,1,2,3 */
+	ADCA.EVCTRL = ADC_EVSEL_3456_gc   /* Event Channel 3,4,5,6 */
 	              | ADC_EVACT_CH0_gc; /* First event triggers channel 0 */
 
 	// ADCA.SAMPCTRL = 0x0 << ADC_SAMPVAL_gp; /* Sampling Time Control: 0x0 */

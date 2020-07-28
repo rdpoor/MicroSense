@@ -20,7 +20,7 @@
  */
 static inline void V_RAMP_set_output_pull_mode(const enum port_output_pull_mode output_pull_mode)
 {
-	PORTA_set_pin_output_pull_mode(0, output_pull_mode);
+	PORTA_set_pin_output_pull_mode(1, output_pull_mode);
 }
 
 /**
@@ -36,7 +36,7 @@ static inline void V_RAMP_set_output_pull_mode(const enum port_output_pull_mode 
  */
 static inline void V_RAMP_set_dir(const enum port_dir dir)
 {
-	PORTA_set_pin_dir(0, dir);
+	PORTA_set_pin_dir(1, dir);
 }
 
 /**
@@ -53,7 +53,7 @@ static inline void V_RAMP_set_dir(const enum port_dir dir)
  */
 static inline void V_RAMP_set_isc(const PORT_ISC_t isc)
 {
-	PORTA_pin_set_isc(0, isc);
+	PORTA_pin_set_isc(1, isc);
 }
 
 /**
@@ -66,7 +66,7 @@ static inline void V_RAMP_set_isc(const PORT_ISC_t isc)
  */
 static inline void V_RAMP_set_inverted(const bool inverted)
 {
-	PORTA_pin_set_inverted(0, inverted);
+	PORTA_pin_set_inverted(1, inverted);
 }
 
 /**
@@ -79,7 +79,7 @@ static inline void V_RAMP_set_inverted(const bool inverted)
  */
 static inline void V_RAMP_set_level(const bool level)
 {
-	PORTA_set_pin_level(0, level);
+	PORTA_set_pin_level(1, level);
 }
 
 /**
@@ -89,7 +89,7 @@ static inline void V_RAMP_set_level(const bool level)
  */
 static inline void V_RAMP_toggle_level()
 {
-	PORTA_toggle_pin_level(0);
+	PORTA_toggle_pin_level(1);
 }
 
 /**
@@ -99,7 +99,7 @@ static inline void V_RAMP_toggle_level()
  */
 static inline bool V_RAMP_get_level()
 {
-	return PORTA_get_pin_level(0);
+	return PORTA_get_pin_level(1);
 }
 
 /**
@@ -267,20 +267,20 @@ static inline void SYNC_IN_int1_mask(const uint8_t value)
 }
 
 /**
- * \brief Set RESET_B output & pull configuration
+ * \brief Set V_REF output & pull configuration
  *
  * Configure pin to pull up, down or disable pull mode, supported pull
  * modes are defined by device used
  *
  * \param[in] output_pull_mode Pin output & pull mode
  */
-static inline void RESET_B_set_output_pull_mode(const enum port_output_pull_mode output_pull_mode)
+static inline void V_REF_set_output_pull_mode(const enum port_output_pull_mode output_pull_mode)
 {
 	PORTA_set_pin_output_pull_mode(4, output_pull_mode);
 }
 
 /**
- * \brief Set RESET_B data direction
+ * \brief Set V_REF data direction
  *
  * Select if the pin data direction is input, output or disabled.
  * If disabled state is not possible, this function throws an assert.
@@ -290,15 +290,15 @@ static inline void RESET_B_set_output_pull_mode(const enum port_output_pull_mode
  *                      PORT_DIR_OFF = Disables the pin
  *                      (low power state)
  */
-static inline void RESET_B_set_dir(const enum port_dir dir)
+static inline void V_REF_set_dir(const enum port_dir dir)
 {
 	PORTA_set_pin_dir(4, dir);
 }
 
 /**
- * \brief Set RESET_B input/sense configuration
+ * \brief Set V_REF input/sense configuration
  *
- * Enable/disable RESET_B digital input buffer and pin change interrupt,
+ * Enable/disable V_REF digital input buffer and pin change interrupt,
  * select pin interrupt edge/level sensing mode
  *
  * \param[in] isc PORT_ISC_BOTHEDGES_gc     = Sense Both Edges
@@ -307,89 +307,89 @@ static inline void RESET_B_set_dir(const enum port_dir dir)
  *                PORT_ISC_INPUT_DISABLE_gc = Digital Input Buffer disabled
  *                PORT_ISC_LEVEL_gc         = Sense low Level
  */
-static inline void RESET_B_set_isc(const PORT_ISC_t isc)
+static inline void V_REF_set_isc(const PORT_ISC_t isc)
 {
 	PORTA_pin_set_isc(4, isc);
 }
 
 /**
- * \brief Set RESET_B inverted mode
+ * \brief Set V_REF inverted mode
  *
  * Enable or disable inverted I/O on a pin
  *
- * \param[in] inverted true  = I/O on RESET_B is inverted
- *                     false = I/O on RESET_B is not inverted
+ * \param[in] inverted true  = I/O on V_REF is inverted
+ *                     false = I/O on V_REF is not inverted
  */
-static inline void RESET_B_set_inverted(const bool inverted)
+static inline void V_REF_set_inverted(const bool inverted)
 {
 	PORTA_pin_set_inverted(4, inverted);
 }
 
 /**
- * \brief Set RESET_B level
+ * \brief Set V_REF level
  *
  * Sets output level on a pin
  *
  * \param[in] level true  = Pin level set to "high" state
  *                  false = Pin level set to "low" state
  */
-static inline void RESET_B_set_level(const bool level)
+static inline void V_REF_set_level(const bool level)
 {
 	PORTA_set_pin_level(4, level);
 }
 
 /**
- * \brief Toggle output level on RESET_B
+ * \brief Toggle output level on V_REF
  *
  * Toggle the pin level
  */
-static inline void RESET_B_toggle_level()
+static inline void V_REF_toggle_level()
 {
 	PORTA_toggle_pin_level(4);
 }
 
 /**
- * \brief Get level on RESET_B
+ * \brief Get level on V_REF
  *
  * Reads the level on a pin
  */
-static inline bool RESET_B_get_level()
+static inline bool V_REF_get_level()
 {
 	return PORTA_get_pin_level(4);
 }
 
 /**
- * \brief Set RESET_B interrupt level
+ * \brief Set V_REF interrupt level
  *
  * Sets interrupt level for port
  *
  * \param[in] level Value to write to the port register
  */
-static inline void RESET_B_int_level(const uint8_t level)
+static inline void V_REF_int_level(const uint8_t level)
 {
 	PORTA_set_int_level(level);
 }
 
 /**
- * \brief Set RESET_B interrupt vector 0 mask
+ * \brief Set V_REF interrupt vector 0 mask
  *
  * Sets interrupt mask for port vector 0
  *
  * \param[in] value Value to write to the port register
  */
-static inline void RESET_B_int0_mask(const uint8_t value)
+static inline void V_REF_int0_mask(const uint8_t value)
 {
 	PORTA_write_int0_mask(value);
 }
 
 /**
- * \brief Set RESET_B interrupt vector 1 mask
+ * \brief Set V_REF interrupt vector 1 mask
  *
  * Sets interrupt mask for port vector 1
  *
  * \param[in] value Value to write to the port register
  */
-static inline void RESET_B_int1_mask(const uint8_t value)
+static inline void V_REF_int1_mask(const uint8_t value)
 {
 	PORTA_write_int1_mask(value);
 }

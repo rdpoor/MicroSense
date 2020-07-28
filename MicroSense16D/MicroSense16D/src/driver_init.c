@@ -61,6 +61,11 @@ void ADC_0_initialization(void)
 	// Disable digital         // Disable digital input buffer
 	V_RAMP_set_isc(PORT_ISC_INPUT_DISABLE_gc);
 
+	// Disable pull-up resistor
+	V_REF_set_output_pull_mode(PORT_CONFIGURATION_TOTEM);
+	// Disable digital         // Disable digital input buffer
+	V_REF_set_isc(PORT_ISC_INPUT_DISABLE_gc);
+
 	ADC_0_init();
 }
 
@@ -213,18 +218,6 @@ void system_init()
 	    // <13=> 13
 	    // <14=> 14
 	    0x0);
-
-	/* PORT setting on PA4 */
-
-	// Set pin direction to output
-	RESET_B_set_dir(PORT_DIR_OUT);
-
-	RESET_B_set_level(
-	    // <y> Initial level
-	    // <id> pad_initial_level
-	    // <false"> Low
-	    // <true"> High
-	    false);
 
 	/* PORT setting on PA5 */
 

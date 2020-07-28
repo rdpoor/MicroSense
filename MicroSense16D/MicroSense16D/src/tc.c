@@ -65,7 +65,7 @@ int8_t PWM_init()
 	TCD0.INTCTRLA = TC_ERRINTLVL_OFF_gc   /* Interrupt Disabled */
 	                | TC_OVFINTLVL_LO_gc; /* Low Level */
 
-	TCD0.CCA = 0x3e8 /* Compare or Capture A: 0x3e8 */;
+	TCD0.CCA = 0x7fff /* Compare or Capture A: 0x7fff */;
 
 	// TCD0.CCB = 0x0 /* Compare or Capture B: 0x0 */;
 
