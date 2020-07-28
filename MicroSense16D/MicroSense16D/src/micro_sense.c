@@ -111,12 +111,13 @@ typedef enum {
 //=============================================================================
 // forward declarations
 
-static uint16_t read_adc_count(void);
+static void emit_sample_frame(sensitivity_t sensitivity, int16_t count);
+
+static int16_t read_adc_count(void);
 static void led_on();
 static void led_off();
 static void reset_integrator();
 static void update_pwm(uint16_t adc_count);
-static void emit_sample_frame(uint16_t count, sensitivity_t gain);
 static sensitivity_t update_autoranging(uint16_t count, sensitivity_t gain);
 static void set_sensitivity(sensitivity_t gain);
 static float lerp(float x, float x0, float x1, float y0, float y1);
@@ -124,9 +125,13 @@ static float lerp(float x, float x0, float x1, float y0, float y1);
 //=============================================================================
 // private storage
 
-static uint16_t s_frame_total;       // accumulated ADC count after N samples
+static int16_t s_frame_total;        // accumulated ADC count after N samples
 static uint8_t s_sample_count;       // counts from 0 to SAMPLES_PER_FRAME
 static sensitivity_t s_sensitivity;  // LOW, MID, HIGH for autoranging
+
+static bool s_has_frame;
+static int16_t s_frame_fg;            
+static sensitivity_t s_sensitivity_fg;
 
 //=============================================================================
 // public code
@@ -142,13 +147,15 @@ void micro_sense_init(void) {
 
 // [foreground] called repeatedly in foreground
 void micro_sense_step(void) {
-  // all processing happens at interrupt level...
-  asm("nop");
+  if (s_has_frame) {
+    emit_sample_frame(s_sensitivity_fg, s_frame_fg);
+	s_has_frame = false;
+  }
 }
 
 // [interrupt] Called on completion of ADC conversion
 void micro_sense_adc_complete_cb(void) {
-  uint16_t count = read_adc_count();
+  int16_t count = read_adc_count();
 
   led_on();
   reset_integrator();
@@ -158,7 +165,12 @@ void micro_sense_adc_complete_cb(void) {
   s_sample_count += 1;
 
   if (s_sample_count >= SAMPLES_PER_FRAME) {
-    emit_sample_frame(s_frame_total, s_sensitivity);
+	// report to foreground
+	s_has_frame = true;
+	// s_frame_fg = s_frame_total;
+	s_frame_fg = count;
+	s_sensitivity_fg = s_sensitivity;
+
     s_sensitivity = update_autoranging(s_frame_total, s_sensitivity);
     set_sensitivity(s_sensitivity);
     s_frame_total = 0;
@@ -170,9 +182,14 @@ void micro_sense_adc_complete_cb(void) {
 //=============================================================================
 // local code
 
+static void emit_sample_frame(sensitivity_t sensitivity, int16_t count) {
+  printf("0b%u%u, %d, %d\r\n", SDA_get_level(), SCL_get_level(), count, count/SAMPLES_PER_FRAME);
+}
+
 // Fetch the raw 12 bit sample from the A/D
-static uint16_t read_adc_count(void) {
-	return (ADCA.CH0RES);
+static int16_t read_adc_count(void) {
+	int16_t count = ADCA.CH0RES;
+	return count;
 }
 
 static void led_on() {
@@ -192,10 +209,6 @@ static void reset_integrator() {
 static void update_pwm(uint16_t adc_count) {
   float ratio = lerp(adc_count, ADC_COUNT_MIN, ADC_COUNT_MAX, 0.0, 1.0);
   pwm_set_ratio(ratio);
-}
-
-static void emit_sample_frame(uint16_t count, sensitivity_t sensitivity) {
-  printf("%d, %d\r\n", sensitivity, count);
 }
 
 static sensitivity_t update_autoranging(uint16_t count, sensitivity_t gain) {
@@ -232,20 +245,22 @@ SDA,SCL          Range
 0, 1             High
 */
 static void set_sensitivity(sensitivity_t sensitivity) {
-  switch(sensitivity) {
-    case LOW_SENSITIVITY:             // aka low range, minimum gain
-    GAIN_A1_set_level(true);
-    GAIN_A0_set_level(true);
-    break;
-    case MID_SENSITIVITY:             // aka mid range
-    GAIN_A1_set_level(true);
-    GAIN_A0_set_level(false);
-    break;
-    case HIGH_SENSITIVITY:            // aka high range, maximum gain
-    GAIN_A1_set_level(false);
-    GAIN_A0_set_level(true);
-    break;
-  }
+  GAIN_A1_set_level(SDA_get_level());
+  GAIN_A0_set_level(SCL_get_level());
+  //switch(sensitivity) {
+    //case LOW_SENSITIVITY:             // aka low range, minimum gain
+    //GAIN_A1_set_level(false);
+    //GAIN_A0_set_level(false);
+    //break;
+    //case MID_SENSITIVITY:             // aka mid range
+    //GAIN_A1_set_level(false);
+    //GAIN_A0_set_level(true);
+    //break;
+    //case HIGH_SENSITIVITY:            // aka high range, maximum gain
+    //GAIN_A1_set_level(true);
+    //GAIN_A0_set_level(false);
+    //break;
+  //}
 }
 
 static float lerp(float x, float x0, float x1, float y0, float y1) {
