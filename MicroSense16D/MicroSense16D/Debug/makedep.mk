@@ -10,8 +10,6 @@ examples\src\usart_basic_example.c
 
 main.c
 
-src\ac.c
-
 src\adc.c
 
 src\clk.c

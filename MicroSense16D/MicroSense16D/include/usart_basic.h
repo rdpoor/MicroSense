@@ -69,28 +69,6 @@ void USART_0_write(const uint8_t data);
 
 void USART_0_set_ISR_cb(usart_cb_t cb, usart_cb_type_t type);
 
-int8_t IRDA_init();
-
-void IRDA_enable();
-
-void IRDA_enable_rx();
-
-void IRDA_enable_tx();
-
-void IRDA_disable();
-
-uint8_t IRDA_get_data();
-
-bool IRDA_is_tx_ready();
-
-bool IRDA_is_rx_ready();
-
-bool IRDA_is_tx_busy();
-
-uint8_t IRDA_read(void);
-
-void IRDA_write(const uint8_t data);
-
 #ifdef __cplusplus
 }
 #endif

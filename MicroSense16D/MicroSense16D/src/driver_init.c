@@ -76,23 +76,6 @@ void EVENT_SYSTEM_0_initialization(void)
 	EVENT_SYSTEM_0_init();
 }
 
-/* configure pins and initialize registers */
-void AC_0_initialization(void)
-{
-
-	// Disable pull-up resistor
-	COMP_N_set_output_pull_mode(PORT_CONFIGURATION_TOTEM);
-	// Disable digital         // Disable digital input buffer
-	COMP_N_set_isc(PORT_ISC_INPUT_DISABLE_gc);
-
-	// Disable pull-up resistor
-	V_REF_set_output_pull_mode(PORT_CONFIGURATION_TOTEM);
-	// Disable digital         // Disable digital input buffer
-	V_REF_set_isc(PORT_ISC_INPUT_DISABLE_gc);
-
-	AC_0_init();
-}
-
 /* Configure pins and initialize registers */
 void USART_0_initialization(void)
 {
@@ -124,39 +107,6 @@ void USART_0_initialization(void)
 	    false);
 
 	USART_0_init();
-}
-
-/* Configure pins and initialize registers */
-void IRDA_initialization(void)
-{
-
-	// Set pin direction to input
-	RXD_set_dir(PORT_DIR_IN);
-
-	RXD_set_output_pull_mode(
-	    // <y> Output and Pull Configuration
-	    // <id> pad_output_pull_config
-	    // <PORT_CONFIGURATION_TOTEM"> Totem-pole
-	    // <PORT_CONFIGURATION_BUSKEEPER"> Totem-pole with bus-keeper
-	    // <PORT_CONFIGURATION_PULLDOWN"> Pull-down
-	    // <PORT_CONFIGURATION_PULLUP"> Pull-up
-	    // <PORT_CONFIGURATION_WIREDOR"> Wired-OR
-	    // <PORT_CONFIGURATION_WIREDAND"> Wired-AND
-	    // <PORT_CONFIGURATION_WIREDORPULL"> Wired-OR with pull-down
-	    // <PORT_CONFIGURATION_WIREDANDPULL"> Wired-AND with pull-up
-	    PORT_CONFIGURATION_TOTEM);
-
-	// Set pin direction to output
-	TXD_set_dir(PORT_DIR_OUT);
-
-	TXD_set_level(
-	    // <y> Initial level
-	    // <id> pad_initial_level
-	    // <false"> Low
-	    // <true"> High
-	    false);
-
-	IRDA_init();
 }
 
 /**
@@ -417,9 +367,5 @@ void system_init()
 
 	EVENT_SYSTEM_0_initialization();
 
-	AC_0_init();
-
 	USART_0_initialization();
-
-	IRDA_initialization();
 }

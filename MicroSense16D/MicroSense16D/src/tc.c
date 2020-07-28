@@ -44,7 +44,7 @@ int8_t PWM_init()
 	             | 0 << TC0_CCCEN_bp /* Compare or Capture C Enable: disabled */
 	             | 0 << TC0_CCBEN_bp /* Compare or Capture B Enable: disabled */
 	             | 0 << TC0_CCAEN_bp /* Compare or Capture C Enable: disabled */
-	             | TC_WGMODE_FRQ_gc; /* Frequency Generation Mode */
+	             | TC_WGMODE_SS_gc;  /* Single Slope */
 
 	// TCD0.CTRLC = 0 << TC0_CMPD_bp /* Compare D Output Value: disabled */
 	//		 | 0 << TC0_CMPC_bp /* Compare C Output Value: disabled */
@@ -75,7 +75,7 @@ int8_t PWM_init()
 
 	// TCD0.CNT = 0x0; /* Count: 0x0 */
 
-	TCD0.PER = 0x7d0; /* Period: 0x7d0 */
+	// TCD0.PER = 0xffff; /* Period: 0xffff */
 
 	TCD0.CTRLA = TC_CLKSEL_DIV1_gc; /* System Clock */
 

@@ -36,10 +36,12 @@
 #include <driver_init.h>
 #include <compiler.h>
 #include "micro_sense.h"
+#include "pwm.h"
 
 ISR(TCD0_OVF_vect)
 {
-	/* Insert your Timer Overflow/Underflow Interrupt handling code here */
+  // PWM is at end of cycle
+  pwm_overflow_cb();
 }
 
 ISR(ADCA_CH0_vect)
@@ -50,23 +52,10 @@ ISR(ADCA_CH0_vect)
   TP_0_set_level(false);
 }
 
-ISR(ACA_AC0_vect)
-{
-  // analog comparator (AC0) interrupt
-  TP_1_set_level(true);
-  micro_sense_ac_match_cb();
-  // clear comparator interrupt here?
-  TP_1_set_level(false);
-}
-
 ISR(PORTA_INT0_vect)
 {
   // sync (GPIO) interrupt
   TP_2_set_level(true);
-  micro_sense_sync_cb();
-  // elevate INT0 interrupt to medium level? (see driver_init.c)
-  // initiate ADC conversion here?
-  // ADCA.CTRLA |= 1 << ADC_CH0START_bp // start an ADC conversion
   TP_2_set_level(false);
   PORTA_INTFLAGS = PORT_INT0IF_bm;
 }

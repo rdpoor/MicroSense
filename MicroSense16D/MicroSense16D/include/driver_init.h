@@ -56,9 +56,6 @@
 #include <sleep.h>
 
 #include <evsys.h>
-#include <ac.h>
-
-#include <usart_basic.h>
 
 #include <usart_basic.h>
 
