@@ -160,10 +160,10 @@ drivers:
       adc_cal: 0
       adc_cmp: 0
       adc_ctrl_gain_ch0: x/2 gain
-      adc_ctrl_inputmode_ch0: Differential input, no gain
+      adc_ctrl_inputmode_ch0: Differential input, with gain
       adc_ctrla_enable: true
       adc_ctrla_flush: false
-      adc_ctrlb_conmode: Unsigned Mode
+      adc_ctrlb_conmode: Signed Mode
       adc_ctrlb_currlimit: No limit
       adc_ctrlb_freerun: false
       adc_ctrlb_resolution: 12-bit right-adjusted result
@@ -172,11 +172,11 @@ drivers:
       adc_intctrl_intlvl_ch0: Low level
       adc_intctrl_intmode_ch0: Interrupt on conversion complete
       adc_muxctrl_muxint_ch0: Temperature Reference
-      adc_muxctrl_muxneg_ch0: Input pin 1 (Input Mode = 2)
-      adc_muxctrl_muxpos_ch0: Input pin 4
-      adc_prescaler_prescaler: Divide clock by 4
+      adc_muxctrl_muxneg_ch0: Input pin 4 (Input Mode = 3)
+      adc_muxctrl_muxpos_ch0: Input pin 1
+      adc_prescaler_prescaler: Divide clock by 32
       adc_refctrl_bandgap: false
-      adc_refctrl_refsel: Internal 1V
+      adc_refctrl_refsel: Internal VCC / 1.6
       adc_refctrl_tempref: false
       adc_sampctrl_sampval: 0
       adc_scan_count_ch: 0
