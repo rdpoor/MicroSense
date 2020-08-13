@@ -46,10 +46,10 @@ int8_t PWM_init()
 	             | 0 << TC0_CCAEN_bp /* Compare or Capture C Enable: disabled */
 	             | TC_WGMODE_SS_gc;  /* Single Slope */
 
-	// TCD0.CTRLC = 0 << TC0_CMPD_bp /* Compare D Output Value: disabled */
-	//		 | 0 << TC0_CMPC_bp /* Compare C Output Value: disabled */
-	//		 | 0 << TC0_CMPB_bp /* Compare B Output Value: disabled */
-	//		 | 0 << TC0_CMPA_bp /* Compare A Output Value: disabled */;
+	TCD0.CTRLC = 0 << TC0_CMPD_bp   /* Compare D Output Value: disabled */
+	             | 0 << TC0_CMPC_bp /* Compare C Output Value: disabled */
+	             | 0 << TC0_CMPB_bp /* Compare B Output Value: disabled */
+	             | 1 << TC0_CMPA_bp /* Compare A Output Value: enabled */;
 
 	// TCD0.CTRLD = TC_EVACT_OFF_gc /* No Event Action */
 	//		 | 0 << TC0_EVDLY_bp /* Event Delay: disabled */

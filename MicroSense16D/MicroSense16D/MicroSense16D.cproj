@@ -76,7 +76,7 @@
           <AcmeProjectActionInfo Action="File" Source="src/pmic.c" IsConfig="false" Hash="BPk/h0ZNhGdp1hHGcIYQ6A" />
           <AcmeProjectActionInfo Action="File" Source="src/protected_io.S" IsConfig="false" Hash="L8Ol9RShK90tJyVn8DHTdw" />
           <AcmeProjectActionInfo Action="File" Source="src/sleep.c" IsConfig="false" Hash="AXoEKgq9DBGKwk3IVYAzYQ" />
-          <AcmeProjectActionInfo Action="File" Source="src/tc.c" IsConfig="false" Hash="qk60KZvLW9jxVhwWp81QCg" />
+          <AcmeProjectActionInfo Action="File" Source="src/tc.c" IsConfig="false" Hash="1GwziL3lU3Cm1GVYx3wACw" />
           <AcmeProjectActionInfo Action="File" Source="src/usart_basic.c" IsConfig="false" Hash="H/1wTTkUS4NaOUerZz2LvQ" />
           <AcmeProjectActionInfo Action="File" Source="utils/assembler.h" IsConfig="false" Hash="jaaWqpCXnRJMciuXpjSfgQ" />
           <AcmeProjectActionInfo Action="File" Source="utils/assembler/gas.h" IsConfig="false" Hash="wV+34zXWOOJ7jfwQibBgLQ" />

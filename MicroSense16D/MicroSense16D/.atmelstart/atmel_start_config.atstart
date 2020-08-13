@@ -34,7 +34,7 @@ drivers:
       tc0_ctrlb_ccBen: false
       tc0_ctrlb_ccCen: false
       tc0_ctrlb_ccDen: false
-      tc0_ctrlc_cmpA: false
+      tc0_ctrlc_cmpA: true
       tc0_ctrlc_cmpB: false
       tc0_ctrlc_cmpC: false
       tc0_ctrlc_cmpD: false

@@ -93,20 +93,24 @@ PE3: NC
 //=============================================================================
 // definitions
 
+// if defined, take gain from SDA / SCL switches
+#define MANUAL_GAIN
+
 typedef enum {
-  LOW_SENSITIVITY,
-  MID_SENSITIVITY,
-  HIGH_SENSITIVITY
+  LOW_SENSITIVITY = 0,
+  MID_SENSITIVITY = 1,
+  HIGH_SENSITIVITY = 2
 } sensitivity_t;
 
 #define SAMPLES_PER_FRAME 15
 
-#define ADC_COUNT_MIN 0      // the minimum value the ADC emits
-#define ADC_COUNT_MAX 2047   // the maximum value the ADC emits
+#define ADC_COUNT_MIN ((int32_t)0)         // the minimum frame value
+#define ADC_COUNT_MAX ((int32_t)17500)     // the maximum frame value
+#define ADC_COUNT_SPAN ((int32_t)(ADC_COUNT_MAX - ADC_COUNT_MIN))
 
 // Set autoranging thresholds at 1/8th from each end of full scale
-#define COUNT_THRESHOLD_HI ((ADC_COUNT_MAX - (ADC_COUNT_MAX >> 3)) * SAMPLES_PER_FRAME)
-#define COUNT_THRESHOLD_LO ((ADC_COUNT_MIN + (ADC_COUNT_MAX >> 3)) * SAMPLES_PER_FRAME)
+#define COUNT_THRESHOLD_HI (int32_t)(ADC_COUNT_MAX - (ADC_COUNT_SPAN >> 3))
+#define COUNT_THRESHOLD_LO (int32_t)(ADC_COUNT_MIN + (ADC_COUNT_SPAN >> 3))
 
 //=============================================================================
 // forward declarations
@@ -121,6 +125,7 @@ static void update_pwm(uint16_t adc_count);
 static sensitivity_t update_autoranging(uint16_t count, sensitivity_t gain);
 static void set_sensitivity(sensitivity_t gain);
 static float lerp(float x, float x0, float x1, float y0, float y1);
+static void start_adc_reading(void);
 
 //=============================================================================
 // private storage
@@ -129,9 +134,12 @@ static int16_t s_frame_total;        // accumulated ADC count after N samples
 static uint8_t s_sample_count;       // counts from 0 to SAMPLES_PER_FRAME
 static sensitivity_t s_sensitivity;  // LOW, MID, HIGH for autoranging
 
-static bool s_has_frame;
-static int16_t s_frame_fg;            
-static sensitivity_t s_sensitivity_fg;
+static volatile bool s_has_frame;
+static volatile int16_t s_frame_fg;            
+static volatile sensitivity_t s_sensitivity_fg;
+
+static bool s_is_reading_reference; // true when reading v0
+static int16_t s_v0;                // captured v0
 
 //=============================================================================
 // public code
@@ -157,18 +165,38 @@ void micro_sense_step(void) {
 void micro_sense_adc_complete_cb(void) {
   int16_t count = read_adc_count();
 
+  if (s_is_reading_reference) {
+	  s_is_reading_reference = false;
+	  s_v0 = count;
+	  return;
+  }
+  int16_t v1 = count;
+  int16_t dv;
+    
+  if (v1 < 0 && s_v0 < 0) {
+	dv = 0;
+  } else if (v1 > 0 && s_v0 < 0) {
+	  dv = v1;
+  } else if (v1 < s_v0) {
+	  asm("nop");
+  } else {
+	  dv = v1 - s_v0;
+  }
+
+  s_is_reading_reference = true;
   led_on();
   reset_integrator();
-  update_pwm(count);
+  delay_us(50);
+  start_adc_reading();  // start a read for s_v_bottom
+  update_pwm(dv);
 
-  s_frame_total += count;
+  s_frame_total += dv;
   s_sample_count += 1;
 
   if (s_sample_count >= SAMPLES_PER_FRAME) {
 	// report to foreground
 	s_has_frame = true;
-	// s_frame_fg = s_frame_total;
-	s_frame_fg = count;
+	s_frame_fg = s_frame_total;
 	s_sensitivity_fg = s_sensitivity;
 
     s_sensitivity = update_autoranging(s_frame_total, s_sensitivity);
@@ -183,7 +211,11 @@ void micro_sense_adc_complete_cb(void) {
 // local code
 
 static void emit_sample_frame(sensitivity_t sensitivity, int16_t count) {
-  printf("0b%u%u, %d, %d\r\n", SDA_get_level(), SCL_get_level(), count, count/SAMPLES_PER_FRAME);
+#ifdef MANUAL_GAIN
+  printf("0b%u%u, %d, %ld, %ld\r\n", SDA_get_level(), SCL_get_level(), count, COUNT_THRESHOLD_HI, COUNT_THRESHOLD_LO);
+#else
+  printf("0b%d%d, %d, %ld, %ld\r\n", sensitivity > 1, sensitivity & 1, count, COUNT_THRESHOLD_HI, COUNT_THRESHOLD_LO);
+#endif
 }
 
 // Fetch the raw 12 bit sample from the A/D
@@ -233,36 +265,37 @@ static sensitivity_t update_autoranging(uint16_t count, sensitivity_t gain) {
 }
 
 /**
-Lee Felsenstein <lee@fonlyinstitute.com>
-
-Bit                     Corresponding MUX bit           sense of data
-SDA                     MUXA(1)                         inverted
-SCL                     MUXA(0)                         "
-
-SDA,SCL          Range
-1, 1             Low
-1, 0             Mid
-0, 1             High
-*/
+ */
 static void set_sensitivity(sensitivity_t sensitivity) {
+#ifdef MANUAL_GAIN
   GAIN_A1_set_level(SDA_get_level());
   GAIN_A0_set_level(SCL_get_level());
-  //switch(sensitivity) {
-    //case LOW_SENSITIVITY:             // aka low range, minimum gain
-    //GAIN_A1_set_level(false);
-    //GAIN_A0_set_level(false);
-    //break;
-    //case MID_SENSITIVITY:             // aka mid range
-    //GAIN_A1_set_level(false);
-    //GAIN_A0_set_level(true);
-    //break;
-    //case HIGH_SENSITIVITY:            // aka high range, maximum gain
-    //GAIN_A1_set_level(true);
-    //GAIN_A0_set_level(false);
-    //break;
-  //}
+#else
+  switch(sensitivity) {
+    case LOW_SENSITIVITY:             // aka low range, minimum gain
+    GAIN_A1_set_level(false);
+    GAIN_A0_set_level(false);
+    break;
+    case MID_SENSITIVITY:             // aka mid range
+    GAIN_A1_set_level(false);
+    GAIN_A0_set_level(true);
+    break;
+    case HIGH_SENSITIVITY:            // aka high range, maximum gain
+    GAIN_A1_set_level(true);
+    GAIN_A0_set_level(false);
+    break;
+  }
+#endif
 }
 
 static float lerp(float x, float x0, float x1, float y0, float y1) {
   return y0 + (x-x0) * (y1-y0) / (x1-x0);
+}
+
+static void start_adc_reading(void) {
+  // Initiate an ADC reading
+  ADCA.CTRLA = 1 << ADC_CH0START_bp  // Start conversion
+	  | 0 << ADC_FLUSH_bp     // Flush Pipeline: disabled
+	  | 1 << ADC_ENABLE_bp    // Enable ADC: enabled
+	  ;
 }
