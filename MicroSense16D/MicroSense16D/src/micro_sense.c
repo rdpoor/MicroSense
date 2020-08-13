@@ -138,7 +138,7 @@ static volatile bool s_has_frame;
 static volatile int16_t s_frame_fg;            
 static volatile sensitivity_t s_sensitivity_fg;
 
-static bool s_is_reading_reference; // true when reading v0
+static bool s_is_reading_v0; // true when reading v0
 static int16_t s_v0;                // captured v0
 
 //=============================================================================
@@ -165,8 +165,8 @@ void micro_sense_step(void) {
 void micro_sense_adc_complete_cb(void) {
   int16_t count = read_adc_count();
 
-  if (s_is_reading_reference) {
-	  s_is_reading_reference = false;
+  if (s_is_reading_v0) {
+	  s_is_reading_v0 = false;
 	  s_v0 = count;
 	  return;
   }
@@ -183,7 +183,7 @@ void micro_sense_adc_complete_cb(void) {
 	  dv = v1 - s_v0;
   }
 
-  s_is_reading_reference = true;
+  s_is_reading_v0 = true;
   led_on();
   reset_integrator();
   delay_us(50);
