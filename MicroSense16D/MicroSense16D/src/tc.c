@@ -43,7 +43,7 @@ int8_t PWM_init()
 	TCD0.CTRLB = 1 << TC0_CCDEN_bp   /* Compare or Capture D Enable: enabled */
 	             | 0 << TC0_CCCEN_bp /* Compare or Capture C Enable: disabled */
 	             | 0 << TC0_CCBEN_bp /* Compare or Capture B Enable: disabled */
-	             | 0 << TC0_CCAEN_bp /* Compare or Capture C Enable: disabled */
+	             | 1 << TC0_CCAEN_bp /* Compare or Capture A Enable: enabled */
 	             | TC_WGMODE_SS_gc;  /* Single Slope */
 
 	// TCD0.CTRLC = 0 << TC0_CMPD_bp /* Compare D Output Value: disabled */
@@ -65,7 +65,7 @@ int8_t PWM_init()
 	TCD0.INTCTRLA = TC_ERRINTLVL_OFF_gc   /* Interrupt Disabled */
 	                | TC_OVFINTLVL_LO_gc; /* Low Level */
 
-	TCD0.CCA = 0x7fff /* Compare or Capture A: 0x7fff */;
+	TCD0.CCA = 0x00ff /* Compare or Capture A: 0x7fff */;
 
 	// TCD0.CCB = 0x0 /* Compare or Capture B: 0x0 */;
 

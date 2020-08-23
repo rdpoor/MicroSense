@@ -40,6 +40,21 @@ SUBDIRS :=  \
 ../examples/include/ \
 ../examples/src/ \
 ../include/ \
+../modules/ \
+../modules/adc/ \
+../modules/adc/doc/ \
+../modules/clk/ \
+../modules/clk/doc/ \
+../modules/evsys/ \
+../modules/evsys/doc/ \
+../modules/pmic/ \
+../modules/pmic/doc/ \
+../modules/sleep/ \
+../modules/sleep/doc/ \
+../modules/timer/ \
+../modules/timer/doc/ \
+../modules/usart/ \
+../modules/usart/doc/ \
 ../src/ \
 ../utils/ \
 ../utils/assembler/
