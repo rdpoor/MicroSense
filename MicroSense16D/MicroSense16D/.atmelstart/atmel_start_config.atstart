@@ -29,12 +29,12 @@ drivers:
       tc0_ccA: 32767
       tc0_ccB: 0
       tc0_ccC: 0
-      tc0_ccD: 0
+      tc0_ccD: 32767
       tc0_ctrlb_ccAen: true
       tc0_ctrlb_ccBen: false
       tc0_ctrlb_ccCen: false
-      tc0_ctrlb_ccDen: false
-      tc0_ctrlc_cmpA: true
+      tc0_ctrlb_ccDen: true
+      tc0_ctrlc_cmpA: false
       tc0_ctrlc_cmpB: false
       tc0_ctrlc_cmpC: false
       tc0_ctrlc_cmpD: false
@@ -60,6 +60,13 @@ drivers:
       definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::optional_signal_definition::TCD0.OC0A
       name: TCD0/OC0A
       label: OC0A
+    - identifier: PWM:OC0D
+      pad: PD3
+      mode: Enabled
+      configuration: null
+      definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::optional_signal_definition::TCD0.OC0D
+      name: TCD0/OC0D
+      label: OC0D
     variant: null
     clocks:
       domain_group:
@@ -379,6 +386,12 @@ pads:
     definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::pad::PD0
     mode: Digital output
     user_label: PWM_OUT
+    configuration: null
+  PWM_ALT:
+    name: PD3
+    definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::pad::PD3
+    mode: Digital output
+    user_label: PWM_ALT
     configuration: null
   STATUS_LED:
     name: PD7

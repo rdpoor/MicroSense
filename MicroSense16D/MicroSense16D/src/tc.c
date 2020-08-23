@@ -40,16 +40,16 @@
 int8_t PWM_init()
 {
 
-	TCD0.CTRLB = 0 << TC0_CCDEN_bp   /* Compare or Capture D Enable: disabled */
+	TCD0.CTRLB = 1 << TC0_CCDEN_bp   /* Compare or Capture D Enable: enabled */
 	             | 0 << TC0_CCCEN_bp /* Compare or Capture C Enable: disabled */
 	             | 0 << TC0_CCBEN_bp /* Compare or Capture B Enable: disabled */
 	             | 0 << TC0_CCAEN_bp /* Compare or Capture C Enable: disabled */
 	             | TC_WGMODE_SS_gc;  /* Single Slope */
 
-	TCD0.CTRLC = 0 << TC0_CMPD_bp   /* Compare D Output Value: disabled */
-	             | 0 << TC0_CMPC_bp /* Compare C Output Value: disabled */
-	             | 0 << TC0_CMPB_bp /* Compare B Output Value: disabled */
-	             | 1 << TC0_CMPA_bp /* Compare A Output Value: enabled */;
+	// TCD0.CTRLC = 0 << TC0_CMPD_bp /* Compare D Output Value: disabled */
+	//		 | 0 << TC0_CMPC_bp /* Compare C Output Value: disabled */
+	//		 | 0 << TC0_CMPB_bp /* Compare B Output Value: disabled */
+	//		 | 0 << TC0_CMPA_bp /* Compare A Output Value: disabled */;
 
 	// TCD0.CTRLD = TC_EVACT_OFF_gc /* No Event Action */
 	//		 | 0 << TC0_EVDLY_bp /* Event Delay: disabled */
@@ -71,7 +71,7 @@ int8_t PWM_init()
 
 	// TCD0.CCC = 0x0; /* Compare or Capture C: 0x0 */
 
-	// TCD0.CCD = 0x0; /* Compare or Capture D: 0x0 */
+	TCD0.CCD = 0x7fff; /* Compare or Capture D: 0x7fff */
 
 	// TCD0.CNT = 0x0; /* Count: 0x0 */
 

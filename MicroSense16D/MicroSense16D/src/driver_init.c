@@ -49,6 +49,16 @@ void PWM_initialization(void)
 	    // <true"> High
 	    false);
 
+	// Set pin direction to output
+	PWM_ALT_set_dir(PORT_DIR_OUT);
+
+	PWM_ALT_set_level(
+	    // <y> Initial level
+	    // <id> pad_initial_level
+	    // <false"> Low
+	    // <true"> High
+	    false);
+
 	PWM_init();
 }
 
