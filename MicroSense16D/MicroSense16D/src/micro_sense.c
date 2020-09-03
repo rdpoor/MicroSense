@@ -115,8 +115,6 @@ typedef enum {
 //=============================================================================
 // forward declarations
 
-static void emit_sample_frame(sensitivity_t sensitivity, int16_t count);
-
 static int16_t read_adc_count(void);
 static void led_on();
 static void led_off();
@@ -130,12 +128,16 @@ static void start_adc_reading(void);
 //=============================================================================
 // private storage
 
-static int16_t s_frame_total;        // accumulated ADC count after N samples
 static uint8_t s_sample_count;       // counts from 0 to SAMPLES_PER_FRAME
+static int32_t s_v0_total;
+static int32_t s_v1_total;
+static int32_t s_dv_total;
 static sensitivity_t s_sensitivity;  // LOW, MID, HIGH for autoranging
 
 static volatile bool s_has_frame;
-static volatile int16_t s_frame_fg;            
+static volatile int32_t s_v0_fg;
+static volatile int32_t s_v1_fg;
+static volatile int32_t s_dv_fg;
 static volatile sensitivity_t s_sensitivity_fg;
 
 static bool s_is_reading_v0; // true when reading v0
@@ -156,7 +158,11 @@ void micro_sense_init(void) {
 // [foreground] called repeatedly in foreground
 void micro_sense_step(void) {
   if (s_has_frame) {
-    emit_sample_frame(s_sensitivity_fg, s_frame_fg);
+    printf("%d, %ld, %ld, %ld\r\n", 
+	       s_sensitivity_fg,
+		   s_v0_fg,
+		   s_v1_fg,
+		   s_dv_fg);
 	s_has_frame = false;
   }
 }
@@ -173,35 +179,33 @@ void micro_sense_adc_complete_cb(void) {
   int16_t v1 = count;
   int16_t dv;
     
-  if (v1 < 0 && s_v0 < 0) {
-	dv = 0;
-  } else if (v1 > 0 && s_v0 < 0) {
-	  dv = v1;
-  } else if (v1 < s_v0) {
-	  asm("nop");
-  } else {
-	  dv = v1 - s_v0;
-  }
+  dv = v1 - s_v0;
 
   s_is_reading_v0 = true;
   led_on();
   reset_integrator();
   delay_us(50);
   start_adc_reading();  // start a read for s_v_bottom
-  update_pwm(dv);
 
-  s_frame_total += dv;
+  s_v0_total += s_v0;
+  s_v1_total += v1;
+  s_dv_total += dv;
   s_sample_count += 1;
 
   if (s_sample_count >= SAMPLES_PER_FRAME) {
+    update_pwm(s_dv_total);
 	// report to foreground
 	s_has_frame = true;
-	s_frame_fg = s_frame_total;
+	s_v0_fg = s_v0_total;
+	s_v1_fg = s_v1_total;
+	s_dv_fg = s_dv_total;
 	s_sensitivity_fg = s_sensitivity;
 
-    s_sensitivity = update_autoranging(s_frame_total, s_sensitivity);
+    s_sensitivity = update_autoranging(s_dv_total, s_sensitivity);
     set_sensitivity(s_sensitivity);
-    s_frame_total = 0;
+	s_v0_total = 0;
+	s_v1_total = 0;
+	s_dv_total = 0;
     s_sample_count = 0;
   }
   led_off();
@@ -209,14 +213,6 @@ void micro_sense_adc_complete_cb(void) {
 
 //=============================================================================
 // local code
-
-static void emit_sample_frame(sensitivity_t sensitivity, int16_t count) {
-#ifdef MANUAL_GAIN
-  printf("0b%u%u, %d, %ld, %ld\r\n", SDA_get_level(), SCL_get_level(), count, COUNT_THRESHOLD_HI, COUNT_THRESHOLD_LO);
-#else
-  printf("0b%d%d, %d, %ld, %ld\r\n", sensitivity > 1, sensitivity & 1, count, COUNT_THRESHOLD_HI, COUNT_THRESHOLD_LO);
-#endif
-}
 
 // Fetch the raw 12 bit sample from the A/D
 static int16_t read_adc_count(void) {
