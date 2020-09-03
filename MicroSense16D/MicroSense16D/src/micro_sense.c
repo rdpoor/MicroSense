@@ -109,8 +109,10 @@ typedef enum {
 #define ADC_COUNT_SPAN ((int32_t)(ADC_COUNT_MAX - ADC_COUNT_MIN))
 
 // Set autoranging thresholds at 1/8th from each end of full scale
-#define COUNT_THRESHOLD_HI (int32_t)(ADC_COUNT_MAX - (ADC_COUNT_SPAN >> 3))
-#define COUNT_THRESHOLD_LO (int32_t)(ADC_COUNT_MIN + (ADC_COUNT_SPAN >> 3))
+// #define COUNT_THRESHOLD_HI (int32_t)(ADC_COUNT_MAX - (ADC_COUNT_SPAN >> 3))
+#define COUNT_THRESHOLD_HI 15000
+// #define COUNT_THRESHOLD_LO (int32_t)(ADC_COUNT_MIN + (ADC_COUNT_SPAN >> 3))
+#define COUNT_THRESHOLD_LO 2000
 
 //=============================================================================
 // forward declarations
@@ -158,11 +160,16 @@ void micro_sense_init(void) {
 // [foreground] called repeatedly in foreground
 void micro_sense_step(void) {
   if (s_has_frame) {
-    printf("%d, %ld, %ld, %ld\r\n", 
+	    GAIN_A1_set_level(SDA_get_level());
+	    GAIN_A0_set_level(SCL_get_level());
+
+	uint8_t switches = (SDA_get_level() ? 2 : 0) + (SCL_get_level() ? 1 : 0);
+    printf("%d, %ld, %ld, %ld, %d\r\n", 
 	       s_sensitivity_fg,
 		   s_v0_fg,
 		   s_v1_fg,
-		   s_dv_fg);
+		   s_dv_fg,
+		   switches);
 	s_has_frame = false;
   }
 }
@@ -195,11 +202,11 @@ void micro_sense_adc_complete_cb(void) {
   if (s_sample_count >= SAMPLES_PER_FRAME) {
     update_pwm(s_dv_total);
 	// report to foreground
-	s_has_frame = true;
 	s_v0_fg = s_v0_total;
 	s_v1_fg = s_v1_total;
 	s_dv_fg = s_dv_total;
 	s_sensitivity_fg = s_sensitivity;
+	s_has_frame = true;
 
     s_sensitivity = update_autoranging(s_dv_total, s_sensitivity);
     set_sensitivity(s_sensitivity);

@@ -2,16 +2,16 @@ format_version: '2'
 name: MicroSense16D2
 versions:
   api: '1.0'
-  backend: 1.7.391
-  commit: d4b7e9f65a05ebffcb0986e4060cb8c0a313e69a
+  backend: 1.7.430
+  commit: f09e2a2493613fab9dafdd76d38e1ed2f0a13a39
   content: unknown
   content_pack_name: unknown
   format: '2'
-  frontend: 1.7.391
-  packs_version_avr8: 1.0.1421
+  frontend: 1.7.430
+  packs_version_avr8: 1.0.1429
   packs_version_qtouch: unknown
   packs_version_sam: 1.0.1658
-  version_backend: 1.7.391
+  version_backend: 1.7.430
   version_frontend: ''
 board:
   identifier: CustomBoard
@@ -44,7 +44,7 @@ drivers:
       tc0_intctrlb_ccCintlvl: Interrupt Disabled
       tc0_intctrlb_ccDintlvl: Interrupt Disabled
       tc_cnt: 0
-      tc_ctrla_clksel: System Clock
+      tc_ctrla_clksel: System Clock / 4
       tc_ctrlb_wgmode: Single Slope
       tc_ctrld_evact: No Event Action
       tc_ctrld_evsel: No Event Source
