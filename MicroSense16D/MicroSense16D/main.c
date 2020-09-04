@@ -1,7 +1,7 @@
 /**
  * MicroSense firmware for LACH project.
  * Robert Poor <rdpoor@gmail.com>
- * May 2019
+ * May 2020
  *
  * See ReadMe.md for overview and details.
  */
@@ -12,7 +12,7 @@
 
 int main(void) {
 	atmel_start_init();
-	printf("MicroSense v0.1\r\n");
+	printf("\r\n# ===============\r\n# MicroSense v1.0\r\n");
 
   micro_sense_init();
 
