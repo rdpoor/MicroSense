@@ -32,7 +32,7 @@ After 15 conversions (250 mSec) still in the ISR:
 ## Autoranging
 
 The system can set MUX0 and MUX1 to set the analog sensitivity to three levels
-for LOW_, MED_, or HIGH_SENSITIVITY.  The update_autoranging() function adjusts
+for LOW_, MED_, or HIGH_SENSITIVITY.  The update_sensitivity() function adjusts
 the sensitivity based on the most recent sample frame.
 
 When the averaged ADC count exceeds ADC_THRESH_HI (and if the sensitivity is
@@ -100,7 +100,8 @@ PE3: NC
 typedef enum {
   LOW_SENSITIVITY = 0,
   MID_SENSITIVITY = 1,
-  HIGH_SENSITIVITY = 2
+  HIGH_SENSITIVITY = 2,
+  UNKNOWN_SENSITIVITY = 3
 } sensitivity_t;
 
 #define SAMPLES_PER_FRAME 15
@@ -118,12 +119,14 @@ typedef enum {
 //=============================================================================
 // forward declarations
 
+static sensitivity_t read_sensitivity_switches(); // read SDA:SCL
+
 static int16_t read_adc_count(void);
 static void led_on();
 static void led_off();
 static void reset_integrator();
 static void update_pwm(uint16_t adc_count);
-static sensitivity_t update_autoranging(uint16_t count,
+static sensitivity_t update_sensitivity(uint16_t count,
                                         sensitivity_t sensitivity);
 static sensitivity_t get_desired_sensitivity(void);
 static void set_sensitivity(sensitivity_t sensitivity);
@@ -133,11 +136,14 @@ static void start_adc_reading(void);
 //=============================================================================
 // private storage
 
+// True if autoranging in effect, false if SDA:SCL set the gain.
+static bool is_autoranging;
+
 static uint8_t s_sample_count; // counts from 0 to SAMPLES_PER_FRAME
 static int32_t s_v0_total;
 static int32_t s_v1_total;
 static int32_t s_dv_total;
-static sensitivity_t s_sensitivity; // LOW, MID, HIGH for autoranging
+static sensitivity_t s_sensitivity;
 
 static volatile bool s_has_frame;
 static volatile int32_t s_v0_fg;
@@ -153,9 +159,21 @@ static int16_t s_v0;         // captured v0
 
 // [foreground] called once at initialization
 void micro_sense_init(void) {
-  delay_ms(5);
+  delay_ms(50);
 
-  set_sensitivity(MID_SENSITIVITY);
+  sensitivity_t initial_sensitivity = read_sensitivity_switches();
+  if (initial_sensitivity == UNKNOWN_SENSITIVITY) {
+    // If both SDA and SCL are open, pullups will make them both read as 1
+    // which we use to set autoranging mode.
+    s_is_autoranging = true;
+    set_sensitivity(MID_SENSITIVITY);
+  } else {
+    // If either SDA or SCL are puled low, assume we want to set sensitivity
+    // manually
+    s_is_autoranging = false;
+    set_sensitivity(initial_sensitivity);
+  }
+
   pwm_set_ratio(0.5); // mid range
   reset_integrator();
 }
@@ -163,16 +181,12 @@ void micro_sense_init(void) {
 // [foreground] called repeatedly in foreground
 void micro_sense_step(void) {
   if (s_has_frame) {
-    GAIN_A1_set_level(SDA_get_level());
-    GAIN_A0_set_level(SCL_get_level());
-
-    uint8_t switches = (SDA_get_level() ? 2 : 0) + (SCL_get_level() ? 1 : 0);
-    printf("%d, %ld, %ld, %ld, %d\r\n",
-           s_sensitivity_fg,
+    printf("%s, %d, %ld, %ld, %ld\r\n",
+           s_is_autoranging ? "A" : "M",
+           s_sensitivity,
            s_v0_fg,
            s_v1_fg,
-           s_dv_fg,
-           get_desired_sensitivity());
+           s_dv_fg);
     s_has_frame = false;
   }
 }
@@ -182,20 +196,24 @@ void micro_sense_adc_complete_cb(void) {
   int16_t count = read_adc_count();
 
   if (s_is_reading_v0) {
-    s_is_reading_v0 = false;
+    // Here, capture the first ADC reading after resetting the integrator
     s_v0 = count;
+    s_is_reading_v0 = false;
     return;
   }
+
+  // Here, capture the second ADC reading after VSync goes true
   int16_t v1 = count;
   int16_t dv;
 
   dv = v1 - s_v0;
 
-  s_is_reading_v0 = true;
   led_on();
   reset_integrator();
   delay_us(50);
-  start_adc_reading(); // start a read for s_v_bottom
+
+  s_is_reading_v0 = true;
+  start_adc_reading(); // initiate a read for s_v0
 
   s_v0_total += s_v0;
   s_v1_total += v1;
@@ -203,18 +221,22 @@ void micro_sense_adc_complete_cb(void) {
   s_sample_count += 1;
 
   if (s_sample_count >= SAMPLES_PER_FRAME) {
+    // Here once every 250 mSec (after 15 frames): update PWM and transfer
+    // computed variables to safe locations for the foreground.
     update_pwm(s_dv_total);
-    // report to foreground
     s_v0_fg = s_v0_total;
     s_v1_fg = s_v1_total;
     s_dv_fg = s_dv_total;
     s_sensitivity_fg = s_sensitivity;
     s_has_frame = true;
 
-    s_sensitivity = update_autoranging(s_dv_total, s_sensitivity);
-    // At this point, s_sensitivity represents what the system would choose if
-    // autoranging is enabled.
-    set_sensitivity(get_desired_sensitivity());
+    if (is_autoranging) {
+      s_sensitivity = update_sensitivity(s_dv_total, s_sensitivity);
+    } else {
+      s_sensitivity = read_sensitivity_switches();
+    }
+    set_sensitivity(s_sensitivity);
+
     s_v0_total = 0;
     s_v1_total = 0;
     s_dv_total = 0;
@@ -225,6 +247,15 @@ void micro_sense_adc_complete_cb(void) {
 
 //=============================================================================
 // local code
+
+static sensitivity_t read_sensitivity_switches() {
+  // SDA(A1) SCL(A0) sensitivity
+  // 0       0       LO  (0)
+  // 0       1       MID (1)
+  // 1       0       HI  (2)
+  // 1       1       undef
+  return (SDA_get_level() ? 2 : 0) + (SCL_get_level() ? 1 : 0);
+}
 
 // Fetch the raw 12 bit sample from the A/D
 static int16_t read_adc_count(void) {
@@ -243,11 +274,12 @@ static void reset_integrator() {
 }
 
 static void update_pwm(uint16_t adc_count) {
+  // ratio goes 0.0...1.0 as adc count goes ADC_COUNT_MIN...ADC_COUNT_MAX
   float ratio = lerp(adc_count, ADC_COUNT_MIN, ADC_COUNT_MAX, 0.0, 1.0);
   pwm_set_ratio(ratio);
 }
 
-static sensitivity_t update_autoranging(uint16_t count,
+static sensitivity_t update_sensitivity(uint16_t count,
                                         sensitivity_t sensitivity) {
   if (count > COUNT_THRESHOLD_HI) {
     // reduce sensitivity if possible...
@@ -269,20 +301,9 @@ static sensitivity_t update_autoranging(uint16_t count,
   }
 }
 
-static sensitivity_t get_desired_sensitivity(void) {
-#ifdef USE_AUTORANGING
-  return s_sensitivity;
-#else
-  // SDA(A1) SCL(A0) sensitivity
-  // 0       0       LO  (0)
-  // 0       1       MID (1)
-  // 1       0       HI  (2)
-  // 1       1       undef
-  return (SDA_get_level() ? 2 : 0) + (SCL_get - level() ? 1 : 0);
-#endif
-}
-
 /**
+ * @brief Set GAIN_A1 and GAIN_A0 lines to control the sensitivity of the analog
+ * system.
  */
 static void set_sensitivity(sensitivity_t sensitivity) {
   switch (sensitivity) {
@@ -299,7 +320,7 @@ static void set_sensitivity(sensitivity_t sensitivity) {
     GAIN_A0_set_level(false);
     break;
   }
-rich }
+}
 
 static float lerp(float x, float x0, float x1, float y0, float y1) {
   return y0 + (x - x0) * (y1 - y0) / (x1 - x0);
