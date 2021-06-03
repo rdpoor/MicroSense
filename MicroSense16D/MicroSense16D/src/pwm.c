@@ -22,7 +22,8 @@ void pwm_set_ratio(float ratio) {
   }
   // It's safe to set CCA at any time: the TC hardware buffers the value and
   // transfers it it at an "update", i.e. when the counter hits max count.
-  TCD0.CCA = PWM_RATIO_TO_COUNT(ratio);
+  uint16_t count = PWM_RATIO_TO_COUNT(ratio);
+  TCD0.CCA = count;
 }
 
 float pwm_get_ratio() {

@@ -31,10 +31,10 @@ typedef enum {
 
 // Set autoranging thresholds at 1/8th from each end of full scale
 // #define COUNT_THRESHOLD_HI (int32_t)(ADC_COUNT_MAX - (ADC_COUNT_SPAN >> 3))
-#define COUNT_THRESHOLD_HI 15000
+#define COUNT_THRESHOLD_HI 20000
 // #define COUNT_THRESHOLD_LO (int32_t)(ADC_COUNT_MIN + (ADC_COUNT_SPAN >> 3))
-#define COUNT_THRESHOLD_LO 2000
-
+//#define COUNT_THRESHOLD_LO 2000
+#define COUNT_THRESHOLD_LO 1800
 //=============================================================================
 // forward declarations
 
@@ -43,7 +43,7 @@ static void write_sensitivity_switches(sensitivity_t sensitivity);
 
 static int16_t read_adc_count(void);
 static void reset_integrator();
-static void update_pwm(uint16_t adc_count);
+static void update_pwm(int16_t adc_count);
 static sensitivity_t update_sensitivity(int16_t count,
                                         sensitivity_t sensitivity);
 static void set_sensitivity(sensitivity_t sensitivity);
@@ -100,10 +100,12 @@ void micro_sense_init(void) {
 // [foreground] called repeatedly in foreground
 void micro_sense_step(void) {
   if (s_has_frame) {
-    printf("%s, %d, %ld\r\n",
+    printf("%s, %d, %ld, %ld, %ld\r\n",
            s_is_autoranging ? "A" : "M",
            s_sensitivity,
-           s_dv_fg);
+           s_dv_fg,
+		   s_v0_fg,
+		   s_v1_fg);
     s_has_frame = false;
   }
 }
@@ -126,7 +128,7 @@ void micro_sense_adc_complete_cb(void) {
   dv = v1 - s_v0;
 
   reset_integrator();
-  delay_us(50);
+  delay_us(200); //integrator recovery delay
 
   s_is_reading_v0 = true;
   start_adc_reading(); // initiate a read for s_v0
@@ -206,7 +208,7 @@ static void reset_integrator() {
   RESET_A_set_level(false);
 }
 
-static void update_pwm(uint16_t adc_count) {
+static void update_pwm(int16_t adc_count) {
   // ratio goes 0.0...1.0 as adc count goes ADC_COUNT_MIN...ADC_COUNT_MAX
   float ratio = lerp(adc_count, ADC_COUNT_MIN, ADC_COUNT_MAX, 0.0, 1.0);
   pwm_set_ratio(ratio);
@@ -259,7 +261,8 @@ static void set_sensitivity(sensitivity_t sensitivity) {
 }
 
 static float lerp(float x, float x0, float x1, float y0, float y1) {
-  return y0 + (x - x0) * (y1 - y0) / (x1 - x0);
+  float ret = y0 + (x - x0) * (y1 - y0) / (x1 - x0);
+  return ret;
 }
 
 static void start_adc_reading(void) {
