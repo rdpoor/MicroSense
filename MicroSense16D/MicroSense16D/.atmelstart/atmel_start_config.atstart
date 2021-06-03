@@ -2,16 +2,16 @@ format_version: '2'
 name: MicroSense16D2
 versions:
   api: '1.0'
-  backend: 1.7.430
-  commit: f09e2a2493613fab9dafdd76d38e1ed2f0a13a39
+  backend: 1.8.580
+  commit: f3d8d96e294de8dee688333bbbe8d8458a4f6b4c
   content: unknown
   content_pack_name: unknown
   format: '2'
-  frontend: 1.7.430
-  packs_version_avr8: 1.0.1429
+  frontend: 1.8.580
+  packs_version_avr8: 1.0.1463
   packs_version_qtouch: unknown
-  packs_version_sam: 1.0.1658
-  version_backend: 1.7.430
+  packs_version_sam: 1.0.1726
+  version_backend: 1.8.580
   version_frontend: ''
 board:
   identifier: CustomBoard
@@ -83,6 +83,12 @@ drivers:
     functionality: System
     api: Drivers:OSC:Init
     configuration:
+      $input: 400000
+      $input_id: 2MHz Internal Oscillator
+      RESERVED_InputFreq: 400000
+      RESERVED_InputFreq_id: 2MHz Internal Oscillator
+      _$freq_output_External Crystal Oscillator 0.4-16MHz: '12000000'
+      _$freq_output_PLL: 1000000
       dfll2m_calib_a: 0
       dfll2m_calib_b: 0
       dfll2m_calib_ref: false
@@ -114,8 +120,8 @@ drivers:
       pll_src: 2MHz Internal Oscillator
       xosc32k_klpm: false
       xosc_enable: false
-      xosc_frequency: 400000
-      xosc_frqrange: 0.4 - 2 MHz
+      xosc_frequency: 12000000
+      xosc_frqrange: 12 - 16 MHz
       xosc_owr: false
     optional_signals: []
     variant: null
@@ -127,11 +133,22 @@ drivers:
     functionality: System
     api: Drivers:CLK:Init
     configuration:
+      $input: 12000000
+      $input_id: CLK SYS source
+      RESERVED_InputFreq: 12000000
+      RESERVED_InputFreq_id: CLK SYS source
+      _$freq_output_CLK CPU/PER: 12000000
+      _$freq_output_CLK PER2: 12000000
+      _$freq_output_CLK PER4: 12000000
+      _$freq_output_CPU: 12000000
+      _$freq_output_NVM: 12000000
+      _$freq_output_RAM: 12000000
+      _$freq_output_RTC source: 1024
       clk_cpu_clock_source: CLK PER2
       clk_lock_lock: false
-      clk_psctrl_psadiv: Divide by 2
+      clk_psctrl_psadiv: Divide by 1
       clk_psctrl_psbcdiv: Divide B by 1 and C by 1
-      clk_sys_source_oscillator: 32MHz Internal Oscillator
+      clk_sys_source_oscillator: External Crystal Oscillator 0.4-16MHz
       cpu_clock_prescaler: 0
       cpu_clock_source: CLK CPU/PER
       enable_clk_cpu_source: true
@@ -445,3 +462,18 @@ toolchain_options:
       avrgcc_compiler_miscellaneous_OtherFlags: -std=gnu99
     linker_config:
       avrgcc_linker_miscellaneous_LinkerFlags: ''
+- definition:
+    identifier: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::environment_definition::All:Microchip.Studio.xc8:7.0.0
+  configuration:
+    compiler_config:
+      xc8_compiler_miscellaneous_OtherFlags: -std=gnu99
+    linker_config:
+      xc8_linker_miscellaneous_LinkerFlags: ''
+- definition:
+    identifier: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::environment_definition::All:Microchip.Studio.gcc:7.0.0
+  configuration:
+    compiler_config:
+      avrgcc_compiler_miscellaneous_OtherFlags: -std=gnu99
+    linker_config:
+      avrgcc_linker_miscellaneous_LinkerFlags: ''
+static_files: []
