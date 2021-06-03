@@ -31,10 +31,10 @@ typedef enum {
 
 // Set autoranging thresholds at 1/8th from each end of full scale
 // #define COUNT_THRESHOLD_HI (int32_t)(ADC_COUNT_MAX - (ADC_COUNT_SPAN >> 3))
-#define COUNT_THRESHOLD_HI 15000
+#define COUNT_THRESHOLD_HI 20000
 // #define COUNT_THRESHOLD_LO (int32_t)(ADC_COUNT_MIN + (ADC_COUNT_SPAN >> 3))
 //#define COUNT_THRESHOLD_LO 2000
-#define COUNT_THRESHOLD_LO 1200
+#define COUNT_THRESHOLD_LO 1800
 //=============================================================================
 // forward declarations
 
@@ -128,7 +128,7 @@ void micro_sense_adc_complete_cb(void) {
   dv = v1 - s_v0;
 
   reset_integrator();
-  delay_us(50);
+  delay_us(200); //integrator recovery delay
 
   s_is_reading_v0 = true;
   start_adc_reading(); // initiate a read for s_v0
