@@ -45,10 +45,10 @@
 int8_t OSC_init()
 {
 
-	OSC.XOSCCTRL = OSC_FRQRANGE_12TO16_gc   /* 12 - 16 MHz */
-	               | 0 << OSC_X32KLPM_bp    /* 32.768 kHz XTAL OSC Low-power Mode: disabled */
-	               | 0 << OSC_XOSCPWR_bp    /* Crystal Oscillator Drive: disabled */
-	               | OSC_XOSCSEL_EXTCLK_gc; /* External Clock - 6 CLK */
+	OSC.XOSCCTRL = OSC_FRQRANGE_9TO12_gc         /* 9 - 12 MHz */
+	               | 0 << OSC_X32KLPM_bp         /* 32.768 kHz XTAL OSC Low-power Mode: disabled */
+	              //  | 0 << OSC_XOSCPWR_bp         /* Crystal Oscillator Drive: disabled */
+	               | OSC_XOSCSEL_XTAL_16KCLK_gc; /* 0.4-16 MHz XTAL - 16K CLK */
 
 	// OSC.XOSCFAIL = 0 << OSC_PLLFDIF_bp /* PLL Failure Detection Interrupt Flag: disabled */
 	//		 | 0 << OSC_XOSCFDIF_bp; /* XOSC Failure Detection Interrupt Flag: disabled */

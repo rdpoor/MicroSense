@@ -46,11 +46,11 @@ int8_t ADC_0_init()
 
 	// ADCA.CAL = 0x0; /* Calibration Value: 0x0 */
 
-	ADCA.CH0.CTRL = ADC_CH_GAIN_DIV2_gc              /* x/2 gain */
-	                | ADC_CH_INPUTMODE_DIFFWGAIN_gc; /* Differential input, with gain */
+	ADCA.CH0.CTRL = ADC_CH_GAIN_1X_gc           /* 1x gain */
+	                | ADC_CH_INPUTMODE_DIFF_gc; /* Differential input, no gain */
 
-	ADCA.CH0.MUXCTRL = ADC_CH_MUXPOS_PIN1_gc    /* Input pin 1 */
-	                   | ADC_CH_MUXNEG_PIN4_gc; /* Input pin 4 (Input Mode = 3) */
+	ADCA.CH0.MUXCTRL = ADC_CH_MUXPOS_PIN0_gc    /* Input pin 0 */
+	                   | ADC_CH_MUXNEG_PIN2_gc; /* Input pin 2 (Input Mode = 2) */
 
 	ADCA.CH0.INTCTRL = ADC_CH_INTMODE_COMPLETE_gc /* Interrupt on conversion complete */
 	                   | ADC_CH_INTLVL_LO_gc;     /* Low level */
@@ -67,9 +67,9 @@ int8_t ADC_0_init()
 
 	// ADCA.SAMPCTRL = 0x0 << ADC_SAMPVAL_gp; /* Sampling Time Control: 0x0 */
 
-	ADCA.REFCTRL = ADC_REFSEL_INTVCC_gc   /* Internal VCC / 1.6 */
-	               | 0 << ADC_BANDGAP_bp  /* Bandgap enable: disabled */
-	               | 0 << ADC_TEMPREF_bp; /* Temperature Reference Enable: disabled */
+	// ADCA.REFCTRL = ADC_REFSEL_INT1V_gc /* Internal 1V */
+	//		 | 0 << ADC_BANDGAP_bp /* Bandgap enable: disabled */
+	//		 | 0 << ADC_TEMPREF_bp; /* Temperature Reference Enable: disabled */
 
 	ADCA.PRESCALER = ADC_PRESCALER_DIV32_gc; /* Divide clock by 32 */
 

@@ -110,7 +110,7 @@ drivers:
       osc32m_cal_override: false
       osc32m_enable: false
       osc_xoscctrl_x32klpm: false
-      osc_xoscctrl_xoscsel: External Clock - 6 CLK
+      osc_xoscctrl_xoscsel: 0.4-16 MHz XTAL - 16K CLK
       osc_xoscfail_pllfden: false
       osc_xoscfail_pllfdif: false
       osc_xoscfail_xoscfden: false
@@ -121,7 +121,7 @@ drivers:
       xosc32k_klpm: false
       xosc_enable: true
       xosc_frequency: 12000000
-      xosc_frqrange: 12 - 16 MHz
+      xosc_frqrange: 9 - 12 MHz
       xosc_owr: false
     optional_signals: []
     variant: null
@@ -183,8 +183,8 @@ drivers:
     configuration:
       adc_cal: 0
       adc_cmp: 0
-      adc_ctrl_gain_ch0: x/2 gain
-      adc_ctrl_inputmode_ch0: Differential input, with gain
+      adc_ctrl_gain_ch0: 1x gain
+      adc_ctrl_inputmode_ch0: Differential input, no gain
       adc_ctrla_enable: true
       adc_ctrla_flush: false
       adc_ctrlb_conmode: Signed Mode
@@ -196,29 +196,29 @@ drivers:
       adc_intctrl_intlvl_ch0: Low level
       adc_intctrl_intmode_ch0: Interrupt on conversion complete
       adc_muxctrl_muxint_ch0: Temperature Reference
-      adc_muxctrl_muxneg_ch0: Input pin 4 (Input Mode = 3)
-      adc_muxctrl_muxpos_ch0: Input pin 1
+      adc_muxctrl_muxneg_ch0: Input pin 2 (Input Mode = 2)
+      adc_muxctrl_muxpos_ch0: Input pin 0
       adc_prescaler_prescaler: Divide clock by 32
       adc_refctrl_bandgap: false
-      adc_refctrl_refsel: Internal VCC / 1.6
+      adc_refctrl_refsel: Internal 1V
       adc_refctrl_tempref: false
       adc_sampctrl_sampval: 0
       adc_scan_count_ch: 0
     optional_signals:
-    - identifier: ADC_0:ADC/1
-      pad: PA1
+    - identifier: ADC_0:ADC/0
+      pad: PA0
       mode: Enabled
       configuration: null
-      definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::optional_signal_definition::ADCA.ADC.1
-      name: ADCA/ADC/1
-      label: ADC/1
-    - identifier: ADC_0:ADC/4
-      pad: PA4
+      definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::optional_signal_definition::ADCA.ADC.0
+      name: ADCA/ADC/0
+      label: ADC/0
+    - identifier: ADC_0:ADC/2
+      pad: PA2
       mode: Enabled
       configuration: null
-      definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::optional_signal_definition::ADCA.ADC.4
-      name: ADCA/ADC/4
-      label: ADC/4
+      definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::optional_signal_definition::ADCA.ADC.2
+      name: ADCA/ADC/2
+      label: ADC/2
     variant: null
     clocks:
       domain_group:
@@ -428,11 +428,17 @@ pads:
     mode: Digital input
     user_label: SCL
     configuration: null
-  V_RAMP:
-    name: PA1
-    definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::pad::PA1
+  PA0:
+    name: PA0
+    definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::pad::PA0
     mode: Analog
-    user_label: V_RAMP
+    user_label: PA0
+    configuration: null
+  PA2:
+    name: PA2
+    definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::pad::PA2
+    mode: Analog
+    user_label: PA2
     configuration: null
   SYNC_IN:
     name: PA3
@@ -448,12 +454,6 @@ pads:
       pad_int1msk: '0'
       pad_isc: Sense Rising Edge
       pad_output_pull_config: Totem-pole
-  V_REF:
-    name: PA4
-    definition: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::pad::PA4
-    mode: Analog
-    user_label: V_REF
-    configuration: null
 toolchain_options:
 - definition:
     identifier: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::environment_definition::All:Microchip.Studio.xc8:7.0.0
@@ -463,14 +463,14 @@ toolchain_options:
     linker_config:
       xc8_linker_miscellaneous_LinkerFlags: ''
 - definition:
-    identifier: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::environment_definition::All:Microchip.Studio.gcc:7.0.0
+    identifier: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::environment_definition::All:Atmel.Studio:7.0.0
   configuration:
     compiler_config:
       avrgcc_compiler_miscellaneous_OtherFlags: -std=gnu99
     linker_config:
       avrgcc_linker_miscellaneous_LinkerFlags: ''
 - definition:
-    identifier: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::environment_definition::All:Atmel.Studio:7.0.0
+    identifier: Atmel:XMEGA_D_Drivers:0.0.1::ATxmega16D4-AU::environment_definition::All:Microchip.Studio.gcc:7.0.0
   configuration:
     compiler_config:
       avrgcc_compiler_miscellaneous_OtherFlags: -std=gnu99

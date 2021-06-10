@@ -16,37 +16,37 @@ GPIO F/W Name   Schem Name   Description
 PA0  Vinp       VOUT         Analog ramp, 0 - 1.0 vpp
 PA1  unused     VOUT
 PA2  Vinn       VREF         Analog reference, ~0 v
-PA3             16mSEC
+PA3  V_SYNC     16mSEC       60 Hz Sync Pulse, interrupt on ^ edge
 PA4  unused     VREF
-PA5             A
-PA6             PA6
-PA7             PA7
+PA5             RESET_A      Pulse 200 uS high to reset integrator
+PA6             PA6          Test point
+PA7             PA7          Test point
 
-PB0             MUXA0
-PB1             MUXA1
+PB0  unused     MUXA0        (Was gain)
+PB1  unused     MUXA1        (Was gain)
 PB2  unused     -
 PB3  unused     -
 
 PC0  unused     -
 PC1  unused     -
-PC2             RXDC
-PC3             TXDC
+PC2             RXDC         Serial Rx
+PC3             TXDC         Serial Tx  
 PC4  unused     -
 PC5  unused     -
 PC6  unused     -
 PC7  unused     -
 
-PD0             PWM
+PD0             PWM          PWM
 PD1  unused     -
-PD2             RXDD
-PD3             TXDD
-PD4             SDD
+PD2  unused     RXDD         Future expansion IRDA
+PD3  unused     TXDD         Future expansion IRDA
+PD4  unused     SDD          Future expansion IRDA
 PD5  unused     -
 PD6  unused     -
-PD7             STATUS
+PD7  LED        STATUS       High true
 
-PE0             SDA
-PE1             SCL
+PE0  unused     SDA
+PE1  unused     SCL
 PE2  unused     -
 PE3  unused     -
 
@@ -70,7 +70,6 @@ noise), so this condition is satisfied.
 #include "micro_sense.h"
 #include "atmel_start_pins.h"
 #include "delay.h"
-#include "profiling.h"
 #include "pwm.h"
 #include <atmel_start.h>
 #include <stdbool.h>
@@ -179,7 +178,7 @@ void micro_sense_adc_complete_cb(void) {
 
   if (s_is_reading_v0) {
     // Here, capture the first ADC reading after resetting the integrator
-  gi  s_v0 = count;
+    s_v0 = count;
     s_is_reading_v0 = false;
     return;
   }

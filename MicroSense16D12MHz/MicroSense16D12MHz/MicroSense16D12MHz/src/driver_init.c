@@ -67,14 +67,14 @@ void ADC_0_initialization(void)
 {
 
 	// Disable pull-up resistor
-	V_RAMP_set_output_pull_mode(PORT_CONFIGURATION_TOTEM);
+	PA0_set_output_pull_mode(PORT_CONFIGURATION_TOTEM);
 	// Disable digital         // Disable digital input buffer
-	V_RAMP_set_isc(PORT_ISC_INPUT_DISABLE_gc);
+	PA0_set_isc(PORT_ISC_INPUT_DISABLE_gc);
 
 	// Disable pull-up resistor
-	V_REF_set_output_pull_mode(PORT_CONFIGURATION_TOTEM);
+	PA2_set_output_pull_mode(PORT_CONFIGURATION_TOTEM);
 	// Disable digital         // Disable digital input buffer
-	V_REF_set_isc(PORT_ISC_INPUT_DISABLE_gc);
+	PA2_set_isc(PORT_ISC_INPUT_DISABLE_gc);
 
 	ADC_0_init();
 }
