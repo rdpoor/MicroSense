@@ -35,7 +35,7 @@
 
 #include <driver_init.h>
 #include <compiler.h>
-#include "micro_sense.h"
+#include "micro_sensor.h"
 #include "pwm.h"
 
 ISR(TCD0_OVF_vect)
@@ -48,7 +48,7 @@ ISR(ADCA_CH0_vect)
 {
   // A/D conversion complete interrupt
   TP_0_set_level(true);
-  micro_sense_adc_complete_cb();
+  micro_sensor_adc_complete_cb();
   TP_0_set_level(false);
 }
 
