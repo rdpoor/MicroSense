@@ -32,11 +32,13 @@ noise), so this condition is satisfied.
 //=============================================================================
 // definitions
 
+// Define symbolic gain names.  By setting the name equal to the actual gain,
+// we can print the value directly in the CSV string.
 typedef enum {
-  GAIN_LOW = 0,
-  GAIN_MEDIUM = 1,
-  GAIN_HIGH = 2,
-  GAIN_AUTO = 3
+  GAIN_AUTO = 0,
+  GAIN_LOW = 1,
+  GAIN_MEDIUM = 4,
+  GAIN_HIGH = 16,
 } gain_t;
 
 #define SAMPLES_PER_FRAME 15
@@ -110,7 +112,6 @@ static void update_pwm(int16_t adc_count);
  */
 static float lerp(float x, float x0, float x1, float y0, float y1);
 
-
 //=============================================================================
 // private storage
 
@@ -137,14 +138,24 @@ static int16_t s_v0;         // captured v0
 void micro_sensor_init(void) {
   delay_ms(50);
 
-  s_gain = GAIN_AUTO;  // force initial write in set_gain()
+  s_sample_count = 0;
+  s_v0_total = 0;
+  s_v1_total = 0;
+  s_dv_total = 0;
+
+  s_gain = GAIN_AUTO; // force initial write in set_gain()
+
+  s_has_frame = false;
+  s_is_reading_v0 = false;
+  s_v0 = 0;
+
   gain_t target_gain = read_gain_switches();
 
   if (target_gain == GAIN_AUTO) {
-      // If autoranging, assume medium gain to start with.
-      set_gain(GAIN_MEDIUM);
+    // If autoranging, assume medium gain to start with.
+    set_gain(GAIN_MEDIUM);
   } else {
-      set_gain(target_gain);
+    set_gain(target_gain);
   }
   pwm_set_ratio(0.5); // mid range
   reset_integrator();
@@ -153,12 +164,8 @@ void micro_sensor_init(void) {
 // [foreground] called repeatedly in foreground
 void micro_sensor_step(void) {
   if (s_has_frame) {
-    printf("%s, %d, %ld, %ld, %ld\r\n",
-           is_autoranging() ? "A" : "M",
-           s_gain,
-           s_dv_fg,
-           s_v0_fg,
-           s_v1_fg);
+    printf("%s, %d, %ld, %ld, %ld\r\n", is_autoranging() ? "A" : "M", s_gain_fg,
+           s_dv_fg, s_v0_fg, s_v1_fg);
     s_has_frame = false;
   }
 }
@@ -245,9 +252,7 @@ static gain_t read_gain_switches() {
   }
 }
 
-static bool is_autoranging(void) {
-  return read_gain_switches() == GAIN_AUTO;
-}
+static bool is_autoranging(void) { return read_gain_switches() == GAIN_AUTO; }
 
 static gain_t autorange(int16_t count, gain_t gain) {
   if (count > GAIN_DN_THRESH * SAMPLES_PER_FRAME) {
@@ -316,9 +321,9 @@ static int16_t read_adc_count(void) {
 
 static void reset_integrator() {
   RESET_A_set_level(true);
-  delay_us(200);              // hold time
+  delay_us(200); // hold time
   RESET_A_set_level(false);
-  delay_us(200);              // settling time
+  delay_us(200); // settling time
 }
 
 static void update_pwm(int16_t adc_count) {
