@@ -1,8 +1,7 @@
 /*
- * micro_sensor.h
+ * \file micro_sensor.h
  *
- * Created: 5/3/2019 6:58:26 AM
- * Author: Robert Poor <rdpoor@gmail.com>
+ * Author: R. D. Poor <rdpoor@gmail.com>
  */
 
 

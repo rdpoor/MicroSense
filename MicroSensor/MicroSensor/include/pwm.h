@@ -1,3 +1,9 @@
+/**
+ * \file pwm.h
+ *
+ * \brief Using TCD0 for Pulse Width Modulation
+ */
+
 #ifndef PWM_H_INCLUDED
 #define PWM_H_INCLUDED
 
@@ -7,16 +13,30 @@
 extern "C" {
 #endif
 
-// initialize pwm
+/**
+ * @brief Initialize TCD0 to generate Pulse Width Modulated signals.
+ */
 void pwm_init(void);
 
-// set the PWM duty cycle (takes effect at the next interrupt)
+/**
+ * @brief Set the duty cycle of the PWM.
+ *
+ * @param ratio A float between 0.0 (for 0% duty cycle) and 1.0 (for 100%).
+ */
 void pwm_set_ratio(float ratio);
 
-// get the pending (or current) PWM ratio
+/**
+ * @brief Get the duty cycle of the PWM.
+ *
+ * @return A float between 0.0 (for 0% duty cycle) and 1.0 (for 100%).
+ */
 float pwm_get_ratio();
 
-// called from interrupt level when the PWM overflows.  Update ratio.
+/**
+ * @brief Interrupt-level callback invoked when TCD0 overflows from 0xffff to 0.
+ *
+ * Note: see driver_isr.c.
+ */
 void pwm_overflow_cb();
 
 #ifdef __cplusplus

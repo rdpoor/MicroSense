@@ -1,24 +1,7 @@
 /*
- * micro_sensor.c
+ * \file micro_sensor.c
  *
- * Author: Robert Poor <rdpoor@gmail.com>
- */
-
-/**
- * @brief Firmware for the SoulPhone (pka MicroSensor).
-
-Notes on the ADC configuration:
-
-The ADC is configured for:
-* Differential input on PA0 (+) and PA2 (-)
-* 12-bit signed output in the range -2048 ... 2047.
-* Unity Gain
-* Internal voltage reference is the 1V bandgap
-
-The ADC's differential inputs must not exceed the internal voltage reference of
-1.0 v.  Vinn sits around 0.0v ("noise"), Vinp ramps from 0.0v to 1.0 v (signal +
-noise), so this condition is satisfied.
-
+ * Author: R. D. Poor <rdpoor@gmail.com>
  */
 
 #include "micro_sensor.h"

@@ -1,10 +1,16 @@
+/*
+ * \file pwm.c
+ *
+ * Author: R. D. Poor <rdpoor@gmail.com>
+ */
+
 #include <pwm.h>
 
 // About the Pulse Width Modulator:
 //
 // The PWM is implemented using TCD0, a 16 bit timer driven by the system clock.
-// With a system clock of 12MHz, the PWM has a period of (1<<16)/12M = 5.461 mS
-// or 183 Hz
+// It has 16-bit resolution and updates once every (1<<16)/12Mhz = 5.461 mS or
+// at a rate of 183 Hz.
 
 #define PWM_MAX_COUNT (0xffff)
 #define PWM_RATIO_TO_COUNT(ratio) (int)((ratio) * PWM_MAX_COUNT)

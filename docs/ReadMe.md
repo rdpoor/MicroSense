@@ -1,21 +1,27 @@
-# SoulPhone User
+# MicroSensor User Notes
 
-The serial output prints a CSV record once every 250 milliseconds.  The format
-is:
+## Serial Output
+
+The serial output is configured for 115200 baud, 8-bit, one stop bit, no parity.
+It prints a CSV record once every 250 milliseconds.  The format is:
 
 ```
 <auto>, <gain>, <count>, <vneg>, <vpos>
 
 <auto>  is either 'M' or 'A' for Manual or Autoranging gain.
-<gain>  is the system gain: 01 for minimum sensitivity, 04 for 4x sensitivity,
-        16 for maximum sensitivity
-<count> is the conductivity as a unit-less value.  To account for the gain,
+<gain>  system gain: 1 for minimum gain, 4 for 4x gain, 16 for maximum gain.
+<count> Conductivity as a unit-less value.  To account for the gain,
         normalize the count by dividing by the system gain, e.g. <count>/<gain>.
 <vneg>  used for diagnostics
 <vpos>  used for diagnostics
 ```
 
-# SoulPhone Developer Notes
+## Analog Output
+
+The analog output provide a quick way to visualize rapid changes to the
+measured conductance.  It outputs a voltage between 0 and 3.3 volts.  
+
+# MicroSensor Developer Notes
 
 ## Documentation links
 
@@ -102,9 +108,19 @@ PR0             XTAL2
 PR1             XTAL1
 ```
 
-## About ADC gain
+## About ADC
 
-When the ADC is configured for differential mode:
+The ADC is configured for:
+* Differential input on PA0 (+) and PA2 (-)
+* 12-bit signed output in the range -2048 ... 2047.
+* Switchable gain.
+* Internal voltage reference is the 1V bandgap
+
+The ADC's differential inputs must not exceed the internal voltage reference of
+1.0 v.  Vinn sits around 0.0v ("noise"), Vinp ramps from 0.0v to 1.0 v (signal +
+noise), so this condition is satisfied.
+
+Since the ADC is in differential mode:
 * When configured for no gain stage, Vinn MUST be on PA0 PA1 PA2 or PA3
 * When configured with gain, Vinn MUST be on PA4 PA5 PA6 or PA7
 

@@ -1,3 +1,9 @@
+/**
+ * \file delay.c
+ *
+ * \brief Busy-wait delay functions.
+ */
+
 #include "delay.h"
 #include <stdint.h>
 
