@@ -39,7 +39,7 @@
  *
  * \acme_license_stop
  *
- * Project: MicroSensor16D12MHz
+ * Project: MicroSensor
  * Target:  ATxmega16D4 
  *
  **/

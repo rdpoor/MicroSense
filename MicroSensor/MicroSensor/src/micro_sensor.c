@@ -138,12 +138,13 @@ void micro_sensor_init(void) {
   delay_ms(50);
 
   s_gain = GAIN_AUTO;  // force initial write in set_gain()
+  gain_t target_gain = read_gain_switches();
 
-  if (is_autoranging()) {
+  if (target_gain == GAIN_AUTO) {
       // If autoranging, assume medium gain to start with.
       set_gain(GAIN_MEDIUM);
   } else {
-      set_gain(gain);
+      set_gain(target_gain);
   }
   pwm_set_ratio(0.5); // mid range
   reset_integrator();

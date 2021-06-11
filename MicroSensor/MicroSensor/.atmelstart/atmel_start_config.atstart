@@ -1,5 +1,5 @@
 format_version: '2'
-name: MicroSensor16D2
+name: MicroSensor
 versions:
   api: '1.0'
   backend: 1.8.580
