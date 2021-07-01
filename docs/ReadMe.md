@@ -144,3 +144,39 @@ To configure gain = 16
 ADCA.CH0.CTRL = ADC_CH_GAIN_16X_gc | ADC_CH_INPUTMODE_DIFFWGAIN_gc;
 ADCA.CH0.MUXCTRL = ADC_CH_MUXPOS_PIN0_gc | ADC_CH_MUXNEG_PIN4_gc;
 ```
+
+## Reconfiguring for Unsigned mode
+
+The client would like the ADC to run in unsigned mode.  This comes with a few
+restrictions:
+
+* ADC must be single-ended
+* Programmable gain is not available
+* Input voltage is limited to Vref/2 to Vref (i.e. 0.5 <= Vin <= 1.0 when Vref
+  = 1.0v)
+
+Rather than build a new project, we re-program the ADC in the user code.  After
+looking over the data sheet, the only registers that needs to change are the
+ADCA.CH0.CTRL register and the ADCA.CTRLB register:
+
+For unsigned mode / single-ended:
+
+```
+	ADCA.CH0.CTRL = ADC_CH_GAIN_1X_gc           /* 1x gain */
+	                | ADC_CH_INPUTMODE_SINGLEENDED_gc; /* Single-ended input, no gain */
+  ADCA.CTRLB = ADC_CURRLIMIT_NO_gc        /* No limit */
+	             | 0 << ADC_CONMODE_bp      /* Unsigned Mode */
+	             | 0 << ADC_FREERUN_bp      /* Free Running Mode Enable: disabled */
+	             | ADC_RESOLUTION_12BIT_gc; /* 12-bit right-adjusted result */
+```
+
+For signed mode / differential:
+
+```
+ADCA.CH0.CTRL = ADC_CH_GAIN_1X_gc           /* 1x gain */
+                | ADC_CH_INPUTMODE_DIFF_gc; /* Differential input, no gain */
+ADCA.CTRLB = ADC_CURRLIMIT_NO_gc        /* No limit */
+             | 1 << ADC_CONMODE_bp      /* Signed Mode: enabled */
+             | 0 << ADC_FREERUN_bp      /* Free Running Mode Enable: disabled */
+             | ADC_RESOLUTION_12BIT_gc; /* 12-bit right-adjusted result */
+```

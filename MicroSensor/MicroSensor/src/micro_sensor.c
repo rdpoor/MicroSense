@@ -15,6 +15,9 @@
 //=============================================================================
 // definitions
 
+// If true, run in single ended mode
+// #define SINGLE_ENDED
+
 // Define symbolic gain names.  By setting the name equal to the actual gain,
 // we can print the value directly in the CSV string.
 typedef enum {
@@ -26,9 +29,15 @@ typedef enum {
 
 #define SAMPLES_PER_FRAME 15
 
-#define ADC_COUNT_MIN ((int32_t)0)                          // min frame value
-#define ADC_COUNT_MAX ((int32_t)(SAMPLES_PER_FRAME * 2047)) // max frame value
-#define ADC_COUNT_SPAN ((int32_t)(ADC_COUNT_MAX - ADC_COUNT_MIN))
+#ifdef SINGLE_ENDED
+#define MAX_ADC_COUNT ((uint32_t)4096)
+#else
+#define MAX_ADC_COUNT ((uint32_t)2048)
+#endif
+
+#define FRAME_COUNT_MIN ((int32_t)0) // min frame value
+#define FRAME_COUNT_MAX ((int32_t)(SAMPLES_PER_FRAME * (MAX_ADC_COUNT - 1)))
+#define FRAME_COUNT_SPAN ((int32_t)(FRAME_COUNT_MAX - FRAME_COUNT_MIN))
 
 /**
  * AUTORANGING:
@@ -39,8 +48,8 @@ typedef enum {
  * it's less than half of that (= 256).  Similarly, if the read value higher
  * than (2048-256) = 1792, then we lower the gain if possible.
  */
-#define GAIN_UP_THRESH (2048 / 8)
-#define GAIN_DN_THRESH (2048 - GAIN_UP_THRESH)
+#define GAIN_UP_THRESH (MAX_ADC_COUNT / 8)
+#define GAIN_DN_THRESH (MAX_ADC_COUNT - GAIN_UP_THRESH)
 
 //=============================================================================
 // forward declarations
@@ -88,7 +97,7 @@ static void reset_integrator(void);
 /**
  * @brief Set the PWM duty cycle.
  */
-static void update_pwm(int16_t adc_count);
+static void update_pwm(int16_t frame_count);
 
 /**
  * @brief map x value using linear intepolation.
@@ -119,6 +128,22 @@ static int16_t s_v0;         // captured v0
 
 // [foreground] called once at initialization
 void micro_sensor_init(void) {
+#ifdef SINGLE_ENDED
+  ADCA.CH0.CTRL = ADC_CH_GAIN_1X_gc                  /* 1x gain */
+                  | ADC_CH_INPUTMODE_SINGLEENDED_gc; /* Single-ended, no gain */
+  ADCA.CTRLB = ADC_CURRLIMIT_NO_gc                   /* No limit */
+               | 0 << ADC_CONMODE_bp                 /* Unsigned Mode */
+               | 0 << ADC_FREERUN_bp /* Free Running Mode Enable: disabled */
+               | ADC_RESOLUTION_12BIT_gc; /* 12-bit right-adjusted result */
+#else
+  ADCA.CH0.CTRL = ADC_CH_GAIN_1X_gc           /* 1x gain */
+                  | ADC_CH_INPUTMODE_DIFF_gc; /* Differential input, no gain */
+  ADCA.CTRLB = ADC_CURRLIMIT_NO_gc            /* No limit */
+               | 1 << ADC_CONMODE_bp          /* Signed Mode: enabled */
+               | 0 << ADC_FREERUN_bp /* Free Running Mode Enable: disabled */
+               | ADC_RESOLUTION_12BIT_gc; /* 12-bit right-adjusted result */
+#endif
+
   delay_ms(50);
 
   s_sample_count = 0;
@@ -147,8 +172,12 @@ void micro_sensor_init(void) {
 // [foreground] called repeatedly in foreground
 void micro_sensor_step(void) {
   if (s_has_frame) {
-    printf("%s, %d, %ld, %ld, %ld\r\n", is_autoranging() ? "A" : "M", s_gain_fg,
-           s_dv_fg, s_v0_fg, s_v1_fg);
+    printf("%s, %d, %ld, %ld, %ld\r\n",
+           is_autoranging() ? "A" : "M",
+           s_gain_fg,
+           s_dv_fg,
+           s_v0_fg,
+           s_v1_fg);
     s_has_frame = false;
   }
 }
@@ -263,6 +292,10 @@ static gain_t autorange(int16_t count, gain_t gain) {
  * system.
  */
 static void set_gain(gain_t gain) {
+#ifdef SINGLE_ENDED
+  (void)gain;
+  ADCA.CH0.CTRL = ADC_CH_GAIN_1X_gc | ADC_CH_INPUTMODE_SINGLEENDED_gc;
+#else
   if (gain != s_gain) {
     switch (gain) {
     case GAIN_LOW:
@@ -286,6 +319,7 @@ static void set_gain(gain_t gain) {
     }
     s_gain = gain;
   }
+#endif
 }
 
 static void start_adc_reading(void) {
@@ -309,9 +343,9 @@ static void reset_integrator() {
   delay_us(200); // settling time
 }
 
-static void update_pwm(int16_t adc_count) {
-  // ratio goes 0.0...1.0 as adc count goes ADC_COUNT_MIN...ADC_COUNT_MAX
-  float ratio = lerp(adc_count, ADC_COUNT_MIN, ADC_COUNT_MAX, 0.0, 1.0);
+static void update_pwm(int16_t frame_count) {
+  // ratio goes 0.0...1.0 as adc count goes FRAME_COUNT_MIN...FRAME_COUNT_MAX
+  float ratio = lerp(frame_count, FRAME_COUNT_MIN, FRAME_COUNT_MAX, 0.0, 1.0);
   pwm_set_ratio(ratio);
 }
 
